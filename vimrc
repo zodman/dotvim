@@ -39,6 +39,8 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'moll/vim-bbye'
 Plugin 'gregsexton/matchtag'
+Plugin 'bling/vim-bufferline'
+Plugin 'vim-airline/vim-airline'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
