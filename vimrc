@@ -41,12 +41,14 @@ Plugin 'moll/vim-bbye'
 Plugin 'gregsexton/matchtag'
 Plugin 'bling/vim-bufferline'
 Plugin 'vim-airline/vim-airline'
-
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'three/javascript-libraries-syntax.vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
 "folding settings
-set foldmethod=indent   "fold based on indent
+set foldmethod=marker   "fold based on indent
 set foldnestmax=3       "deepest fold is 3 levels
 set cursorline
 syntax on
@@ -54,18 +56,30 @@ set shortmess=atI " Shortens messages in status line.
 set laststatus=2 " Always show status line.
 set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS " Ignore compiled Python files
 set foldenable " Turn on folding.
+set modeline
+set mouse=a
+if (exists('+colorcolumn'))
+    set colorcolumn=80
+    highlight ColorColumn ctermbg=9
+endif
 
 
-"colo PaperColor
-colo badwolf
+"colo solarized
+colo PaperColor
+"colo badwolf
 
-let NERDTreeIgnore = ['\.pyc$']
+let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$']
+set pastetoggle=<F3>
+nnoremap <silent> <F2> :NERDTreeToggle<CR>
+
 nnoremap ,s :update!<CR>
 nnoremap ,d   :Bdelete<CR>
 
-nnoremap _hd :set ft=htmldjango<CR>
-nnoremap _dh :set ft=htmldjango<CR>
-nnoremap _pd :set ft=python.django<CR>
-nnoremap _hb :set ft=handlebars<CR>
 nnoremap <silent> ,q :bp<CR>
 nnoremap <silent> ,w :bn<CR>
+nnoremap _hd :set ft=htmldjango<CR>
+nnoremap _dh :set ft=htmldjango<CR>
+nnoremap _dt :set ft=htmldjango<CR>
+nnoremap _pd :set ft=python.django<CR>
+nnoremap _hb :set ft=handlebars<CR>
+
