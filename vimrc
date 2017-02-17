@@ -1,16 +1,15 @@
 set nocompatible
-
-filetype plugin on
-filetype plugin indent on
 set smartindent
+set autoindent
+iab setheader #!/usr/bin/env python<CR># encoding=utf8<CR># made by zodman
 set modeline
-iab setheader #!/usr/bin/env python<CR># encoding=utf8<CR># vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4<CR># made by zodman
 let g:netrw_list_hide= '.*\.swp$,.*\.pyc'
 set background=dark
 set softtabstop=4
 set tabstop=4
 set shiftwidth=4
 set expandtab
+set nu
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -20,15 +19,14 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'posva/vim-vue'
 Plugin 'scrooloose/nerdtree'
 Plugin 'othree/html5.vim'
+Plugin 'posva/vim-vue'
 Plugin 'maksimr/vim-jsbeautify'
 Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'scrooloose/syntastic'
+Plugin 'vim-syntastic/syntastic'
 Plugin 'NLKNguyen/papercolor-theme'
 Plugin 'tpope/vim-surround'
 Plugin 'jlanzarotta/bufexplorer'
@@ -43,7 +41,7 @@ Plugin 'bling/vim-bufferline'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'three/javascript-libraries-syntax.vim'
+Plugin 'chase/vim-ansible-yaml'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -72,7 +70,7 @@ let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$']
 set pastetoggle=<F3>
 nnoremap <silent> <F2> :NERDTreeToggle<CR>
 
-nnoremap ,s :update!<CR>
+nnoremap ,s :w!<CR>
 nnoremap ,d   :Bdelete<CR>
 
 nnoremap <silent> ,q :bp<CR>
@@ -83,3 +81,13 @@ nnoremap _dt :set ft=htmldjango<CR>
 nnoremap _pd :set ft=python.django<CR>
 nnoremap _hb :set ft=handlebars<CR>
 
+au BufNewFile,BufRead *.vue setf vue.html.javascript.css
+au BufRead,BufNewFile *.vue set expandtab
+au BufRead,BufNewFile *.vue set tabstop=2
+au BufRead,BufNewFile *.vue set softtabstop=2
+au BufRead,BufNewFile *.vue set shiftwidth=2
+
+let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming empty <", "unescaped &" ,  "is not recognized!", "discarding unexpected"]
+
+" https://github.com/webpack/webpack/issues/781#issuecomment-95523711
+set backupcopy=yes
