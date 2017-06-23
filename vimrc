@@ -44,6 +44,8 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'three/javascript-libraries-syntax.vim'
+Plugin 'bash-support.vim'
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 
