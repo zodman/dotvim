@@ -1,7 +1,8 @@
+set noswapfile
+set nobackup
 set nocompatible
 set smartindent
 set autoindent
-iab setheader #!/usr/bin/env python<CR># encoding=utf8<CR># made by zodman
 set modeline
 let g:netrw_list_hide= '.*\.swp$,.*\.pyc'
 set background=dark
@@ -20,6 +21,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'othree/html5.vim'
 Plugin 'posva/vim-vue'
 Plugin 'maksimr/vim-jsbeautify'
@@ -33,21 +35,22 @@ Plugin 'jlanzarotta/bufexplorer'
 Plugin 'django.vim'
 Plugin 'sjl/badwolf'
 Plugin 'SirVer/ultisnips'
-" Snippets are separated from the engine. Add this if you want them:
 Plugin 'honza/vim-snippets'
 Plugin 'moll/vim-bbye'
 Plugin 'gregsexton/matchtag'
 Plugin 'bling/vim-bufferline'
 Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+"Plugin 'vim-airline/vim-airline-themes'
 Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'chase/vim-ansible-yaml'
+"Plugin 'chase/vim-ansible-yaml'
+Plugin 'mileszs/ack.vim'
+Plugin 'editorconfig/editorconfig-vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
 "folding settings
-set foldmethod=marker   "fold based on indent
-set foldnestmax=3       "deepest fold is 3 levels
+set foldmethod=indent   "fold based on indent
+set foldnestmax=5       "deepest fold is 3 levels
 set cursorline
 syntax on
 set shortmess=atI " Shortens messages in status line.
@@ -86,8 +89,17 @@ au BufRead,BufNewFile *.vue set expandtab
 au BufRead,BufNewFile *.vue set tabstop=2
 au BufRead,BufNewFile *.vue set softtabstop=2
 au BufRead,BufNewFile *.vue set shiftwidth=2
+iab setheader #!/usr/bin/env python<CR># encoding=utf8<CR># made by zodman
 
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming empty <", "unescaped &" ,  "is not recognized!", "discarding unexpected"]
 
 " https://github.com/webpack/webpack/issues/781#issuecomment-95523711
 set backupcopy=yes
+
+"let g:ctrlp_custom_ignore = {
+"    \ 'dir':  '\v[\/]\.(git|hg|svn)$|bower_components|node_modules|www|platform',
+"    \ 'file': '\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\|\.swp$|\.swo',
+"    \ }
+
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+
