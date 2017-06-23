@@ -45,6 +45,11 @@ Plugin 'bronson/vim-trailing-whitespace'
 "Plugin 'chase/vim-ansible-yaml'
 Plugin 'mileszs/ack.vim'
 Plugin 'editorconfig/editorconfig-vim'
+Plugin 'chase/vim-ansible-yaml'
+Plugin 'three/javascript-libraries-syntax.vim'
+Plugin 'bash-support.vim'
+
+Plugin 'chase/vim-ansible-yaml'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -57,6 +62,7 @@ set shortmess=atI " Shortens messages in status line.
 set laststatus=2 " Always show status line.
 set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS " Ignore compiled Python files
 set foldenable " Turn on folding.
+set t_Co=256
 set modeline
 set mouse=a
 if (exists('+colorcolumn'))
