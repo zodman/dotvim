@@ -42,20 +42,16 @@ Plugin 'bling/vim-bufferline'
 Plugin 'vim-airline/vim-airline'
 "Plugin 'vim-airline/vim-airline-themes'
 Plugin 'bronson/vim-trailing-whitespace'
-<<<<<<< HEAD
 Plugin 'three/javascript-libraries-syntax.vim'
 Plugin 'Yggdroot/indentLine'
 Plugin 'ctrlpvim/ctrlp.vim'
-=======
 "Plugin 'chase/vim-ansible-yaml'
 Plugin 'mileszs/ack.vim'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'chase/vim-ansible-yaml'
 Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'bash-support.vim'
-Plugin 'Yggdroot/indentLine'
 
->>>>>>> be563b1ed81669c699722b29456b246153422656
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -96,13 +92,11 @@ nnoremap _dt :set ft=htmldjango<CR>
 nnoremap _pd :set ft=python.django<CR>
 nnoremap _hb :set ft=handlebars<CR>
 
-<<<<<<< HEAD
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp$',
   \ 'file': '\.so$\|\.dat$|\.DS_Store$'
 \ }
 
-=======
 au BufNewFile,BufRead *.vue setf vue.html.javascript.css
 au BufRead,BufNewFile *.vue set expandtab
 au BufRead,BufNewFile *.vue set tabstop=2
