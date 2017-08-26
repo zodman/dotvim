@@ -42,7 +42,6 @@ Plugin 'bling/vim-bufferline'
 Plugin 'vim-airline/vim-airline'
 "Plugin 'vim-airline/vim-airline-themes'
 Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'three/javascript-libraries-syntax.vim'
 Plugin 'Yggdroot/indentLine'
 Plugin 'ctrlpvim/ctrlp.vim'
 "Plugin 'chase/vim-ansible-yaml'
@@ -147,6 +146,5 @@ function! NextClosedFold(dir)
         call winrestview(view)
     endif
 endfunction
->>>>>>> be563b1ed81669c699722b29456b246153422656
 
 
