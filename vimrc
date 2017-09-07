@@ -42,6 +42,7 @@ Plugin 'bling/vim-bufferline'
 Plugin 'vim-airline/vim-airline'
 "Plugin 'vim-airline/vim-airline-themes'
 Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'Yggdroot/indentLine'
 "Plugin 'chase/vim-ansible-yaml'
 Plugin 'mileszs/ack.vim'
 Plugin 'editorconfig/editorconfig-vim'
@@ -92,6 +93,11 @@ nnoremap _dh :set ft=htmldjango<CR>
 nnoremap _dt :set ft=htmldjango<CR>
 nnoremap _pd :set ft=python.django<CR>
 nnoremap _hb :set ft=handlebars<CR>
+
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp$',
+  \ 'file': '\.so$\|\.dat$|\.DS_Store$'
+\ }
 
 au BufNewFile,BufRead *.vue setf vue.html.javascript.css
 au BufRead,BufNewFile *.vue set expandtab
