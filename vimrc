@@ -42,13 +42,14 @@ Plugin 'vim-airline/vim-airline'
 "Plugin 'vim-airline/vim-airline-themes'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'Yggdroot/indentLine'
+Plugin 'ctrlpvim/ctrlp.vim'
 "Plugin 'chase/vim-ansible-yaml'
 Plugin 'mileszs/ack.vim'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'chase/vim-ansible-yaml'
 Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'bash-support.vim'
-
+Plugin 'jonathanfilip/vim-lucius'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
