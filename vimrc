@@ -27,7 +27,7 @@ Plugin 'maksimr/vim-jsbeautify'
 Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'vim-syntastic/syntastic'
+"Plugin 'vim-syntastic/syntastic'
 Plugin 'NLKNguyen/papercolor-theme'
 Plugin 'tpope/vim-surround'
 Plugin 'jlanzarotta/bufexplorer'
@@ -50,6 +50,10 @@ Plugin 'chase/vim-ansible-yaml'
 Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'bash-support.vim'
 Plugin 'jonathanfilip/vim-lucius'
+Plugin 'stanangeloff/php.vim'
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
+Plugin 'shime/vim-livedown'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -72,7 +76,7 @@ endif
 
 
 "colo solarized
-colo PaperColor
+"colo PaperColor
 "colo badwolf
 
 let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$']
@@ -107,10 +111,10 @@ let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming em
 " https://github.com/webpack/webpack/issues/781#issuecomment-95523711
 set backupcopy=yes
 
-"let g:ctrlp_custom_ignore = {
-"    \ 'dir':  '\v[\/]\.(git|hg|svn)$|bower_components|node_modules|www|platform',
-"    \ 'file': '\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\|\.swp$|\.swo',
-"    \ }
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/]\.(git|hg|svn)$|bower_components|node_modules|www|platform',
+    \ 'file': '\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\|\.swp$|\.swo',
+    \ }
 
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
 
