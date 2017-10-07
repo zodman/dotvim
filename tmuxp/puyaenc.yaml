@@ -1,0 +1,15 @@
+session_name: puyaenc
+windows:
+    - window_name: commands
+      shell_command_before:
+        - cd ~/apps/puyaencry;
+      panes:
+        - shell_command:
+            - honcho start
+    - window_name: editor
+      focus: true
+      shell_command_before:
+        - cd ~/apps/puyaencry;
+      panes:
+        - vim . 
+

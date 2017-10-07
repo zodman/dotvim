@@ -1,0 +1,15 @@
+session_name: auditmylink 
+windows:
+    - window_name: commands
+      shell_command_before:
+        - cd ~/apps/shorturl2; workon shorturl2
+      panes:
+        - shell_command:
+            - honcho start
+    - window_name: editor
+      focus: true
+      shell_command_before:
+        - cd ~/apps/shorturl2
+      panes:
+        - vim . 
+

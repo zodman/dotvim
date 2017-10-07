@@ -29,7 +29,6 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/nerdcommenter'
 "Plugin 'vim-syntastic/syntastic'
 Plugin 'NLKNguyen/papercolor-theme'
-Plugin 'tpope/vim-surround'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'django.vim'
 Plugin 'sjl/badwolf'
@@ -37,7 +36,6 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'moll/vim-bbye'
 Plugin 'gregsexton/matchtag'
-Plugin 'bling/vim-bufferline'
 Plugin 'vim-airline/vim-airline'
 "Plugin 'vim-airline/vim-airline-themes'
 Plugin 'bronson/vim-trailing-whitespace'
@@ -51,15 +49,14 @@ Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'bash-support.vim'
 Plugin 'jonathanfilip/vim-lucius'
 Plugin 'stanangeloff/php.vim'
-Plugin 'godlygeek/tabular'
-Plugin 'plasticboy/vim-markdown'
 Plugin 'shime/vim-livedown'
+Plugin 'cespare/vim-toml'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
 "folding settings
-set foldmethod=indent   "fold based on indent
-set foldnestmax=5       "deepest fold is 3 levels
+"set foldmethod=indent   "fold based on indent
+"set foldnestmax=5       "deepest fold is 3 levels
 set cursorline
 syntax on
 set shortmess=atI " Shortens messages in status line.
@@ -68,7 +65,9 @@ set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS " Ignore compiled Python files
 set foldenable " Turn on folding.
 set t_Co=256
 set modeline
-set mouse=a
+set mouse=
+"set term=xterm
+
 if (exists('+colorcolumn'))
     set colorcolumn=80
     highlight ColorColumn ctermbg=9
@@ -76,7 +75,7 @@ endif
 
 
 "colo solarized
-"colo PaperColor
+colo PaperColor
 "colo badwolf
 
 let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$']
@@ -149,5 +148,3 @@ function! NextClosedFold(dir)
         call winrestview(view)
     endif
 endfunction
-
-
