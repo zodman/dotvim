@@ -27,7 +27,7 @@ Plugin 'maksimr/vim-jsbeautify'
 Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/nerdcommenter'
-"Plugin 'vim-syntastic/syntastic'
+Plugin 'vim-syntastic/syntastic'
 Plugin 'NLKNguyen/papercolor-theme'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'django.vim'
@@ -49,8 +49,9 @@ Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'bash-support.vim'
 Plugin 'jonathanfilip/vim-lucius'
 Plugin 'stanangeloff/php.vim'
-Plugin 'shime/vim-livedown'
 Plugin 'cespare/vim-toml'
+Plugin 'wakatime/vim-wakatime'
+Plugin 'altercation/vim-colors-solarized'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -63,10 +64,11 @@ set shortmess=atI " Shortens messages in status line.
 set laststatus=2 " Always show status line.
 set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS " Ignore compiled Python files
 set foldenable " Turn on folding.
-set t_Co=256
 set modeline
 set mouse=
-"set term=xterm
+"set term=screen-256color
+set t_ut=
+set t_Co=256
 
 if (exists('+colorcolumn'))
     set colorcolumn=80
@@ -78,7 +80,7 @@ endif
 colo PaperColor
 "colo badwolf
 
-let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$']
+let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__']
 set pastetoggle=<F3>
 nnoremap <silent> <F2> :NERDTreeToggle<CR>
 
