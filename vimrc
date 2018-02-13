@@ -52,6 +52,7 @@ Plugin 'stanangeloff/php.vim'
 Plugin 'cespare/vim-toml'
 Plugin 'wakatime/vim-wakatime'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'dracula/vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -69,6 +70,7 @@ set mouse=
 "set term=screen-256color
 set t_ut=
 set t_Co=256
+set termguicolors
 
 if (exists('+colorcolumn'))
     set colorcolumn=80
@@ -77,7 +79,7 @@ endif
 
 
 "colo solarized
-colo PaperColor
+"colo PaperColor
 "colo badwolf
 
 let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__']
