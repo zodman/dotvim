@@ -15,9 +15,6 @@ set nu
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
@@ -53,6 +50,8 @@ Plugin 'cespare/vim-toml'
 Plugin 'wakatime/vim-wakatime'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'dracula/vim'
+Plugin 'vim-scripts/indentpython.vim'
+Plugin 'chriskempson/base16-vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -67,15 +66,21 @@ set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS " Ignore compiled Python files
 set foldenable " Turn on folding.
 set modeline
 set mouse=
-"set term=screen-256color
-set t_ut=
-set t_Co=256
-set termguicolors
+"set t_ut=
+"set t_Co=256
 
 if (exists('+colorcolumn'))
     set colorcolumn=80
     highlight ColorColumn ctermbg=9
 endif
+
+let python_highlight_all=1
+syntax on
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
 
 
 "colo solarized
