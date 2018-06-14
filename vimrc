@@ -51,6 +51,7 @@ Plugin 'wakatime/vim-wakatime'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'dracula/vim'
 Plugin 'vim-scripts/indentpython.vim'
+Plugin 'hdima/python-syntax'
 Plugin 'chriskempson/base16-vim'
 call vundle#end()            " required
 filetype plugin indent on    " required

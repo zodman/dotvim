@@ -2,14 +2,14 @@ session_name: hugo
 windows:
     - window_name: hugoserver
       shell_command_before:
-        - cd ~/$L
+        - cd ~/apps/$L
       panes:
         - shell_command:
             - explorer http://localhost:1313; hugo server -D
     - window_name: editor
       focus: true
       shell_command_before:
-        - cd ~/blog
+        - cd ~/apps/blog
       panes:
         - read -p 'Title :' T ; [ ! -z "$T" ] && hugo new posts/$T.md --editor vim 
 
