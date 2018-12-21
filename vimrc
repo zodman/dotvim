@@ -33,26 +33,27 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'moll/vim-bbye'
 Plugin 'gregsexton/matchtag'
-Plugin 'vim-airline/vim-airline'
+"Plugin 'vim-airline/vim-airline'
 "Plugin 'vim-airline/vim-airline-themes'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'Yggdroot/indentLine'
 Plugin 'ctrlpvim/ctrlp.vim'
 "Plugin 'chase/vim-ansible-yaml'
 Plugin 'mileszs/ack.vim'
-Plugin 'editorconfig/editorconfig-vim'
-Plugin 'chase/vim-ansible-yaml'
+"Plugin 'editorconfig/editorconfig-vim'
 Plugin 'othree/javascript-libraries-syntax.vim'
-Plugin 'bash-support.vim'
-Plugin 'jonathanfilip/vim-lucius'
+"Plugin 'bash-support.vim'
+"Plugin 'jonathanfilip/vim-lucius'
 Plugin 'stanangeloff/php.vim'
 Plugin 'cespare/vim-toml'
-Plugin 'wakatime/vim-wakatime'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'dracula/vim'
+"Plugin 'wakatime/vim-wakatime'
+"Plugin 'altercation/vim-colors-solarized'
+"Plugin 'dracula/vim'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'hdima/python-syntax'
-Plugin 'chriskempson/base16-vim'
+"Plugin 'chriskempson/base16-vim'
+Plugin 'bennyyip/vim-yapf'
+Plugin 'digitaltoad/vim-pug'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -63,7 +64,7 @@ set cursorline
 syntax on
 set shortmess=atI " Shortens messages in status line.
 set laststatus=2 " Always show status line.
-set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS " Ignore compiled Python files
+set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS,htmlcov " Ignore compiled Python files
 set foldenable " Turn on folding.
 set modeline
 set mouse=
@@ -88,7 +89,12 @@ set statusline+=%*
 "colo PaperColor
 "colo badwolf
 
-let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__']
+let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__','htmlcov','node_modules']
+let NERDTreeQuitOnOpen = 1
+let NERDTreeAutoDeleteBuffer = 1
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+
 set pastetoggle=<F3>
 nnoremap <silent> <F2> :NERDTreeToggle<CR>
 
