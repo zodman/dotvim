@@ -53,6 +53,7 @@ Plugin 'dracula/vim'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'hdima/python-syntax'
 Plugin 'chriskempson/base16-vim'
+Plugin 'digitaltoad/vim-pug'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -114,6 +115,7 @@ au BufRead,BufNewFile *.vue set tabstop=2
 au BufRead,BufNewFile *.vue set softtabstop=2
 au BufRead,BufNewFile *.vue set shiftwidth=2
 iab setheader #!/usr/bin/env python<CR># encoding=utf8<CR># made by zodman
+autocmd BufNewFile,BufRead *.jade set filetype=pug
 
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming empty <", "unescaped &" ,  "is not recognized!", "discarding unexpected"]
 
@@ -158,3 +160,5 @@ function! NextClosedFold(dir)
         call winrestview(view)
     endif
 endfunction
+let g:NERDTreeNodeDelimiter = "\u00a0"
+
