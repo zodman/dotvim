@@ -1,11 +1,11 @@
-session_name: hugo
+session_name: blog
 windows:
     - window_name: hugoserver
       shell_command_before:
-        - cd ~/apps/$L
+        - cd ~/apps/blog
       panes:
         - shell_command:
-            - explorer http://localhost:1313; hugo server -D
+            - xdg-open http://localhost:1313; hugo server -D
     - window_name: editor
       focus: true
       shell_command_before:

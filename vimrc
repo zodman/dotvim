@@ -33,8 +33,8 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'moll/vim-bbye'
 Plugin 'gregsexton/matchtag'
-"Plugin 'vim-airline/vim-airline'
-"Plugin 'vim-airline/vim-airline-themes'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'Yggdroot/indentLine'
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -54,6 +54,10 @@ Plugin 'hdima/python-syntax'
 "Plugin 'chriskempson/base16-vim'
 Plugin 'bennyyip/vim-yapf'
 Plugin 'digitaltoad/vim-pug'
+Plugin 'reedes/vim-lexical'
+Plugin 'mgedmin/coverage-highlight.vim'
+Plugin 'raimon49/requirements.txt.vim'
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -90,10 +94,10 @@ set statusline+=%*
 "colo badwolf
 
 let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__','htmlcov','node_modules']
-let NERDTreeQuitOnOpen = 1
-let NERDTreeAutoDeleteBuffer = 1
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
+"let NERDTreeQuitOnOpen = 1
+"let NERDTreeAutoDeleteBuffer = 1
+"let NERDTreeMinimalUI = 1
+"let NERDTreeDirArrows = 1
 
 set pastetoggle=<F3>
 nnoremap <silent> <F2> :NERDTreeToggle<CR>
@@ -119,6 +123,8 @@ au BufRead,BufNewFile *.vue set expandtab
 au BufRead,BufNewFile *.vue set tabstop=2
 au BufRead,BufNewFile *.vue set softtabstop=2
 au BufRead,BufNewFile *.vue set shiftwidth=2
+autocmd BufNewFile,BufReadPost *.jade set filetype=pug
+
 iab setheader #!/usr/bin/env python<CR># encoding=utf8<CR># made by zodman
 
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming empty <", "unescaped &" ,  "is not recognized!", "discarding unexpected"]
@@ -164,3 +170,13 @@ function! NextClosedFold(dir)
         call winrestview(view)
     endif
 endfunction
+
+augroup lexical
+  autocmd!
+  autocmd FileType markdown,mkd call lexical#init()
+  autocmd FileType textile call lexical#init()
+  autocmd FileType text call lexical#init({ 'spell': 0 })
+augroup END
+let g:lexical#spelllang = ['es','es_mx',]
+let g:syntastic_typescript_tsc_args = "-t ES5 -m commonjs --experimentalDecorators --emitDecoratorMetadata --sourceMap true --moduleResolution node"
+

@@ -1,7 +1,7 @@
 # pip install http://bitbucket.org/sjl/t/get/tip.zip
 
 #export TERM='xterm-256color'
-TASKS_PATH='/mnt/c/Users/Andres/Dropbox/tasks'
+TASKS_PATH='~/Dropbox/tasks'
 alias t='t --task-dir ${TASKS_PATH} --list tasks'
 
 #eval `keychain --eval --agents ssh id_rsa`
