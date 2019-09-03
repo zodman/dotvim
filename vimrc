@@ -51,7 +51,7 @@ Plugin 'cespare/vim-toml'
 "Plugin 'dracula/vim'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'hdima/python-syntax'
-"Plugin 'chriskempson/base16-vim'
+Plugin 'chriskempson/base16-vim'
 Plugin 'bennyyip/vim-yapf'
 Plugin 'digitaltoad/vim-pug'
 Plugin 'reedes/vim-lexical'
@@ -126,6 +126,7 @@ au BufRead,BufNewFile *.vue set shiftwidth=2
 autocmd BufNewFile,BufReadPost *.jade set filetype=pug
 
 iab setheader #!/usr/bin/env python<CR># encoding=utf8<CR># made by zodman
+autocmd BufNewFile,BufRead *.jade set filetype=pug
 
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming empty <", "unescaped &" ,  "is not recognized!", "discarding unexpected"]
 
