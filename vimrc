@@ -31,7 +31,6 @@ Plugin 'django.vim'
 Plugin 'sjl/badwolf'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
-Plugin 'moll/vim-bbye'
 Plugin 'gregsexton/matchtag'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -47,7 +46,7 @@ Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'stanangeloff/php.vim'
 Plugin 'cespare/vim-toml'
 "Plugin 'wakatime/vim-wakatime'
-"Plugin 'altercation/vim-colors-solarized'
+Plugin 'altercation/vim-colors-solarized'
 "Plugin 'dracula/vim'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'hdima/python-syntax'
@@ -57,6 +56,9 @@ Plugin 'digitaltoad/vim-pug'
 Plugin 'reedes/vim-lexical'
 Plugin 'mgedmin/coverage-highlight.vim'
 Plugin 'raimon49/requirements.txt.vim'
+Plugin 'morhetz/gruvbox'
+Plugin 'raimondi/delimitmate'
+Plugin 'moll/vim-bbye' " Bdelete
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -72,8 +74,12 @@ set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS,htmlcov " Ignore compiled Python fi
 set foldenable " Turn on folding.
 set modeline
 set mouse=
-"set t_ut=
-"set t_Co=256
+
+set t_Co=256
+colorscheme gruvbox
+set background=dark
+syntax on
+
 
 if (exists('+colorcolumn'))
     set colorcolumn=80
@@ -82,7 +88,7 @@ endif
 
 let python_highlight_all=1
 syntax on
-
+set laststatus=2
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -180,4 +186,6 @@ augroup lexical
 augroup END
 let g:lexical#spelllang = ['es','es_mx',]
 let g:syntastic_typescript_tsc_args = "-t ES5 -m commonjs --experimentalDecorators --emitDecoratorMetadata --sourceMap true --moduleResolution node"
+
+
 

@@ -1,0 +1,13 @@
+Will not apply HSTS. The HSTS database must be a regular and non-world-writable file.
+ERROR: could not open HSTS store at '/home/zodman/.wget-hsts'. HSTS will be disabled.
+--2020-02-17 14:37:19--  https://gist.githubusercontent.com/kevinold/4749656/raw/19dffb1b52770b9df39a5125125b141512134c9c/.ackrc
+Resolving gist.githubusercontent.com (gist.githubusercontent.com)... 151.101.0.133, 151.101.64.133, 151.101.128.133, ...
+Connecting to gist.githubusercontent.com (gist.githubusercontent.com)|151.101.0.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 981 [text/plain]
+Saving to: ‘.ackrc’
+
+     0K                                                       100% 43.7M=0s
+
+2020-02-17 14:37:20 (43.7 MB/s) - ‘.ackrc’ saved [981/981]
+
