@@ -17,48 +17,46 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
+" CORE
 Plugin 'scrooloose/nerdtree'
+Plugin 'mattn/emmet-vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'vim-syntastic/syntastic'
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'gregsexton/matchtag'
+Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'mileszs/ack.vim'
+Plugin 'Yggdroot/indentLine'
+Plugin 'moll/vim-bbye' " Bdelete
+" OTHER LANGUAGUAGES
+Plugin 'mtscout6/syntastic-local-eslint.vim'
+
 Plugin 'othree/html5.vim'
 Plugin 'posva/vim-vue'
 Plugin 'maksimr/vim-jsbeautify'
-Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'vim-syntastic/syntastic'
-Plugin 'NLKNguyen/papercolor-theme'
-Plugin 'jlanzarotta/bufexplorer'
 Plugin 'django.vim'
-Plugin 'sjl/badwolf'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
-Plugin 'gregsexton/matchtag'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'Yggdroot/indentLine'
-Plugin 'ctrlpvim/ctrlp.vim'
-"Plugin 'chase/vim-ansible-yaml'
-Plugin 'mileszs/ack.vim'
-"Plugin 'editorconfig/editorconfig-vim'
 Plugin 'othree/javascript-libraries-syntax.vim'
-"Plugin 'bash-support.vim'
-"Plugin 'jonathanfilip/vim-lucius'
 Plugin 'stanangeloff/php.vim'
 Plugin 'cespare/vim-toml'
-"Plugin 'wakatime/vim-wakatime'
+"THEMES
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'NLKNguyen/papercolor-theme'
+Plugin 'sjl/badwolf'
+Plugin 'morhetz/gruvbox'
 Plugin 'altercation/vim-colors-solarized'
-"Plugin 'dracula/vim'
+" " Pythons
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'hdima/python-syntax'
-Plugin 'chriskempson/base16-vim'
-Plugin 'bennyyip/vim-yapf'
-Plugin 'digitaltoad/vim-pug'
-Plugin 'reedes/vim-lexical'
-Plugin 'mgedmin/coverage-highlight.vim'
 Plugin 'raimon49/requirements.txt.vim'
-Plugin 'morhetz/gruvbox'
-Plugin 'raimondi/delimitmate'
-Plugin 'moll/vim-bbye' " Bdelete
+"Plugin 'digitaltoad/vim-pug'
+" WRITING
+Plugin 'reedes/vim-lexical'
+"Plugin 'raimondi/delimitmate'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -70,7 +68,7 @@ set cursorline
 syntax on
 set shortmess=atI " Shortens messages in status line.
 set laststatus=2 " Always show status line.
-set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS,htmlcov " Ignore compiled Python files
+set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS,htmlcov,*report*,coverage" Ignore compiled Python files
 set foldenable " Turn on folding.
 set modeline
 set mouse=
@@ -93,13 +91,32 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
+let g:airline#extensions#tabline#enabled = 1
+
+
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_loc_list_height = 5
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_error_symbol = '❌'
+let g:syntastic_style_error_symbol = '⁉️'
+let g:syntastic_warning_symbol = '⚠️'
+let g:syntastic_style_warning_symbol = '💩'
+highlight link SyntasticErrorSign SignColumn
+highlight link SyntasticWarningSign SignColumn
+highlight link SyntasticStyleErrorSign SignColumn
+highlight link SyntasticStyleWarningSign SignColumn
+
 
 
 "colo solarized
 "colo PaperColor
 "colo badwolf
 
-let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__','htmlcov','node_modules']
+let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__','htmlcov','node_modules', '*report*']
 "let NERDTreeQuitOnOpen = 1
 "let NERDTreeAutoDeleteBuffer = 1
 "let NERDTreeMinimalUI = 1

@@ -9,4 +9,5 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim |
 # ~/.vim/bundle/neobundle.vim/bin/neoinstall
 sudo apt install tmux ack-grep python-pep8
 ln -s ~/.vim/ctags ~/.ctagsrc
+ln -s ~/.vim/ackrc ~/.ackrc
 vim +PluginInstall
