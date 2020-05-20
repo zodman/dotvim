@@ -1,0 +1,17 @@
+session_name: pingdoomer
+windows:
+    - window_name: commands
+      shell_command_before:
+        - cd ~/apps/pingdoomer;
+        - workon pingdoomer;
+      panes:
+        - shell_command:
+            - python app/manage.py runserver
+    - window_name: editor
+      focus: true
+      shell_command_before:
+        - cd ~/apps/pingdoomer;
+        - workon pingdoomer;
+      panes:
+        - vim . 
+
