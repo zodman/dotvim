@@ -23,8 +23,8 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'mattn/emmet-vim'
 Plugin 'scrooloose/nerdcommenter'
-"Plugin 'vim-syntastic/syntastic'
-" Plugin 'mtscout6/syntastic-local-eslint.vim'
+Plugin 'vim-syntastic/syntastic'
+Plugin 'mtscout6/syntastic-local-eslint.vim'
 Plugin 'sheerun/vim-polyglot' " hightlight for files
 "Plugin 'jlanzarotta/bufexplorer'
 Plugin 'gregsexton/matchtag'
@@ -53,12 +53,15 @@ Plugin 'dracula/vim', { 'name': 'dracula' }
 "" " Pythons
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'hdima/python-syntax'
+Plugin 'mgedmin/coverage-highlight.vim'
 Plugin 'raimon49/requirements.txt.vim'
 Plugin 'mindriot101/vim-yapf'
 ""Plugin 'digitaltoad/vim-pug'
 " WRITING
 "Plugin 'reedes/vim-lexical'
 "Plugin 'raimondi/delimitmate'
+"Plugin 'rhysd/vim-grammarous'
+Plugin 'dpelle/vim-LanguageTool'
 Plugin 'wakatime/vim-wakatime'
 Plugin 'm-kat/aws-vim'
 call vundle#end()            " required
@@ -166,10 +169,12 @@ au BufRead,BufNewFile *.vue set tabstop=2
 au BufRead,BufNewFile *.vue set softtabstop=2
 au BufRead,BufNewFile *.vue set shiftwidth=2
 autocmd BufNewFile,BufReadPost *.jade set filetype=pug
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab
+" autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab
+autocmd FileType javascript setlocal ts=4 sts=4 sw=4
 iab setheader #!/usr/bin/env python<CR># encoding=utf8<CR># made by zodman
 autocmd BufNewFile,BufRead *.jade set filetype=pug
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=0# indentkeys-=<:> foldmethod=indent nofoldenable
+au BufNewFile,BufRead *.py set tabstop=4 softtabstop=4 shiftwidth=4 expandtab autoindent fileformat=unix
 
 
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming empty <", "unescaped &" ,  "is not recognized!", "discarding unexpected"]
@@ -237,3 +242,4 @@ let g:netrw_list_hide=netrw_gitignore#Hide()
 let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 
 
+let g:languagetool_jar='$HOME/LanguageTool-4.9.1/languagetool-commandline.jar'

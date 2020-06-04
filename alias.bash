@@ -42,8 +42,12 @@ function _ncduzip() {
     rm $tmp_dir -rf
 }
 
+function gitprunelocal()  {
+    git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d
+}
 
 
 alias awsall="_awsListAll"
+alias awslist="_awsListAll"
 alias awsset="_awsSwitchProfile"
 alias awswho="aws configure list"
