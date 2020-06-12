@@ -44,6 +44,7 @@ Plugin 'cespare/vim-toml'
 Plugin 'retorillo/istanbul.vim'
 ""THEMES
 Plugin 'vim-airline/vim-airline'
+Plugin 'sainnhe/sonokai'
 ""Plugin 'vim-airline/vim-airline-themes'
 Plugin 'NLKNguyen/papercolor-theme'
 Plugin 'sjl/badwolf'
@@ -64,6 +65,7 @@ Plugin 'mindriot101/vim-yapf'
 Plugin 'dpelle/vim-LanguageTool'
 Plugin 'wakatime/vim-wakatime'
 Plugin 'm-kat/aws-vim'
+Plugin 'takac/vim-hardtime'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -101,10 +103,14 @@ set statusline+=%*
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#syntastic#enabled = 1
 
+
+" SYNTAX
 "let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
+" disable syntax by default
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = {'mode':'passive'}
 "let g:syntastic_loc_list_height = 5
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_python_checkers = ['pylama']
@@ -116,6 +122,9 @@ highlight link SyntasticErrorSign SignColumn
 highlight link SyntasticWarningSign SignColumn
 highlight link SyntasticStyleErrorSign SignColumn
 highlight link SyntasticStyleWarningSign SignColumn
+
+let g:syntastic_check_on_open = 0
+
 
 
 
@@ -130,8 +139,10 @@ let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__', 'htmlcov
 "let NERDTreeMinimalUI = 1
 "let NERDTreeDirArrows = 1
 
-set pastetoggle=<F3>
 nnoremap <silent> <F2> :NERDTreeToggle<CR>
+set pastetoggle=<F3>
+noremap <F4> :!ctags -R<CR>
+nnoremap <F10> :SyntasticCheck<CR> :SyntasticToggleMode<CR> :w<CR>
 
 nnoremap ,s :w!<CR>
 nnoremap ,d   :Bdelete<CR>
@@ -150,7 +161,8 @@ nnoremap _pd :set ft=python.django<CR>
 nnoremap _hb :set ft=handlebars<CR>
 " ejecute last command
 map <leader>l :<Up><CR>
-map <leader>f :!prettier-eslint %:p --write <CR>
+map <leader>f :silent %!prettier-eslint %:p --write %p <CR>
+nnoremap gp :silent %!prettier-eslint --stdin-filepath % --trailing-comma all --single-quote<CR>
 map <leader>c :IstanbulToggle <CR>
 
 " Edit vimr configuration file

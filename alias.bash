@@ -42,6 +42,9 @@ function _ncduzip() {
     rm $tmp_dir -rf
 }
 
+function gitpruneremote() {
+    git remote prune origin
+}
 function gitprunelocal()  {
     git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d
 }
