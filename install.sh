@@ -8,6 +8,7 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim |
 # git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
 # ~/.vim/bundle/neobundle.vim/bin/neoinstall
 sudo apt install tmux ack-grep python-pep8
-ln -s ~/.vim/ctags ~/.ctagsrc
-ln -s ~/.vim/ackrc ~/.ackrc
+ln -s ~/.vim/ctags ~/.ctagsrc || echo bypass
+ln -s ~/.vim/ackrc ~/.ackrc || echo bypass
+ln -s ~/.vim/powerline ~/.config/powerline || echo bypass
 vim +PluginInstall

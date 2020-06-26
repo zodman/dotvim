@@ -37,6 +37,7 @@ function _awsSwitchProfile() {
 
 function _ncduzip() {
     tmp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
+    du -hc $1
     7z x $1 -o$tmp_dir
     ncdu $tmp_dir
     rm $tmp_dir -rf
@@ -54,3 +55,18 @@ alias awsall="_awsListAll"
 alias awslist="_awsListAll"
 alias awsset="_awsSwitchProfile"
 alias awswho="aws configure list"
+
+
+
+function dubytype() {
+
+    ftypes=$(find $1 -type f | grep -E ".*\.[a-zA-Z0-9]*$" | sed -e 's/.*\(\.[a-zA-Z0-9]*\)$/\1/' | sort | uniq)
+
+    for ft in $ftypes
+    do
+            echo -n "$ft "
+                # find $1 -name "*${ft}" -exec ls -l {} \; | awk '{total += $5} END {print total}'
+                find $1 -name "*${ft}" -print0 | xargs -0 du -c | grep total | awk '{print $1}' 
+            done
+}
+
