@@ -1,0 +1,13 @@
+--recurse=yes
+--exclude=.git
+--exclude=*vendor/*
+--exclude=*node_modules/*
+--exclude=node_modules/
+--exclude=*bower_components/*
+--exclude=db/*
+--exclude=log/*
+--exclude=*static/*
+--exclude=*dist/*
+--exclude=*dist.js
+
+
