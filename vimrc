@@ -11,7 +11,7 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 set nu
-set nocursorline
+set cursorline
 syntax on
 
 " set the runtime path to include Vundle and initialize
@@ -39,6 +39,9 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'othree/html5.vim'
 Plugin 'posva/vim-vue'
 Plugin 'django.vim'
+" Snippets
+Plugin 'isRuslan/vim-es6'
+Plugin 'joaohkfaria/vim-jest-snippets'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'stanangeloff/php.vim'
@@ -47,6 +50,7 @@ Plugin 'retorillo/istanbul.vim'
 ""THEMES
 Plugin 'vim-airline/vim-airline'
 Plugin 'sainnhe/sonokai'
+Plugin 'tomasr/molokai'
 ""Plugin 'vim-airline/vim-airline-themes'
 Plugin 'NLKNguyen/papercolor-theme'
 Plugin 'sjl/badwolf'
@@ -65,6 +69,9 @@ Plugin 'dpelle/vim-LanguageTool'
 Plugin 'takac/vim-hardtime'
 call vundle#end()            " required
 filetype plugin indent on    " required
+filetype plugin on
+" automplete
+set omnifunc=syntaxcomplete#Complete
 
 set conceallevel=0
 
@@ -80,7 +87,7 @@ set modeline
 set mouse=
 set t_Co=256
 
-let g:solarized_termcolors=256
+" let g:solarized_termcolors=256
 
 if (exists('+colorcolumn'))
     set colorcolumn=80
@@ -108,8 +115,8 @@ let g:syntastic_check_on_wq = 1
 " let g:syntastic_mode_map = {'mode':'passive'}
 "let g:syntastic_loc_list_height = 5
 let g:syntastic_javascript_checkers = ['eslint']
-" let g:syntastic_javascript_eslint_exec = 'eslint_d'
-let g:syntastic_javascript_eslint_exec = 'eslint'
+let g:syntastic_javascript_eslint_exec = 'eslint_d'
+"\let g:syntastic_javascript_eslint_exec = 'eslint'
 let g:syntastic_python_checkers = ['pylama']
 let g:syntastic_error_symbol = '❌'
 let g:syntastic_style_error_symbol = '⁉️'
@@ -128,7 +135,7 @@ highlight link SyntasticStyleWarningSign SignColumn
 
 " colorscheme gruvbox
 "colo solarized
-"colo PaperColor
+" colo PaperColor
 "colo badwolf
 
 let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__', 'htmlcov','node_modules', '*report*', 'coverage', '^tags$']
@@ -161,7 +168,8 @@ nnoremap _hb :set ft=handlebars<CR>
 map <leader>l :<Up><CR>
 map <leader>f :!prettier-eslint_d --write %:p  <CR>
 nnoremap gp :silent %!prettier-eslint --stdin-filepath % --trailing-comma all --single-quote<CR>
-map <leader>c :IstanbulToggle <CR>
+nnoremap <leader>iu :IstanbulUpdate <CR>
+nnoremap <leader>it :IstanbulToggle <CR>
 
 " Edit vimr configuration file
 nnoremap <Leader>ve :e $MYVIMRC<CR>
@@ -223,9 +231,9 @@ let g:netrw_liststyle=3     " tree view
 let g:netrw_list_hide=netrw_gitignore#Hide()
 let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 
-
+" language tool plugin
 let g:languagetool_jar='$HOME/LanguageTool-4.9.1/languagetool-commandline.jar'
-
+" Snippets
 let g:UltiSnipsListSnippets="<c-w>"
 
 " HARDTIME
@@ -235,4 +243,35 @@ let g:list_of_insert_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
 let g:list_of_disabled_keys = []
 " ENABLE FOR DEFAULT
 let g:hardtime_default_on = 1
+
+
+
+let g:PaperColor_Theme_Options = {
+  \   'theme': {
+  \     'default.dark': {
+  \       'transparent_background': 1,
+  \       'allow_bold': 1,
+  \       'allow_italic': 1
+  \     }
+  \   }
+  \ }
+
+let g:gruvbox_contrast_dark='hard'
+
+
+" Enable true color 启用终端24位色
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
+
+
+" the configuration options should be placed before `colorscheme sonokai`
+let g:sonokai_style = 'andromeda'
+let g:sonokai_enable_italic = 0
+let g:sonokai_disable_italic_comment = 1
+colo sonokai
+
+
 
