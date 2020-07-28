@@ -39,15 +39,18 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'othree/html5.vim'
 Plugin 'posva/vim-vue'
 Plugin 'django.vim'
+Plugin 'stanangeloff/php.vim'
+Plugin 'cespare/vim-toml'
+Plugin 'retorillo/istanbul.vim'
+Plugin 'neoclide/coc.nvim', {'branch': 'release'}
+
+"
 " Snippets
 Plugin 'isRuslan/vim-es6'
 Plugin 'joaohkfaria/vim-jest-snippets'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
-Plugin 'stanangeloff/php.vim'
-Plugin 'cespare/vim-toml'
-Plugin 'retorillo/istanbul.vim'
-""THEMES
+"THEMES
 Plugin 'vim-airline/vim-airline'
 Plugin 'sainnhe/sonokai'
 Plugin 'tomasr/molokai'
@@ -182,13 +185,15 @@ let g:ctrlp_custom_ignore = {
 \ }
 
 au BufNewFile,BufRead *.vue setf vue.html.javascript.css
+autocmd BufNewFile,BufReadPost *.jade set filetype=pug
+autocmd BufNewFile,BufReadPost *.md set textwidth=80
+
 au BufRead,BufNewFile *.vue set expandtab
 au BufRead,BufNewFile *.vue set tabstop=2
 au BufRead,BufNewFile *.vue set softtabstop=2
 au BufRead,BufNewFile *.vue set shiftwidth=2
 " autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab
 autocmd FileType javascript setlocal ts=4 sts=4 sw=4
-autocmd BufNewFile,BufReadPost *.jade set filetype=pug
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=0# indentkeys-=<:> foldmethod=indent nofoldenable
 au BufNewFile,BufRead *.py set tabstop=4 softtabstop=4 shiftwidth=4 expandtab autoindent fileformat=unix
 
