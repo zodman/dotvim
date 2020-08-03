@@ -14,63 +14,65 @@ set nu
 set cursorline
 syntax on
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
 " CORE
-Plugin 'scrooloose/nerdtree'
-Plugin 'mattn/emmet-vim'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'vim-syntastic/syntastic'
-"Plugin 'mtscout6/syntastic-local-eslint.vim'
-Plugin 'sheerun/vim-polyglot' " hightlight for files
-Plugin 'jlanzarotta/bufexplorer'
-Plugin 'gregsexton/matchtag'
-Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'mileszs/ack.vim'
-Plugin 'Yggdroot/indentLine'
-Plugin 'moll/vim-bbye' " Bdelete
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'mattn/emmet-vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'vim-syntastic/syntastic'
+"Plug 'mtscout6/syntastic-local-eslint.vim'
+Plug 'sheerun/vim-polyglot' " hightlight for files
+Plug 'jlanzarotta/bufexplorer'
+Plug 'gregsexton/matchtag'
+Plug 'bronson/vim-trailing-whitespace'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'mileszs/ack.vim'
+Plug 'Yggdroot/indentLine'
+Plug 'moll/vim-bbye' " Bdelete
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 "" OTHER LANGUAGUAGES
-Plugin 'othree/html5.vim'
-Plugin 'posva/vim-vue'
-Plugin 'django.vim'
-Plugin 'stanangeloff/php.vim'
-Plugin 'cespare/vim-toml'
-Plugin 'retorillo/istanbul.vim'
-Plugin 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'othree/html5.vim'
+Plug 'posva/vim-vue'
+Plug 'stanangeloff/php.vim'
+Plug 'cespare/vim-toml'
+Plug 'retorillo/istanbul.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 "
 " Snippets
-Plugin 'isRuslan/vim-es6'
-Plugin 'joaohkfaria/vim-jest-snippets'
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
+Plug 'isRuslan/vim-es6'
+Plug 'joaohkfaria/vim-jest-snippets'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 "THEMES
-Plugin 'vim-airline/vim-airline'
-Plugin 'sainnhe/sonokai'
-Plugin 'tomasr/molokai'
-""Plugin 'vim-airline/vim-airline-themes'
-Plugin 'NLKNguyen/papercolor-theme'
-Plugin 'sjl/badwolf'
-Plugin 'morhetz/gruvbox'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'dracula/vim', { 'name': 'dracula' }
+Plug 'vim-airline/vim-airline'
+Plug 'sainnhe/sonokai'
+Plug 'tomasr/molokai'
+""Plug 'vim-airline/vim-airline-themes'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'sjl/badwolf'
+Plug 'morhetz/gruvbox'
+Plug 'altercation/vim-colors-solarized'
+Plug 'dracula/vim', { 'name': 'dracula' }
 "" " Pythons
-Plugin 'vim-scripts/indentpython.vim'
-Plugin 'hdima/python-syntax'
-Plugin 'mgedmin/coverage-highlight.vim'
-Plugin 'raimon49/requirements.txt.vim'
-Plugin 'mindriot101/vim-yapf'
-""Plugin 'digitaltoad/vim-pug'
+Plug 'vim-scripts/indentpython.vim'
+Plug 'hdima/python-syntax'
+Plug 'mgedmin/coverage-highlight.vim'
+Plug 'raimon49/requirements.txt.vim'
+Plug 'mindriot101/vim-yapf'
+""Plug 'digitaltoad/vim-pug'
 " WRITING
-Plugin 'dpelle/vim-LanguageTool'
-Plugin 'takac/vim-hardtime'
-call vundle#end()            " required
+Plug 'dpelle/vim-LanguageTool'
+Plug 'takac/vim-hardtime'
+call plug#end()            " required
 filetype plugin indent on    " required
 filetype plugin on
 " automplete
@@ -186,6 +188,7 @@ let g:ctrlp_custom_ignore = {
 
 au BufNewFile,BufRead *.vue setf vue.html.javascript.css
 autocmd BufNewFile,BufReadPost *.jade set filetype=pug
+autocmd BufNewFile,BufReadPost Bakefile set filetype=bash
 autocmd BufNewFile,BufReadPost *.md set textwidth=80
 
 au BufRead,BufNewFile *.vue set expandtab
@@ -277,6 +280,9 @@ let g:sonokai_style = 'andromeda'
 let g:sonokai_enable_italic = 0
 let g:sonokai_disable_italic_comment = 1
 colo sonokai
+
+" hi Normal guibg=NONE ctermbg=NONE
+
 
 
 
