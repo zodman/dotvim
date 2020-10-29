@@ -50,14 +50,6 @@ function gitprunelocal()  {
     git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d
 }
 
-
-alias awsall="_awsListAll"
-alias awslist="_awsListAll"
-alias awsset="_awsSwitchProfile"
-alias awswho="aws configure list"
-
-
-
 function dubytype() {
 
     ftypes=$(find $1 -type f | grep -E ".*\.[a-zA-Z0-9]*$" | sed -e 's/.*\(\.[a-zA-Z0-9]*\)$/\1/' | sort | uniq)
@@ -69,4 +61,19 @@ function dubytype() {
                 find $1 -name "*${ft}" -print0 | xargs -0 du -c | grep total | awk '{print $1}' 
             done
 }
+
+function c() {
+  git commit -am "$*"
+}
+
+##### ALIAS
+
+alias awsall="_awsListAll"
+alias awslist="_awsListAll"
+alias awsset="_awsSwitchProfile"
+alias awswho="aws configure list"
+alias npm-cache-clear="npm cache clear --force"
+alias husky-skip="HUSKY_SKIP_HOOKS=1"
+alias ci-status='watch --color unbuffer "gh pr checks"'
+alias p='git push --no-verify'
 

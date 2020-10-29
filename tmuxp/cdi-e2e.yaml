@@ -1,0 +1,23 @@
+session_name: 'Aws logs cds-data-ingestor'
+windows:
+  - window_name: external_interaction
+    shell_command_before:
+        - awsset global-dev
+    panes:
+      - awslogs get /aws/lambda/e2e-global-cdi-external-interaction-historic ALL -w
+      - awslogs get /aws/lambda/e2e-global-cdi-external-interaction-realtime ALL -w
+  - window_name: process_users
+    shell_command_before:
+        - awsset global-dev
+    panes:
+      - awslogs get /aws/lambda/e2e-global-cdi-lambda-consumer-data-janrain-webhooks ALL -w
+      - awslogs get /aws/lambda/e2e-global-cdi-lambda-historic-profile-bucket ALL -w
+      - awslogs get /aws/lambda/e2e-global-cdi-lambda-janrain-batch-poller ALL -w
+      - awslogs get /aws/lambda/e2e-global-cdi-lambda-janrain-process-users ALL -w
+  - window_name: orc_processor
+    shell_command_before:
+        - awsset global-dev
+    panes:
+      - awslogs get /aws/lambda/e2e-global-cdi-historic-orc-json-processor ALL -w
+      - awslogs get /aws/lambda/e2e-global-cdi-realtime-orc-json-processor ALL -w
+

@@ -3,3 +3,4 @@ spell
 black
 autoload/plug.vim
 plugged
+tags

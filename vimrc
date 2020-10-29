@@ -23,12 +23,12 @@ endif
 
 call plug#begin('~/.vim/plugged')
 " CORE
-Plug 'scrooloose/nerdtree'
+Plug 'preservim/nerdtree'
 Plug 'mattn/emmet-vim'
-Plug 'scrooloose/nerdcommenter'
+Plug 'preservim/nerdcommenter'
 Plug 'vim-syntastic/syntastic'
 "Plug 'mtscout6/syntastic-local-eslint.vim'
-Plug 'sheerun/vim-polyglot' " hightlight for files
+" Plug 'sheerun/vim-polyglot' " hightlight for files
 Plug 'jlanzarotta/bufexplorer'
 Plug 'gregsexton/matchtag'
 Plug 'bronson/vim-trailing-whitespace'
@@ -36,17 +36,18 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'mileszs/ack.vim'
 Plug 'Yggdroot/indentLine'
 Plug 'moll/vim-bbye' " Bdelete
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'sjl/splice.vim'
 "" OTHER LANGUAGUAGES
-Plug 'othree/html5.vim'
-Plug 'posva/vim-vue'
-Plug 'stanangeloff/php.vim'
-Plug 'cespare/vim-toml'
+" Plug 'othree/html5.vim' replace by polyglot
+" Plug 'posva/vim-vue' " replace by polyglot
+Plug 'yuezk/vim-js'
+Plug 'yasuhiroki/github-actions-yaml.vim'
+"Plug 'stanangeloff/php.vim'
+" Plug 'cespare/vim-toml' "check if polyglot can replace
 Plug 'retorillo/istanbul.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-"
 " Snippets
 Plug 'isRuslan/vim-es6'
 Plug 'joaohkfaria/vim-jest-snippets'
@@ -56,22 +57,25 @@ Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'sainnhe/sonokai'
 Plug 'tomasr/molokai'
+Plug 'bluz71/vim-moonfly-colors'
+Plug 'jonathanfilip/vim-lucius'
 ""Plug 'vim-airline/vim-airline-themes'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'joshdick/onedark.vim'
 Plug 'sjl/badwolf'
 Plug 'morhetz/gruvbox'
 Plug 'altercation/vim-colors-solarized'
-Plug 'dracula/vim', { 'name': 'dracula' }
 "" " Pythons
 Plug 'vim-scripts/indentpython.vim'
 Plug 'hdima/python-syntax'
-Plug 'mgedmin/coverage-highlight.vim'
+Plug 'alfredodeza/coveragepy.vim'
 Plug 'raimon49/requirements.txt.vim'
 Plug 'mindriot101/vim-yapf'
 ""Plug 'digitaltoad/vim-pug'
 " WRITING
 Plug 'dpelle/vim-LanguageTool'
 Plug 'takac/vim-hardtime'
+Plug 'pechorin/any-jump.vim'
 call plug#end()            " required
 filetype plugin indent on    " required
 filetype plugin on
@@ -79,6 +83,7 @@ filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 
 set conceallevel=0
+
 
 
 "folding settings
@@ -110,12 +115,17 @@ set statusline+=%*
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#syntastic#enabled = 1
 
+"VUE
+"Polyglot
+" let g:polyglot_disabled = ['vue']
+
+
 
 " SYNTASTIC
 let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
 " disable syntax by default
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 1
 " let g:syntastic_mode_map = {'mode':'passive'}
 "let g:syntastic_loc_list_height = 5
@@ -143,11 +153,13 @@ highlight link SyntasticStyleWarningSign SignColumn
 " colo PaperColor
 "colo badwolf
 
-let NERDTreeIgnore=['\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__', 'htmlcov','node_modules', '*report*', 'coverage', '^tags$']
+let NERDTreeIgnore=['\.log$','junit\.xml$','\.serverless','\.git$','\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__', 'htmlcov','node_modules', '*report*', 'coverage', '^tags$', '\.egg-info','dist','^build$[[dir]]']
 "let NERDTreeQuitOnOpen = 1
 "let NERDTreeAutoDeleteBuffer = 1
 "let NERDTreeMinimalUI = 1
 "let NERDTreeDirArrows = 1
+let NERDTreeShowHidden=1
+
 
 nnoremap <silent> <F2> :NERDTreeToggle<CR>
 set pastetoggle=<F3>
@@ -172,9 +184,12 @@ nnoremap _hb :set ft=handlebars<CR>
 " ejecute last command
 map <leader>l :<Up><CR>
 map <leader>f :!prettier-eslint_d --write %:p  <CR>
+map <leader>a :e ~/.vim/alias.bash  <CR>
 nnoremap gp :silent %!prettier-eslint --stdin-filepath % --trailing-comma all --single-quote<CR>
-nnoremap <leader>iu :IstanbulUpdate <CR>
-nnoremap <leader>it :IstanbulToggle <CR>
+autocmd FileType javascript nnoremap <leader>iu :IstanbulUpdate <CR>
+autocmd FileType javascript nnoremap <leader>it :IstanbulToggle <CR>
+autocmd FileType python nnoremap <leader>iu :Coveragepy refresh <CR>
+
 
 " Edit vimr configuration file
 nnoremap <Leader>ve :e $MYVIMRC<CR>
@@ -189,7 +204,7 @@ let g:ctrlp_custom_ignore = {
 au BufNewFile,BufRead *.vue setf vue.html.javascript.css
 autocmd BufNewFile,BufReadPost *.jade set filetype=pug
 autocmd BufNewFile,BufReadPost Bakefile set filetype=bash
-autocmd BufNewFile,BufReadPost *.md set textwidth=80
+autocmd BufNewFile,BufReadPost *.md set textwidth=80 conceallevel=0
 
 au BufRead,BufNewFile *.vue set expandtab
 au BufRead,BufNewFile *.vue set tabstop=2
@@ -281,8 +296,20 @@ let g:sonokai_enable_italic = 0
 let g:sonokai_disable_italic_comment = 1
 colo sonokai
 
-" hi Normal guibg=NONE ctermbg=NONE
+hi Normal guibg=NONE ctermbg=NONE
 
-
+" COC configuration
+" fix flickering left bar
+set signcolumn=yes 
+set cmdheight=2
+" Use `lp` and `ln` for navigate diagnostics
+nmap <silent> <leader>lp <Plug>(coc-diagnostic-prev)
+nmap <silent> <leader>ln <Plug>(coc-diagnostic-next)
+"
+" " Remap keys for gotos
+nmap <silent> <leader>ld <Plug>(coc-definition)
+nmap <silent> <leader>lt <Plug>(coc-type-definition)
+nmap <silent> <leader>li <Plug>(coc-implementation)
+nmap <silent> <leader>lf <Plug>(coc-references)
 
 

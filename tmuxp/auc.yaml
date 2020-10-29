@@ -1,0 +1,13 @@
+session_name: 'Aws logs adobea'
+windows:
+  - window_name: profile_historic
+    # layout: tiled
+    shell_command_before:
+      - awsset global-dev
+    panes:
+      - awslogs get /aws/lambda/andres-global-auc-lambda-coke-profile-connector ALL -w
+      - awslogs get /aws/lambda/andres-global-auc-lambda-activity-stream-connector ALL -w
+      - awslogs get /aws/lambda/andres-global-auc-delete-profile ALL -w
+      - awslogs get /aws/lambda/andres-global-auc-get-profile ALL -w
+      - awslogs get  /aws/lambda/andres-global-auc-lambda-external-interaction-connector ALL -w
+      - awslogs get  /aws/lambda/andres-global-auc-revoke-consents  ALL -w
