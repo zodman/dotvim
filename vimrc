@@ -15,6 +15,12 @@ set cursorline
 syntax on
 
 
+"VUE
+"Polyglot
+" let g:polyglot_disabled = ['vue', 'python']
+
+
+
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
           \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -28,17 +34,19 @@ Plug 'mattn/emmet-vim'
 Plug 'preservim/nerdcommenter'
 Plug 'vim-syntastic/syntastic'
 "Plug 'mtscout6/syntastic-local-eslint.vim'
-" Plug 'sheerun/vim-polyglot' " hightlight for files
+Plug 'sheerun/vim-polyglot' " hightlight for files
 Plug 'jlanzarotta/bufexplorer'
 Plug 'gregsexton/matchtag'
 Plug 'bronson/vim-trailing-whitespace'
-Plug 'ctrlpvim/ctrlp.vim'
+"Plug 'ctrlpvim/ctrlp.vim' use fzf instead
 Plug 'mileszs/ack.vim'
 Plug 'Yggdroot/indentLine'
 Plug 'moll/vim-bbye' " Bdelete
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'sjl/splice.vim'
+Plug 'editorconfig/editorconfig-vim'
+
 "" OTHER LANGUAGUAGES
 " Plug 'othree/html5.vim' replace by polyglot
 " Plug 'posva/vim-vue' " replace by polyglot
@@ -67,7 +75,6 @@ Plug 'morhetz/gruvbox'
 Plug 'altercation/vim-colors-solarized'
 "" " Pythons
 Plug 'vim-scripts/indentpython.vim'
-Plug 'hdima/python-syntax'
 Plug 'alfredodeza/coveragepy.vim'
 Plug 'raimon49/requirements.txt.vim'
 Plug 'mindriot101/vim-yapf'
@@ -82,6 +89,7 @@ filetype plugin on
 " automplete
 set omnifunc=syntaxcomplete#Complete
 
+let g:python_highlight_all = 1
 set conceallevel=0
 
 
@@ -91,7 +99,7 @@ set foldmethod=manual   "fold based on indent
 "set foldnestmax=3       "deepest fold is 3 levels
 set shortmess=atI " Shortens messages in status line.
 set laststatus=2 " Always show status line.
-set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS,htmlcov,*report*,coverage/*
+set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS,htmlcov,*report*,coverage/*,my_data/*
 set foldenable " Turn on folding.
 set modeline
 set mouse=
@@ -114,11 +122,6 @@ set statusline+=%*
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#syntastic#enabled = 1
-
-"VUE
-"Polyglot
-" let g:polyglot_disabled = ['vue']
-
 
 
 " SYNTASTIC
@@ -146,6 +149,8 @@ highlight link SyntasticStyleWarningSign SignColumn
 
 
 
+" FZF
+nmap <C-P> :FZF<CR>
 
 
 " colorscheme gruvbox
@@ -153,7 +158,8 @@ highlight link SyntasticStyleWarningSign SignColumn
 " colo PaperColor
 "colo badwolf
 
-let NERDTreeIgnore=['\.log$','junit\.xml$','\.serverless','\.git$','\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__', 'htmlcov','node_modules', '*report*', 'coverage', '^tags$', '\.egg-info','dist','^build$[[dir]]']
+"let NERDTreeIgnore=['\.log$','junit\.xml$','\.serverless','\.git$','\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__', 'htmlcov','node_modules', '*report*', 'coverage', '^tags$', '\.egg-info','dist','^build$[[dir]]']
+let NERDTreeIgnore=['\.log$','junit\.xml$','\.serverless','\.git$','\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__', 'htmlcov','node_modules', '*report*', 'coverage', '^tags$', '\.egg-info','dist','my_data']
 "let NERDTreeQuitOnOpen = 1
 "let NERDTreeAutoDeleteBuffer = 1
 "let NERDTreeMinimalUI = 1
@@ -167,7 +173,8 @@ noremap <F4> :!ctags -R<CR>
 nnoremap <F9> :SyntasticCheck<CR> :SyntasticToggleMode<CR> :w<CR>
 
 nnoremap ,s :w!<CR>
-nnoremap ,d   :Bdelete<CR>
+nnoremap ,d   :bd<CR>
+nnoremap ,D   :Bdelete<CR>
 
 nnoremap <silent> ,q :bp<CR>
 nnoremap <silent> ,w :bn<CR>
@@ -197,7 +204,7 @@ nnoremap <Leader>ve :e $MYVIMRC<CR>
 nnoremap <Leader>vr :source $MYVIMRC<CR>
 
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp\|coverage$',
+  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp\|coverage$|my_data\',
   \ 'file': '\.so$\|\.dat$|\.DS_Store$'
 \ }
 
@@ -255,7 +262,8 @@ let g:netrw_list_hide=netrw_gitignore#Hide()
 let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 
 " language tool plugin
-let g:languagetool_jar='$HOME/LanguageTool-4.9.1/languagetool-commandline.jar'
+" use choco to install it.n
+let g:languagetool_jar='$HOME/.local/bin/languagetool-commandline.jar'
 " Snippets
 let g:UltiSnipsListSnippets="<c-w>"
 
@@ -302,6 +310,7 @@ hi Normal guibg=NONE ctermbg=NONE
 " fix flickering left bar
 set signcolumn=yes 
 set cmdheight=2
+
 " Use `lp` and `ln` for navigate diagnostics
 nmap <silent> <leader>lp <Plug>(coc-diagnostic-prev)
 nmap <silent> <leader>ln <Plug>(coc-diagnostic-next)
@@ -310,6 +319,6 @@ nmap <silent> <leader>ln <Plug>(coc-diagnostic-next)
 nmap <silent> <leader>ld <Plug>(coc-definition)
 nmap <silent> <leader>lt <Plug>(coc-type-definition)
 nmap <silent> <leader>li <Plug>(coc-implementation)
-nmap <silent> <leader>lf <Plug>(coc-references)
+nmap <silent> <leader>lr <Plug>(coc-references)
 
 
