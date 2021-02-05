@@ -1,7 +1,0 @@
-{
-    "typescript.suggest.enabled": false,
-    "typescript.suggestionActions.enabled": false,
-    "javascript.suggestionActions.enabled": false,
-    "pyright.disableOrganizeImports": true,
-    "pyright.reportMissingImports": false
-}

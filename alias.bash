@@ -2,14 +2,13 @@
 
 #export TERM='xterm-256color'
 TASKS_PATH='~/Dropbox/tasks'
-alias t='t --task-dir ${TASKS_PATH} --list tasks'
+# pip install git+https://github.com/sjl/t.git
 
 #eval `keychain --eval --agents ssh id_rsa`
-eval `keychain --agents ssh --eval id_rsa`
-eval `keychain --agents ssh --eval id_rsa2`
-source $HOME/.keychain/$HOSTNAME-sh
+#eval `keychain --agents ssh --eval id_rsa`
+#eval `keychain --agents ssh --eval id_rsa2`
+#source $HOME/.keychain/$HOSTNAME-sh
 
-alias wtc='git commit -am "$(curl --retry 5 --retry-delay 0 -s http://whatthecommit.com/index.txt)"'
 
 function _awsListAll() {
 
@@ -67,69 +66,23 @@ function c() {
   git commit -am "$*"
 }
 
-
-function _echo()
+# https://github.com/zmwangx/ets
+# https://github.com/sindresorhus/anybar-cli
+function m() 
 {
-    color_1=`tput setaf 3`
-    color_2=`tput setaf 5`
-    reset=`tput sgr0`
-    echo "${color_1}D: ${color_2}$1${reset}"
+    anybar cyan
+    eval "ets -s $@"; 
+    if [ $? -eq 0 ]; then
+        anybar green
+        say -v Amelie Processus terminé
+    else
+        anybar red
+        say -v Amelie Le processus a échoué
+    fi
 }
-
-function _eval()
-{
-    GREEN='\033[0;32m'
-    NC='\033[0m'
-    printf "${GREEN}$1${NC}\n"
-    eval "$1"
-}
-
-function dockercpup()
-{
-    _echo "Docker TOOL UP"
-    cd <put-your-path-here>/docker
-    _echo "$(pwd)"
-    docker-compose -p cp up $1
-}
-
-function dockercpdown()
-{
-    _echo "Docker TOOL DOWN"
-    cd <put-your-path-here>/docker
-    _echo "$(pwd)"
-    docker-compose -p cp down
-}
-
-function dockerpython3()
-{
-    _echo "Docker Python 3 - Bash Command"
-    container=`docker container ls | grep 'python3' | awk '{ print $1 }'`
-    _echo $container
-    _echo "Container: $container"
-    docker exec -ti $container bash
-}
-
-function dockermysql()
-{
-    _echo "Docker Mysql - Bash Command"
-    container=`docker container ls | grep 'mysql' | awk '{ print $1 }'`
-    _echo $container
-    _echo "Container: $container"
-    docker exec -ti $container bash
-}
-
-function dockernodejs()
-{
-    _echo "Docker NodeJs - Bash Command"
-    container=`docker container ls | grep 'node' | awk '{ print $1 }'`
-    _echo $container
-    _echo "Container: $container"
-    docker exec -ti $container bash
-}
-
 
 ##### ALIAS
-
+alias wtc='git commit -am "$(curl --retry 5 --retry-delay 0 -s http://whatthecommit.com/index.txt)"'
 alias awsall="_awsListAll"
 alias awslist="_awsListAll"
 alias awsset="_awsSwitchProfile"
@@ -138,4 +91,5 @@ alias npm-cache-clear="npm cache clear --force"
 alias husky-skip="HUSKY_SKIP_HOOKS=1"
 alias ci-status='watch --color unbuffer "gh pr checks"'
 alias p='git push --no-verify'
+alias t='t --task-dir ${TASKS_PATH} --list tasks'
 

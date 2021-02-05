@@ -9,5 +9,7 @@
 --exclude=*static/*
 --exclude=*dist/*
 --exclude=*dist.js
+--exclude=.env/*
+--exclude=my_data/*
 
 
