@@ -11,9 +11,10 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 set nu
-set cursorline
+" set cursorline
 syntax on
 set hidden
+set signcolumn=yes
 
 
 "VUE
@@ -46,9 +47,6 @@ Plug 'sjl/splice.vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'preservim/tagbar'
 "" OTHER LANGUAGUAGES
-" Plug 'othree/html5.vim' replace by polyglot
-Plug 'posva/vim-vue' " replace by polyglot
-Plug 'yuezk/vim-js'
 Plug 'yasuhiroki/github-actions-yaml.vim'
 "Plug 'stanangeloff/php.vim'
 " Plug 'cespare/vim-toml' "check if polyglot can replace
@@ -71,7 +69,7 @@ Plug 'sainnhe/sonokai'
 Plug 'tomasr/molokai'
 Plug 'bluz71/vim-moonfly-colors'
 Plug 'jonathanfilip/vim-lucius'
-""Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'joshdick/onedark.vim'
 Plug 'sjl/badwolf'
@@ -91,7 +89,8 @@ call plug#end()            " required
 filetype plugin indent on    " required
 filetype plugin on
 " automplete
-set omnifunc=syntaxcomplete#Complete
+"set omnifunc=syntaxcomplete#Complete
+set completefunc=LanguageClient#complete
 
 let python_highlight_all=1
 let g:python_highlight_all = 1
@@ -106,11 +105,10 @@ set shortmess=atI " Shortens messages in status line.
 set laststatus=2 " Always show status line.
 set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS,htmlcov,*report*,coverage/*,my_data/*
 set foldenable " Turn on folding.
-set modeline
 set mouse=
 set t_Co=256
 
-let g:solarized_termcolors=256
+"let g:solarized_termcolors=256
 
 if (exists('+colorcolumn'))
     set colorcolumn=80
@@ -118,6 +116,9 @@ if (exists('+colorcolumn'))
 endif
 
 
+let g:airline#extensions#languageclient#enabled = 1
+let g:airline#extensions#languageclient#show_line_numbers = 1
+let g:airline#extensions#bufferline#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 
 
@@ -126,13 +127,16 @@ let g:airline#extensions#tabline#enabled = 1
 " colo PaperColor
 colo badwolf
 
-"let NERDTreeIgnore=['\.log$','junit\.xml$','\.serverless','\.git$','\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__', 'htmlcov','node_modules', '*report*', 'coverage', '^tags$', '\.egg-info','dist','^build$[[dir]]']
-let NERDTreeIgnore=['\.log$','junit\.xml$','\.serverless','\.git$','\.swp$','\.pyc$','\.pyo$', '\.swo$','__pycache__', 'htmlcov','node_modules', '*report*', 'coverage', '^tags$', '\.egg-info','dist','my_data']
+let NERDTreeIgnore=[
+                \'\.log$','junit\.xml$','\.serverless','\.git$','\.swp$','\.pyc$','\.pyo$',
+                \'\.swo$','__pycache__','htmlcov','node_modules','*report*',
+                \'coverage', '^tags$','\.egg-info','dist','my_data','\.nyc_output$'
+                \]
 "let NERDTreeQuitOnOpen = 1
 "let NERDTreeAutoDeleteBuffer = 1
 "let NERDTreeMinimalUI = 1
 "let NERDTreeDirArrows = 1
-let NERDTreeShowHidden=1
+let NERDTreeShowHidden=0
 
 " https://github.com/junegunn/fzf/issues/453#issuecomment-513495518
 "au BufEnter * if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree' && winnr('$') > 1 | b# | exe "normal! \<c-w>\<c-w>" | :blast | endif
@@ -140,6 +144,9 @@ let NERDTreeShowHidden=1
 
 " FZF
 nmap <C-P> :GFiles<CR>
+nmap <C-F> :Files<CR>
+nnoremap <silent><leader>t :Tags -q <C-R>=expand("<cword>")<CR><CR>
+
 
 set pastetoggle=<F3>
 noremap <F4> :!ctags -R<CR>
@@ -147,7 +154,7 @@ noremap <F2> :NERDTreeToggle<CR>
 nnoremap <F9> :SyntasticCheck<CR> :SyntasticToggleMode<CR> :w<CR>
 
 nnoremap ,s :w!<CR>
-nnoremap ,d   :Bdelete<CR>
+nnoremap ,d :Bdelete<CR>
 
 nnoremap <silent> ,q :bp<CR>
 nnoremap <silent> ,w :bn<CR>
@@ -163,7 +170,7 @@ nnoremap _pd :set ft=python.django<CR>
 nnoremap _hb :set ft=handlebars<CR>
 " ejecute last command
 map <leader>l :<Up><CR>
-map <leader>f :!prettier-eslint_d --write %:p  <CR>
+map <leader>f :!prettier-eslint_d --write %:p<CR>
 map <leader>a :e ~/.vim/alias.bash  <CR>
 nnoremap gp :silent %!prettier-eslint --stdin-filepath % --trailing-comma all --single-quote<CR>
 autocmd FileType javascript nnoremap <leader>iu :IstanbulUpdate <CR>
@@ -182,6 +189,7 @@ autocmd BufNewFile,BufReadPost *.jade set filetype=pug
 autocmd BufNewFile,BufReadPost Bakefile set filetype=bash
 autocmd BufNewFile,BufReadPost *.md set textwidth=80 conceallevel=0
 
+au BufRead,BufNewFile .tmux.conf.local set filetype=tmux
 au BufRead,BufNewFile *.vue set expandtab
 au BufRead,BufNewFile *.vue set tabstop=2
 au BufRead,BufNewFile *.vue set softtabstop=2
@@ -211,7 +219,7 @@ let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 " use choco to install it.n
 let g:languagetool_cmd='languagetool'
 " Snippets
-let g:UltiSnipsListSnippets="<c-w>"
+"let g:UltiSnipsListSnippets="<c-w>"
 
 " HARDTIME
 let g:list_of_normal_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
@@ -237,11 +245,11 @@ let g:gruvbox_contrast_dark='hard'
 
 
 " Enable true color 启用终端24位色
-"if exists('+termguicolors')
+if exists('+termguicolors')
   "let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   "let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   "set termguicolors
-"endif
+endif
 
 
 " the configuration options should be placed before `colorscheme sonokai`
@@ -256,18 +264,28 @@ colo sonokai
 set hidden
 
 let g:LanguageClient_serverCommands = {
+    \ 'vue': ['vls'],
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
     \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
     \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
-    \ 'python': ['/usr/local/bin/pyls'],
+    \ 'python': ['/usr/local/bin/pyls', '-vvvv', '--log-file=/tmp/pyls.log'],
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ }
 
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+"nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+nnoremap <silent> <leader>m :call LanguageClient_contextMenu()<CR>
+
+" clear languageclient clutter
+nnoremap <leader>cg :sign unplace *<cr>
+
+
 
 let g:ackprg = 'ag --vimgrep'
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 set grepprg=ag\ --nogroup\ --nocolor
+
+nnoremap <Leader>bg :hi Normal guibg=NONE ctermbg=NONE " make backgroun transparent<CR>
+
 
