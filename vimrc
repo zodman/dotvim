@@ -11,7 +11,7 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 set nu
-" set cursorline
+set cursorline
 syntax on
 set hidden
 set signcolumn=yes
@@ -19,7 +19,8 @@ set signcolumn=yes
 
 "VUE
 "Polyglot
-"let g:polyglot_disabled = ['vue',]
+let g:python_highlight_all = 1
+
 
 
 
@@ -36,55 +37,52 @@ Plug 'mattn/emmet-vim'
 Plug 'preservim/nerdcommenter'
 Plug 'sheerun/vim-polyglot' " hightlight for files
 Plug 'jlanzarotta/bufexplorer'
-Plug 'gregsexton/matchtag'
+""Plug 'gregsexton/matchtag'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'mileszs/ack.vim'
 Plug 'Yggdroot/indentLine'
 Plug 'moll/vim-bbye' " Bdelete
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'sjl/splice.vim'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'preservim/tagbar'
-"" OTHER LANGUAGUAGES
-Plug 'yasuhiroki/github-actions-yaml.vim'
-"Plug 'stanangeloff/php.vim'
-" Plug 'cespare/vim-toml' "check if polyglot can replace
-Plug 'retorillo/istanbul.vim'
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
+"" Plug 'sjl/splice.vim'
+"Plug 'editorconfig/editorconfig-vim'
+"Plug 'preservim/tagbar'
+""" OTHER LANGUAGUAGES
+"Plug 'yasuhiroki/github-actions-yaml.vim'
+""Plug 'stanangeloff/php.vim'
+"" Plug 'cespare/vim-toml' "check if polyglot can replace
+""Plug 'retorillo/istanbul.vim'
 Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
+    \ 'branch': 'dev',
     \ 'do': 'bash install.sh',
     \ }
 
-" Snippets
-Plug 'isRuslan/vim-es6'
-Plug 'joaohkfaria/vim-jest-snippets'
+"" Snippets
+"Plug 'isRuslan/vim-es6'
+"Plug 'joaohkfaria/vim-jest-snippets'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-"THEMES
+""THEMES
 Plug 'vim-airline/vim-airline'
 Plug 'sainnhe/sonokai'
 Plug 'tomasr/molokai'
-Plug 'bluz71/vim-moonfly-colors'
-Plug 'jonathanfilip/vim-lucius'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'joshdick/onedark.vim'
+"Plug 'bluz71/vim-moonfly-colors'
+"Plug 'jonathanfilip/vim-lucius'
+"Plug 'vim-airline/vim-airline-themes'
+"Plug 'NLKNguyen/papercolor-theme'
+"Plug 'joshdick/onedark.vim'
 Plug 'sjl/badwolf'
-Plug 'morhetz/gruvbox'
-Plug 'altercation/vim-colors-solarized'
-"" " Pythons
+"Plug 'morhetz/gruvbox'
+"Plug 'altercation/vim-colors-solarized'
+""" " Pythons
 Plug 'vim-scripts/indentpython.vim'
-Plug 'alfredodeza/coveragepy.vim'
+"Plug 'alfredodeza/coveragepy.vim'
 Plug 'raimon49/requirements.txt.vim'
 Plug 'mindriot101/vim-yapf'
-""Plug 'digitaltoad/vim-pug'
-" WRITING
+"""Plug 'digitaltoad/vim-pug'
+"" WRITING
 Plug 'dpelle/vim-LanguageTool'
 Plug 'takac/vim-hardtime'
-Plug 'pechorin/any-jump.vim'
 call plug#end()            " required
 filetype plugin indent on    " required
 filetype plugin on
@@ -92,9 +90,7 @@ filetype plugin on
 "set omnifunc=syntaxcomplete#Complete
 set completefunc=LanguageClient#complete
 
-let python_highlight_all=1
-let g:python_highlight_all = 1
-set conceallevel=0
+let  g:indentLine_setConceal=0
 
 
 
@@ -125,7 +121,7 @@ let g:airline#extensions#tabline#enabled = 1
 " colorscheme gruvbox
 "colo solarized
 " colo PaperColor
-colo badwolf
+" colo badwolf
 
 let NERDTreeIgnore=[
                 \'\.log$','junit\.xml$','\.serverless','\.git$','\.swp$','\.pyc$','\.pyo$',
@@ -151,7 +147,8 @@ nnoremap <silent><leader>t :Tags -q <C-R>=expand("<cword>")<CR><CR>
 set pastetoggle=<F3>
 noremap <F4> :!ctags -R<CR>
 noremap <F2> :NERDTreeToggle<CR>
-nnoremap <F9> :SyntasticCheck<CR> :SyntasticToggleMode<CR> :w<CR>
+" nnoremap <F9> :SyntasticCheck<CR> :SyntasticToggleMode<CR> :w<CR>
+" syntastic disabled
 
 nnoremap ,s :w!<CR>
 nnoremap ,d :Bdelete<CR>
@@ -161,6 +158,8 @@ nnoremap <silent> ,w :bn<CR>
 
 nnoremap <silent> ,1 :tabprev<CR>
 nnoremap <silent> ,2 :tabnext<CR>
+map ; :set cursorline<CR>:set cursorcolumn<CR>:set nocursorline<CR>:set nocursorcolumn<CR>
+
 
 
 nnoremap _hd :set ft=htmldjango<CR>
@@ -172,6 +171,7 @@ nnoremap _hb :set ft=handlebars<CR>
 map <leader>l :<Up><CR>
 map <leader>f :!prettier-eslint_d --write %:p<CR>
 map <leader>a :e ~/.vim/alias.bash  <CR>
+map <leader>i :call LanguageClient#explainErrorAtPoint()<CR>
 nnoremap gp :silent %!prettier-eslint --stdin-filepath % --trailing-comma all --single-quote<CR>
 autocmd FileType javascript nnoremap <leader>iu :IstanbulUpdate <CR>
 autocmd FileType javascript nnoremap <leader>it :IstanbulToggle <CR>
@@ -194,6 +194,7 @@ au BufRead,BufNewFile *.vue set expandtab
 au BufRead,BufNewFile *.vue set tabstop=2
 au BufRead,BufNewFile *.vue set softtabstop=2
 au BufRead,BufNewFile *.vue set shiftwidth=2
+au FileType html setl sw=2 sts=2 et  
 " autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab
 autocmd FileType javascript setlocal ts=4 sts=4 sw=4
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=0# indentkeys-=<:> foldmethod=indent nofoldenable
@@ -246,9 +247,9 @@ let g:gruvbox_contrast_dark='hard'
 
 " Enable true color 启用终端24位色
 if exists('+termguicolors')
-  "let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  "let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  "set termguicolors
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
 endif
 
 
@@ -256,7 +257,7 @@ endif
 let g:sonokai_style = 'andromeda'
 let g:sonokai_enable_italic = 0
 let g:sonokai_disable_italic_comment = 1
-colo sonokai
+"colo sonokai
 
 
 " langserver configuration
@@ -268,7 +269,7 @@ let g:LanguageClient_serverCommands = {
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
     \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
     \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
-    \ 'python': ['/usr/local/bin/pyls', '-vvvv', '--log-file=/tmp/pyls.log'],
+    \ 'python': ['pyls', '-vvvv', '--log-file=/tmp/pyls.log'],
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ }
 
