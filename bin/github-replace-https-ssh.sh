@@ -31,3 +31,4 @@ CHANGE_CMD="git remote set-url origin $NEW_URL"
 `$CHANGE_CMD`
 
 echo "Success"
+
