@@ -5,9 +5,9 @@ TASKS_PATH='~/Dropbox/tasks'
 # pip install git+https://github.com/sjl/t.git
 
 #eval `keychain --eval --agents ssh id_rsa`
-#eval `keychain --agents ssh --eval id_rsa`
-#eval `keychain --agents ssh --eval id_rsa2`
-#source $HOME/.keychain/$HOSTNAME-sh
+eval `keychain --agents ssh --eval id_rsa`
+eval `keychain --agents ssh --eval id_rsa2`
+source $HOME/.keychain/$HOSTNAME-sh
 
 
 function _awsListAll() {
@@ -68,7 +68,7 @@ function c() {
 
 # https://github.com/zmwangx/ets
 # https://github.com/sindresorhus/anybar-cli
-function m() 
+function ___m() 
 {
     anybar cyan
     eval "ets -s $@"; 
@@ -81,6 +81,17 @@ function m()
     fi
 }
 
+function gitignore() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}
+function aws-echo-keys() {
+    AWS_ACCESS_KEY_ID=`aws configure get aws_access_key_id`
+    AWS_SECRET_ACCESS_KEY=`aws configure get aws_secret_access_key`
+    echo "# AWS_PROFILE=${AWS_PROFILE}"
+    echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
+    echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+}
+
+
+source ~/.vim/docker_alias.bash
 ##### ALIAS
 alias wtc='git commit -am "$(curl --retry 5 --retry-delay 0 -s http://whatthecommit.com/index.txt)"'
 alias awsall="_awsListAll"
@@ -92,4 +103,9 @@ alias husky-skip="HUSKY_SKIP_HOOKS=1"
 alias ci-status='watch --color unbuffer "gh pr checks"'
 alias p='git push --no-verify'
 alias t='t --task-dir ${TASKS_PATH} --list tasks'
+alias docker-stop-all='dstop'
+alias view-path='echo "$PATH" | tr ":" "\n" | nl'
+
+# export FZF_DEFAULT_COMMAND='fd --type f'
+
 

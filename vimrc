@@ -15,6 +15,10 @@ set cursorline
 syntax on
 set hidden
 set signcolumn=yes
+" wsl + tmux + vim
+set t_Co=256
+
+
 
 
 "VUE
@@ -39,14 +43,18 @@ Plug 'sheerun/vim-polyglot' " hightlight for files
 Plug 'jlanzarotta/bufexplorer'
 ""Plug 'gregsexton/matchtag'
 Plug 'bronson/vim-trailing-whitespace'
-Plug 'mileszs/ack.vim'
+" Plug 'mileszs/ack.vim' replace with <leader>ag
 Plug 'Yggdroot/indentLine'
 Plug 'moll/vim-bbye' " Bdelete
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+" Plug 'bling/vim-bufferline'
 "" Plug 'sjl/splice.vim'
-"Plug 'editorconfig/editorconfig-vim'
-"Plug 'preservim/tagbar'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'preservim/tagbar'
+Plug 'jmcantrell/vim-diffchanges'
+
+
 """ OTHER LANGUAGUAGES
 "Plug 'yasuhiroki/github-actions-yaml.vim'
 ""Plug 'stanangeloff/php.vim'
@@ -66,14 +74,15 @@ Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'sainnhe/sonokai'
 Plug 'tomasr/molokai'
-"Plug 'bluz71/vim-moonfly-colors'
-"Plug 'jonathanfilip/vim-lucius'
-"Plug 'vim-airline/vim-airline-themes'
-"Plug 'NLKNguyen/papercolor-theme'
-"Plug 'joshdick/onedark.vim'
+Plug 'wojciechkepka/vim-github-dark'
+Plug 'bluz71/vim-moonfly-colors'
+Plug 'jonathanfilip/vim-lucius'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'joshdick/onedark.vim'
 Plug 'sjl/badwolf'
-"Plug 'morhetz/gruvbox'
-"Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
+Plug 'altercation/vim-colors-solarized'
 """ " Pythons
 Plug 'vim-scripts/indentpython.vim'
 "Plug 'alfredodeza/coveragepy.vim'
@@ -139,8 +148,10 @@ let NERDTreeShowHidden=0
 " au BufEnter * if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree' && winnr('$') > 1 | b# | exe "normal! \<c-w>\<c-w>" | endif
 
 " FZF
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 nmap <C-P> :GFiles<CR>
 nmap <C-F> :Files<CR>
+nmap <C-B> :Buffers<CR>
 nnoremap <silent><leader>t :Tags -q <C-R>=expand("<cword>")<CR><CR>
 
 
@@ -232,6 +243,8 @@ let g:hardtime_default_on = 1
 
 
 
+" COLORS
+"
 let g:PaperColor_Theme_Options = {
   \   'theme': {
   \     'default.dark': {
@@ -246,18 +259,22 @@ let g:gruvbox_contrast_dark='hard'
 
 
 " Enable true color 启用终端24位色
-if exists('+termguicolors')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
+"if exists('+termguicolors')
+  "let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  "let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  "set termguicolors
+"endif
+
+
+" running wsl + tmux + vim
+let g:solarized_termcolors=256
 
 
 " the configuration options should be placed before `colorscheme sonokai`
 let g:sonokai_style = 'andromeda'
 let g:sonokai_enable_italic = 0
 let g:sonokai_disable_italic_comment = 1
-"colo sonokai
+colo molokai
 
 
 " langserver configuration
@@ -273,13 +290,22 @@ let g:LanguageClient_serverCommands = {
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ }
 
+let g:LanguageClient_diagnosticsList="Disabled"
+
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+" press ctrl+o to jump back
 "nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 nnoremap <silent> <leader>m :call LanguageClient_contextMenu()<CR>
 
 " clear languageclient clutter
 nnoremap <leader>cg :sign unplace *<cr>
+function! FzfAgCurrentWord()
+  let l:word = expand('<cword>')
+  call fzf#vim#ag(l:word)
+endfunction
+
+noremap <silent> <leader>ag :call FzfAgCurrentWord()<cr>
 
 
 
@@ -288,5 +314,4 @@ let g:ackprg = 'ag --vimgrep'
 set grepprg=ag\ --nogroup\ --nocolor
 
 nnoremap <Leader>bg :hi Normal guibg=NONE ctermbg=NONE " make backgroun transparent<CR>
-
 
