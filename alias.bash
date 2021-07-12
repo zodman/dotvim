@@ -9,6 +9,8 @@ eval `keychain --agents ssh --eval id_rsa`
 eval `keychain --agents ssh --eval id_rsa2`
 source $HOME/.keychain/$HOSTNAME-sh
 
+source ~/.vim/docker_alias.bash
+
 
 function _awsListAll() {
 
@@ -62,6 +64,12 @@ function dubytype() {
             done
 }
 
+function rm-progress (){
+    export $RES=$( du -a $1 | wc -l)
+    rm $1 -rvf | pv -l -s $RES > /dev/null
+    unset $RES
+}
+
 function c() {
   git commit -am "$*"
 }
@@ -81,7 +89,7 @@ function ___m()
     fi
 }
 
-function gitignore() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}
+function gitignore() { curl -skL https://www.toptal.com/developers/gitignore/api/$@ ;}
 function aws-echo-keys() {
     AWS_ACCESS_KEY_ID=`aws configure get aws_access_key_id`
     AWS_SECRET_ACCESS_KEY=`aws configure get aws_secret_access_key`
@@ -92,9 +100,44 @@ function aws-echo-keys() {
     echo "AWS_REGION=${AWS_REGION}"
 }
 
+function terminal-notifier(){
+    $POWERSHELL "New-BurntToastNotification  -Silent -Text \"$1\", \"$2\""
+}
 
-source ~/.vim/docker_alias.bash
+function  clip-exe() {
+    $POWERSHELL "clip.exe"
+}
+
+function edit-alias(){
+    vim ~/.vim/alias.bash
+    . ~/.vim/alias.bash
+}
+function load-dot-env () {
+    if [ -z "$*" ]; then
+        if [ -f '.env' ]; then
+            export $(cat .env | grep -v "#") && red "loaded .env file"
+            export DOTENV='.env'
+        else
+            red --fg yellow "no .env file"
+            unset DOTENV
+        fi
+    else
+        if [ -f "$1" ]; then
+            export $(cat "$1" | grep -v "#") && red "loaded $1 file"
+            export DOTENV=$1
+        else
+            red --fg yellow "no .env file"
+            unset DOTENV
+        fi
+    fi
+}
+
+pyclean () {
+        find . -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
+}
+
 ##### ALIAS
+alias wttr='curl wttr.in -L'
 alias wtc='git commit -am "$(curl --retry 5 --retry-delay 0 -s http://whatthecommit.com/index.txt)"'
 alias awsall="_awsListAll"
 alias awslist="_awsListAll"
@@ -107,7 +150,10 @@ alias p='git push --no-verify'
 alias t='t --task-dir ${TASKS_PATH} --list tasks'
 alias docker-stop-all='dstop'
 alias view-path='echo "$PATH" | tr ":" "\n" | nl'
-
+alias rscp='rsync -aP'
+alias rsmv='rsync -aP --remove-source-files'
+alias venv='python3 -m venv .venv'
+alias venvact='source .venv/bin/activate'
+# red from bake-cli
 # export FZF_DEFAULT_COMMAND='fd --type f'
-
 

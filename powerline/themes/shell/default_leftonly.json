@@ -16,6 +16,13 @@
 			{
 				"function": "powerline.segments.common.env.environment",
                 "args": {
+                    "variable": "DOTENV"
+                },
+				"priority": 50
+			},
+			{
+				"function": "powerline.segments.common.env.environment",
+                "args": {
                     "variable": "AWS_PROFILE"
                 },
 				"priority": 50

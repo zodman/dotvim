@@ -15,9 +15,6 @@ set cursorline
 syntax on
 set hidden
 set signcolumn=yes
-" wsl + tmux + vim
-set t_Co=256
-
 
 
 
@@ -82,12 +79,15 @@ Plug 'NLKNguyen/papercolor-theme'
 Plug 'joshdick/onedark.vim'
 Plug 'sjl/badwolf'
 Plug 'morhetz/gruvbox'
-Plug 'altercation/vim-colors-solarized'
+Plug 'srcery-colors/srcery-vim'
+
 """ " Pythons
 Plug 'vim-scripts/indentpython.vim'
-"Plug 'alfredodeza/coveragepy.vim'
+Plug 'mgedmin/coverage-highlight.vim'
 Plug 'raimon49/requirements.txt.vim'
 Plug 'mindriot101/vim-yapf'
+Plug 'vim-python/python-syntax'
+
 """Plug 'digitaltoad/vim-pug'
 "" WRITING
 Plug 'dpelle/vim-LanguageTool'
@@ -96,10 +96,18 @@ call plug#end()            " required
 filetype plugin indent on    " required
 filetype plugin on
 " automplete
+" To use omni completion, type <C-X><C-O> while open in Insert mode. If
+" matching names are found, a pop-up menu opens which can be navigated using
+" the <C-N> and <C-P> keys.
 "set omnifunc=syntaxcomplete#Complete
+set omnifunc=LanguageClient#complete
 set completefunc=LanguageClient#complete
 
 let  g:indentLine_setConceal=0
+
+" Polyglot
+let g:polyglot_disabled = ['python']
+
 
 
 
@@ -111,9 +119,7 @@ set laststatus=2 " Always show status line.
 set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS,htmlcov,*report*,coverage/*,my_data/*
 set foldenable " Turn on folding.
 set mouse=
-set t_Co=256
 
-"let g:solarized_termcolors=256
 
 if (exists('+colorcolumn'))
     set colorcolumn=80
@@ -258,12 +264,20 @@ let g:PaperColor_Theme_Options = {
 let g:gruvbox_contrast_dark='hard'
 
 
+" wsl + tmux + vim
+if &term =~ '256color'
+  " disable Background Color Erase (BCE) so that color schemes
+  " render properly when inside 256-color tmux and GNU screen.
+  " see also http://snk.tuxfamily.org/log/vim-256color-bce.html
+  set t_ut=
+endif
 " Enable true color 启用终端24位色
-"if exists('+termguicolors')
-  "let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  "let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  "set termguicolors
-"endif
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set t_Co=256
+  set termguicolors
+endif
 
 
 " running wsl + tmux + vim
