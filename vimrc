@@ -62,6 +62,8 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'do': 'bash install.sh',
     \ }
 
+Plug 'pantharshit00/vim-prisma'
+
 "" Snippets
 "Plug 'isRuslan/vim-es6'
 "Plug 'joaohkfaria/vim-jest-snippets'
@@ -92,6 +94,7 @@ Plug 'vim-python/python-syntax'
 "" WRITING
 Plug 'dpelle/vim-LanguageTool'
 Plug 'takac/vim-hardtime'
+
 call plug#end()            " required
 filetype plugin indent on    " required
 filetype plugin on
@@ -189,7 +192,7 @@ map <leader>l :<Up><CR>
 map <leader>f :!prettier-eslint_d --write %:p<CR>
 map <leader>a :e ~/.vim/alias.bash  <CR>
 map <leader>i :call LanguageClient#explainErrorAtPoint()<CR>
-nnoremap gp :silent %!prettier-eslint --stdin-filepath % --trailing-comma all --single-quote<CR>
+nnoremap gp :%!npx prettier --stdin-filepath % --trailing-comma all --single-quote<CR>
 autocmd FileType javascript nnoremap <leader>iu :IstanbulUpdate <CR>
 autocmd FileType javascript nnoremap <leader>it :IstanbulToggle <CR>
 autocmd FileType python nnoremap <leader>iu :Coveragepy refresh <CR>
@@ -298,13 +301,16 @@ set hidden
 let g:LanguageClient_serverCommands = {
     \ 'vue': ['vls'],
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
-    \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
+    \ 'javascript': ['typescript-language-server', '--stdio'],
+    \ 'typescriptreact': ['typescript-language-server', '--stdio'],
+    \ 'typescript': ['typescript-language-server', '--stdio'],
+    \ 'javascript.jsx': ['typescript-language-server', '--stdio'],
+    \ 'typescript.tsx': ['typescript-language-server', '--stdio'],
     \ 'python': ['pyls', '-vvvv', '--log-file=/tmp/pyls.log'],
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ }
 
-let g:LanguageClient_diagnosticsList="Disabled"
+"let g:LanguageClient_diagnosticsList="Disabled"
 
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
@@ -328,4 +334,3 @@ let g:ackprg = 'ag --vimgrep'
 set grepprg=ag\ --nogroup\ --nocolor
 
 nnoremap <Leader>bg :hi Normal guibg=NONE ctermbg=NONE " make backgroun transparent<CR>
-

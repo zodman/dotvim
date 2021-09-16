@@ -53,6 +53,7 @@ function gitprunelocal()  {
 }
 
 function dubytype() {
+    ## du for a specify type
 
     ftypes=$(find $1 -type f | grep -E ".*\.[a-zA-Z0-9]*$" | sed -e 's/.*\(\.[a-zA-Z0-9]*\)$/\1/' | sort | uniq)
 
@@ -132,8 +133,35 @@ function load-dot-env () {
     fi
 }
 
-pyclean () {
+function pyclean () {
         find . -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
+}
+
+function venv () {
+    red "loading venv"
+    if [ ! -d '.venv' ]; then
+        python3 -m venv .venv
+        red "venv created"
+    else
+        . .venv/bin/activate
+        red "venv loaded"
+    fi
+}
+
+function nrlogs() {
+    app=$1
+    app_env=$2
+    query_args="app='$app' and env='$app_env'"
+    limit=$(tput lines)
+    query="select message,app,env,levelname,lineno,pathname from Log where $query_args limit $limit"
+    SPACE=" \" \""
+    #cmd="newrelic  nrql query -q \"$query\" |  jq -r '.[] | (.levelname) + $SPACE  + (.timestamp|todate) + $SPACE + (.message) + $SPACE '"
+    tail="jsonlog template --format \"{timestamp} [{app}] [{env}] {levelname} {pathname}:{lineno} {message}\""
+    tail="fblog -p --main-line-format \"{{time}} {{app}} {{env}} {{levelname}} {{pathname}}:{{lineno}} {{message}}\""
+    cmd="newrelic  nrql query -q \"$query\" | jq -c -r '.[]' | $tail" 
+
+    echo $cmd 
+    while true; do eval $cmd; sleep 1; done
 }
 
 ##### ALIAS
@@ -152,8 +180,9 @@ alias docker-stop-all='dstop'
 alias view-path='echo "$PATH" | tr ":" "\n" | nl'
 alias rscp='rsync -aP'
 alias rsmv='rsync -aP --remove-source-files'
-alias venv='python3 -m venv .venv'
-alias venvact='source .venv/bin/activate'
+alias m-ets="m ets -s"
+alias cloudflare-docker-localhost="cloudflared tunnel --hostname localhost.python3.ninja --url http://$DOCKER_IP:8000"
+alias poson="pg_ctl start -D /home/linuxbrew/.linuxbrew/var/postgres -l logfile"
 # red from bake-cli
 # export FZF_DEFAULT_COMMAND='fd --type f'
 

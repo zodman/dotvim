@@ -4,14 +4,14 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-#### Docker for wsl
-export DOCKER_IP=192.168.99.103
+#### Docker for wsl taking from /etc/hosts
+export DOCKER_IP=$(getent  hosts host.docker.internal  | awk '{ print $1 }')
 export DOCKER_HOST=tcp://${DOCKER_IP}:2376
 export DOCKER_CERT_PATH=/mnt/c/Users/QA/.docker/machine/machines/default
 export DOCKER_TLS_VERIFY="1"
 sudo mount --bind /mnt/c /c
 
-# export DISPLAY=:0
+export DISPLAY=:0
 
 
 # export PATH=/home/zodman/.local/bin:/home/zodman/.local/bin:/home/zodman/.nvm/versions/node/v12.14.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/zodman/aws-glue-libs/bin:/home/zodman/aws-glue-libs/bin:
