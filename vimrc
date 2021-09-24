@@ -16,14 +16,9 @@ syntax on
 set hidden
 set signcolumn=yes
 
-
-
 "VUE
 "Polyglot
 let g:python_highlight_all = 1
-
-
-
 
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -69,6 +64,7 @@ Plug 'pantharshit00/vim-prisma'
 "Plug 'joaohkfaria/vim-jest-snippets'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'mlaursen/vim-react-snippets', {'branch': 'main'}
 ""THEMES
 Plug 'vim-airline/vim-airline'
 Plug 'sainnhe/sonokai'
@@ -110,9 +106,6 @@ let  g:indentLine_setConceal=0
 
 " Polyglot
 let g:polyglot_disabled = ['python']
-
-
-
 
 "folding settings
 set foldmethod=manual   "fold based on indent
@@ -189,7 +182,7 @@ nnoremap _pd :set ft=python.django<CR>
 nnoremap _hb :set ft=handlebars<CR>
 " ejecute last command
 map <leader>l :<Up><CR>
-map <leader>f :!prettier-eslint_d --write %:p<CR>
+map <leader>f :!npx prettier --write %:p<CR>
 map <leader>a :e ~/.vim/alias.bash  <CR>
 map <leader>i :call LanguageClient#explainErrorAtPoint()<CR>
 nnoremap gp :%!npx prettier --stdin-filepath % --trailing-comma all --single-quote<CR>
@@ -241,6 +234,8 @@ let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 let g:languagetool_cmd='languagetool'
 " Snippets
 "let g:UltiSnipsListSnippets="<c-w>"
+let g:UltiSnipsExpandTrigger="<tab>"
+"
 
 " HARDTIME
 let g:list_of_normal_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
@@ -310,13 +305,38 @@ let g:LanguageClient_serverCommands = {
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ }
 
-"let g:LanguageClient_diagnosticsList="Disabled"
+"let g:LanguageClient_diagnosticsList="Location"
+let g:LanguageClient_selectionUI="fzf"
+function SetLSPShortcuts()
+  "Goto definition under cursor.
+  nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
+  nnoremap <silent>gd :call LanguageClient#textDocument_definition()<CR>
+"Rename identifier under cursor.
+  nnoremap <leader>lr :call LanguageClient#textDocument_rename()<CR>
+" Format current document.
+  nnoremap <leader>lf :call LanguageClient#textDocument_formatting()<CR>
+"Goto type definition under cursor.
+  nnoremap <leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
+"List all references of identifier under cursor.
+  nnoremap <leader>lx :call LanguageClient#textDocument_references()<CR>
 
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-" press ctrl+o to jump back
-"nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-nnoremap <silent> <leader>m :call LanguageClient_contextMenu()<CR>
+  "Get a list of completion items at current editing location.
+  nnoremap <leader>lc :call LanguageClient#textDocument_completion()<CR>
+  "Show type info (and short doc) of identifier under cursor.
+  nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
+  "List of current buffer's symbols.
+  nnoremap <leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
+  " menu
+  nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
+  nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
+endfunction()
+
+call SetLSPShortcuts()
+
+"nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+"" press ctrl+o to jump back
+""nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+"nnoremap <silent> <leader>m :call LanguageClient_contextMenu()<CR>
 
 " clear languageclient clutter
 nnoremap <leader>cg :sign unplace *<cr>

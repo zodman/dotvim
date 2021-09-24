@@ -72,7 +72,7 @@ function rm-progress (){
 }
 
 function c() {
-  git commit -am "$*"
+    git commit -am "$*"
 }
 
 # https://github.com/zmwangx/ets
@@ -163,6 +163,12 @@ function nrlogs() {
     echo $cmd 
     while true; do eval $cmd; sleep 1; done
 }
+
+
+function pvrm(){
+    rm -frv $1 | pv -l -s $( du -a $1 | wc -l ) > /dev/null
+}
+
 
 ##### ALIAS
 alias wttr='curl wttr.in -L'
