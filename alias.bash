@@ -26,7 +26,7 @@ function _awsListAll() {
 
 function _awsSwitchProfile() {
    if [ -z $1 ]; then  echo "Usage: awsp profilename"; return; fi
-   
+
    exists="$(aws configure get aws_access_key_id --profile $1)"
    if [[ -n $exists ]]; then
        export AWS_DEFAULT_PROFILE=$1;
@@ -61,7 +61,7 @@ function dubytype() {
     do
             echo -n "$ft "
                 # find $1 -name "*${ft}" -exec ls -l {} \; | awk '{total += $5} END {print total}'
-                find $1 -name "*${ft}" -print0 | xargs -0 du -c | grep total | awk '{print $1}' 
+                find $1 -name "*${ft}" -print0 | xargs -0 du -c | grep total | awk '{print $1}'
             done
 }
 
@@ -77,10 +77,10 @@ function c() {
 
 # https://github.com/zmwangx/ets
 # https://github.com/sindresorhus/anybar-cli
-function ___m() 
+function ___m()
 {
     anybar cyan
-    eval "ets -s $@"; 
+    eval "ets -s $@";
     if [ $? -eq 0 ]; then
         anybar green
         say -v Amelie Processus terminé
@@ -158,9 +158,9 @@ function nrlogs() {
     #cmd="newrelic  nrql query -q \"$query\" |  jq -r '.[] | (.levelname) + $SPACE  + (.timestamp|todate) + $SPACE + (.message) + $SPACE '"
     tail="jsonlog template --format \"{timestamp} [{app}] [{env}] {levelname} {pathname}:{lineno} {message}\""
     tail="fblog -p --main-line-format \"{{time}} {{app}} {{env}} {{levelname}} {{pathname}}:{{lineno}} {{message}}\""
-    cmd="newrelic  nrql query -q \"$query\" | jq -c -r '.[]' | $tail" 
+    cmd="newrelic  nrql query -q \"$query\" | jq -c -r '.[]' | $tail"
 
-    echo $cmd 
+    echo $cmd
     while true; do eval $cmd; sleep 1; done
 }
 
@@ -169,17 +169,35 @@ function pvrm(){
     rm -frv $1 | pv -l -s $( du -a $1 | wc -l ) > /dev/null
 }
 
+function pr_status() {
+    red "==== backend ====" && \
+    gh pr list -R visto-tech/backend &&\
+    gh pr status -R visto-tech/backend && \
+    red "===== fronted ====" && \
+    gh pr list -R visto-tech/frontend && \
+    gh pr  status -R visto-tech/frontend
+}
+
+function check_anybar_running() {
+    while true
+    do
+        (echo >/dev/tcp/localhost/4000) &>/dev/null && anybar green  || anybar red
+        sleep 1
+    done
+}
 
 ##### ALIAS
 alias wttr='curl wttr.in -L'
 alias wtc='git commit -am "$(curl --retry 5 --retry-delay 0 -s http://whatthecommit.com/index.txt)"'
+alias wtc-comment='gh pr comment -b "$(curl --retry 5 --retry-delay 0 -s http://whatthecommit.com/index.txt) \n plz review my changes"'
 alias awsall="_awsListAll"
 alias awslist="_awsListAll"
 alias awsset="_awsSwitchProfile"
 alias awswho="aws configure list"
 alias npm-cache-clear="npm cache clear --force"
 alias husky-skip="HUSKY_SKIP_HOOKS=1"
-alias ci-status='watch --color unbuffer "gh pr checks"'
+alias ci-status='gh run watch'
+alias ci-log='gh run view --log-failed'
 alias p='git push --no-verify'
 alias t='t --task-dir ${TASKS_PATH} --list tasks'
 alias docker-stop-all='dstop'
@@ -189,6 +207,11 @@ alias rsmv='rsync -aP --remove-source-files'
 alias m-ets="m ets -s"
 alias cloudflare-docker-localhost="cloudflared tunnel --hostname localhost.python3.ninja --url http://$DOCKER_IP:8000"
 alias poson="pg_ctl start -D /home/linuxbrew/.linuxbrew/var/postgres -l logfile"
+alias del-ts-check="ag '@ts-nocheck' -l | xargs sed -i  '/\/\/ @ts-nocheck/d'"
+alias npm-completation="source <(npm completion)"
+alias r="reset"
+alias pr-status="pr_status"
+alias explorer-here="$POWERSHELL explorer ."
 # red from bake-cli
 # export FZF_DEFAULT_COMMAND='fd --type f'
 

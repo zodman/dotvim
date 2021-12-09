@@ -16,9 +16,6 @@ syntax on
 set hidden
 set signcolumn=yes
 
-"VUE
-"Polyglot
-let g:python_highlight_all = 1
 
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -31,12 +28,12 @@ call plug#begin('~/.vim/plugged')
 Plug 'preservim/nerdtree'
 Plug 'mattn/emmet-vim'
 Plug 'preservim/nerdcommenter'
-Plug 'sheerun/vim-polyglot' " hightlight for files
 Plug 'jlanzarotta/bufexplorer'
 ""Plug 'gregsexton/matchtag'
 Plug 'bronson/vim-trailing-whitespace'
 " Plug 'mileszs/ack.vim' replace with <leader>ag
 Plug 'Yggdroot/indentLine'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'moll/vim-bbye' " Bdelete
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -48,16 +45,19 @@ Plug 'jmcantrell/vim-diffchanges'
 
 
 """ OTHER LANGUAGUAGES
-"Plug 'yasuhiroki/github-actions-yaml.vim'
+Plug 'yasuhiroki/github-actions-yaml.vim'
 ""Plug 'stanangeloff/php.vim'
 "" Plug 'cespare/vim-toml' "check if polyglot can replace
 ""Plug 'retorillo/istanbul.vim'
 Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'dev',
+        \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
 
+
 Plug 'pantharshit00/vim-prisma'
+Plug 'jparise/vim-graphql'
+Plug 'hashivim/vim-terraform'
 
 "" Snippets
 "Plug 'isRuslan/vim-es6'
@@ -81,7 +81,7 @@ Plug 'srcery-colors/srcery-vim'
 
 """ " Pythons
 Plug 'vim-scripts/indentpython.vim'
-Plug 'mgedmin/coverage-highlight.vim'
+" Plug 'mgedmin/coverage-highlight.vim'
 Plug 'raimon49/requirements.txt.vim'
 Plug 'mindriot101/vim-yapf'
 Plug 'vim-python/python-syntax'
@@ -91,7 +91,11 @@ Plug 'vim-python/python-syntax'
 Plug 'dpelle/vim-LanguageTool'
 Plug 'takac/vim-hardtime'
 
+Plug 'mnishz/colorscheme-preview.vim'
+
 call plug#end()            " required
+
+
 filetype plugin indent on    " required
 filetype plugin on
 " automplete
@@ -99,13 +103,9 @@ filetype plugin on
 " matching names are found, a pop-up menu opens which can be navigated using
 " the <C-N> and <C-P> keys.
 "set omnifunc=syntaxcomplete#Complete
-set omnifunc=LanguageClient#complete
-set completefunc=LanguageClient#complete
-
 let  g:indentLine_setConceal=0
 
-" Polyglot
-let g:polyglot_disabled = ['python']
+
 
 "folding settings
 set foldmethod=manual   "fold based on indent
@@ -165,9 +165,17 @@ noremap <F2> :NERDTreeToggle<CR>
 
 nnoremap ,s :w!<CR>
 nnoremap ,d :Bdelete<CR>
+" // https://vi.stackexchange.com/a/19420
+function! BSkipQuickFix(command)
+  let start_buffer = bufnr('%')
+  execute a:command
+  while &buftype ==# 'quickfix' && bufnr('%') != start_buffer
+    execute a:command
+  endwhile
+endfunction
 
-nnoremap <silent> ,q :bp<CR>
-nnoremap <silent> ,w :bn<CR>
+nnoremap <silent> ,q :call BSkipQuickFix("bp")<CR>
+nnoremap <silent> ,w :call BSkipQuickFix("bn")<CR>
 
 nnoremap <silent> ,1 :tabprev<CR>
 nnoremap <silent> ,2 :tabnext<CR>
@@ -182,19 +190,19 @@ nnoremap _pd :set ft=python.django<CR>
 nnoremap _hb :set ft=handlebars<CR>
 " ejecute last command
 map <leader>l :<Up><CR>
-map <leader>f :!npx prettier --write %:p<CR>
-map <leader>a :e ~/.vim/alias.bash  <CR>
-map <leader>i :call LanguageClient#explainErrorAtPoint()<CR>
-nnoremap gp :%!npx prettier --stdin-filepath % --trailing-comma all --single-quote<CR>
+nnoremap gp :%!npx prettier --stdin-filepath %<CR>
 autocmd FileType javascript nnoremap <leader>iu :IstanbulUpdate <CR>
 autocmd FileType javascript nnoremap <leader>it :IstanbulToggle <CR>
 autocmd FileType python nnoremap <leader>iu :Coveragepy refresh <CR>
 
 
 " Edit vimr configuration file
-nnoremap <Leader>ve :e $MYVIMRC<CR>
+nnoremap <Leader>ve :e ~/.vim/vimrc<CR>
 " Reload vimr configuration file
 nnoremap <Leader>vr :source $MYVIMRC<CR>
+
+nnoremap <Leader>co :copen<CR>
+nnoremap <Leader>cc :cclose<CR>
 
 
 au BufNewFile,BufRead *.vue setf vue.html.javascript.css
@@ -208,19 +216,26 @@ au BufRead,BufNewFile *.vue set tabstop=2
 au BufRead,BufNewFile *.vue set softtabstop=2
 au BufRead,BufNewFile *.vue set shiftwidth=2
 au FileType html setl sw=2 sts=2 et  
-" autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab
-autocmd FileType javascript setlocal ts=4 sts=4 sw=4
+" Fix identitation on filetypes
+autocmd FileType javascriptreact setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType typescriptreact setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType typescript setlocal ts=2 sts=2 sw=2 expandtab
+
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=0# indentkeys-=<:> foldmethod=indent nofoldenable
+autocmd FileType prisma,graphql setlocal ts=2 sts=2 sw=2 expandtab foldmethod=indent nofoldenable
 au BufNewFile,BufRead *.py set tabstop=4 softtabstop=4 shiftwidth=4 expandtab autoindent fileformat=unix
 
 iab setheader #!/usr/bin/env python<CR># encoding=utf8<CR># made by zodman
+iab nocheck // @ts-nocheck
+iab zodman // made by zodman
 
 
 " https://github.com/webpack/webpack/issues/781#issuecomment-95523711
 set backupcopy=yes
 
 let g:indentLine_enabled = 1
-
+set conceallevel=2
 
 let g:netrw_banner=0        " disable annoying banner
 let g:netrw_browse_split=4  " open in prior window
@@ -233,8 +248,7 @@ let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 " use choco to install it.n
 let g:languagetool_cmd='languagetool'
 " Snippets
-"let g:UltiSnipsListSnippets="<c-w>"
-let g:UltiSnipsExpandTrigger="<tab>"
+"let g:UltiSnipsExpandTrigger="<tab>"
 "
 
 " HARDTIME
@@ -283,7 +297,7 @@ let g:solarized_termcolors=256
 
 
 " the configuration options should be placed before `colorscheme sonokai`
-let g:sonokai_style = 'andromeda'
+"let g:sonokai_style = 'andromeda'
 let g:sonokai_enable_italic = 0
 let g:sonokai_disable_italic_comment = 1
 colo molokai
@@ -306,15 +320,14 @@ let g:LanguageClient_serverCommands = {
     \ }
 
 "let g:LanguageClient_diagnosticsList="Location"
-let g:LanguageClient_selectionUI="fzf"
 function SetLSPShortcuts()
   "Goto definition under cursor.
   nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
   nnoremap <silent>gd :call LanguageClient#textDocument_definition()<CR>
 "Rename identifier under cursor.
-  nnoremap <leader>lr :call LanguageClient#textDocument_rename()<CR>
+  nnoremap <leader>lr :LanguageClientStop<CR>:LanguageClientStart<CR>
 " Format current document.
-  nnoremap <leader>lf :call LanguageClient#textDocument_formatting()<CR>
+  nnoremap <leader>lf :%!npx prettier --stdin-filepath %<CR>
 "Goto type definition under cursor.
   nnoremap <leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
 "List all references of identifier under cursor.
@@ -326,12 +339,30 @@ function SetLSPShortcuts()
   nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
   "List of current buffer's symbols.
   nnoremap <leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
+  "nnoremap <leader>la :call LanguageClient_textDocument_<CR>
+
   " menu
   nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
   nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
+
+   map <leader>i :call LanguageClient#explainErrorAtPoint()<CR>
+   nnoremap <leader>ln :call LanguageClient_diagnosticsNext()<CR>
+   nnoremap <leader>lp :call LanguageClient_diagnosticsPrevious()<CR>
+   "https://jameschambers.co.uk/vim-typescript-slow
+"   set re=0
+   set omnifunc=LanguageClient#complete
+   set completefunc=LanguageClient#complete
+
 endfunction()
 
 call SetLSPShortcuts()
+
+function DebugProfile() 
+    profile start profile.log
+    profile func *
+    profile file *
+endfunction()
+
 
 "nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 "" press ctrl+o to jump back
@@ -339,7 +370,8 @@ call SetLSPShortcuts()
 "nnoremap <silent> <leader>m :call LanguageClient_contextMenu()<CR>
 
 " clear languageclient clutter
-nnoremap <leader>cg :sign unplace *<cr>
+"nnoremap <leader>cg :sign unplace *<cr>
+
 function! FzfAgCurrentWord()
   let l:word = expand('<cword>')
   call fzf#vim#ag(l:word)
@@ -354,3 +386,5 @@ let g:ackprg = 'ag --vimgrep'
 set grepprg=ag\ --nogroup\ --nocolor
 
 nnoremap <Leader>bg :hi Normal guibg=NONE ctermbg=NONE " make backgroun transparent<CR>
+
+
