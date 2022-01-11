@@ -67,17 +67,17 @@ Plug 'honza/vim-snippets'
 Plug 'mlaursen/vim-react-snippets', {'branch': 'main'}
 ""THEMES
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'sainnhe/sonokai'
 Plug 'tomasr/molokai'
-Plug 'wojciechkepka/vim-github-dark'
 Plug 'bluz71/vim-moonfly-colors'
 Plug 'jonathanfilip/vim-lucius'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'NLKNguyen/papercolor-theme'
 Plug 'joshdick/onedark.vim'
 Plug 'sjl/badwolf'
 Plug 'morhetz/gruvbox'
 Plug 'srcery-colors/srcery-vim'
+Plug 'projekt0n/github-nvim-theme'
+
 
 """ " Pythons
 Plug 'vim-scripts/indentpython.vim'
@@ -92,6 +92,9 @@ Plug 'dpelle/vim-LanguageTool'
 Plug 'takac/vim-hardtime'
 
 Plug 'mnishz/colorscheme-preview.vim'
+Plug 'ruanyl/vim-gh-line'
+
+Plug 'wakatime/vim-wakatime'
 
 call plug#end()            " required
 
@@ -229,6 +232,7 @@ au BufNewFile,BufRead *.py set tabstop=4 softtabstop=4 shiftwidth=4 expandtab au
 iab setheader #!/usr/bin/env python<CR># encoding=utf8<CR># made by zodman
 iab nocheck // @ts-nocheck
 iab zodman // made by zodman
+iab noconsole // eslint-disable-next-line no-console
 
 
 " https://github.com/webpack/webpack/issues/781#issuecomment-95523711
@@ -387,4 +391,7 @@ set grepprg=ag\ --nogroup\ --nocolor
 
 nnoremap <Leader>bg :hi Normal guibg=NONE ctermbg=NONE " make backgroun transparent<CR>
 
+let g:gh_open_command = 'wslview '
 
+"let g:gh_line_map = '<leader>gh'
+"let g:gh_line_blame_map = '<leader>gb'

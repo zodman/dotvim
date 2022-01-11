@@ -10,6 +10,7 @@ eval `keychain --agents ssh --eval id_rsa2`
 source $HOME/.keychain/$HOSTNAME-sh
 
 source ~/.vim/docker_alias.bash
+source ~/.vim/anybar_init.sh
 
 
 function _awsListAll() {
@@ -34,7 +35,9 @@ function _awsSwitchProfile() {
        export AWS_REGION=$(aws configure get region --profile $1);
        echo "Switched to AWS Profile: $1";
        aws configure list
+       complete -C aws_completer aws
    fi
+
 };
 
 function _ncduzip() {
@@ -71,7 +74,13 @@ function rm-progress (){
     unset $RES
 }
 
-function c() {
+function c-n() {
+    git commit --no-verify -am "$*"
+}
+
+
+function __c() {
+    [ -d node_modules ] && npm run lint:fix
     git commit -am "$*"
 }
 
@@ -80,13 +89,11 @@ function c() {
 function ___m()
 {
     anybar cyan
-    eval "ets -s $@";
+    eval "$@";
     if [ $? -eq 0 ]; then
         anybar green
-        say -v Amelie Processus terminé
     else
         anybar red
-        say -v Amelie Le processus a échoué
     fi
 }
 
@@ -99,6 +106,10 @@ function aws-echo-keys() {
     echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
     echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
     echo "AWS_REGION=${AWS_REGION}"
+}
+function aws-load-keys-profile() {
+    export $(aws-echo-keys | grep -v '#' | xargs )
+    env | grep AWS
 }
 
 function terminal-notifier(){
@@ -187,6 +198,7 @@ function check_anybar_running() {
 }
 
 ##### ALIAS
+alias m=anybar_monitor
 alias wttr='curl wttr.in -L'
 alias wtc='git commit -am "$(curl --retry 5 --retry-delay 0 -s http://whatthecommit.com/index.txt)"'
 alias wtc-comment='gh pr comment -b "$(curl --retry 5 --retry-delay 0 -s http://whatthecommit.com/index.txt) \n plz review my changes"'
@@ -196,7 +208,7 @@ alias awsset="_awsSwitchProfile"
 alias awswho="aws configure list"
 alias npm-cache-clear="npm cache clear --force"
 alias husky-skip="HUSKY_SKIP_HOOKS=1"
-alias ci-status='gh run watch'
+alias ci-status='m gh run watch --exit-status -i 1'
 alias ci-log='gh run view --log-failed'
 alias p='git push --no-verify'
 alias t='t --task-dir ${TASKS_PATH} --list tasks'
@@ -205,13 +217,18 @@ alias view-path='echo "$PATH" | tr ":" "\n" | nl'
 alias rscp='rsync -aP'
 alias rsmv='rsync -aP --remove-source-files'
 alias m-ets="m ets -s"
-alias cloudflare-docker-localhost="cloudflared tunnel --hostname localhost.python3.ninja --url http://$DOCKER_IP:8000"
+alias cloudflare-docker-localhost="cloudflared tunnel --hostname localhost.python3.ninja --url http://$DOCKER_IP:3000"
 alias poson="pg_ctl start -D /home/linuxbrew/.linuxbrew/var/postgres -l logfile"
+alias posoff="pg_ctl  stop -D /home/linuxbrew/.linuxbrew/var/postgres -l logfile"
 alias del-ts-check="ag '@ts-nocheck' -l | xargs sed -i  '/\/\/ @ts-nocheck/d'"
 alias npm-completation="source <(npm completion)"
-alias r="reset"
-alias pr-status="pr_status"
+alias r=reset
+alias pr-status=pr_status
 alias explorer-here="$POWERSHELL explorer ."
+alias vistoupdate="ncu -f /visto/ -u"
+alias c-m="git commit --no-verify -m"
+alias c=__c
+alias reload-alias="source ~/.vim/alias.bash"
 # red from bake-cli
 # export FZF_DEFAULT_COMMAND='fd --type f'
 

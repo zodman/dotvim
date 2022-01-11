@@ -42,8 +42,6 @@ POWERLINE_BASH_SELECT=1
 POWPATH=/home/linuxbrew/.linuxbrew/opt/python@3.8/lib/python3.8/site-packages/
 . $POWPATH/powerline/bindings/bash/powerline.sh
 # anybar
-. ~/anybar-bash/init.sh
-alias m=anybar_monitor
 
 # WSL Shit
 eval "$(gh completion -s bash)"
@@ -55,3 +53,4 @@ set -o vi
 
 eval "$(gh completion -s bash)"
 
+export DOKKU_HOST=dokku

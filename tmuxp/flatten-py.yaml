@@ -1,0 +1,8 @@
+session_name: flatten-py
+windows:
+  - window_name: runs
+    panes:
+      - cdvisto && cd dev-ops/visto/flatten-py && bake run
+  - window_name: code
+    panes:
+      - cdvisto && cd dev-ops/visto/flatten-py 

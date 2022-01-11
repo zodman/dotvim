@@ -1,0 +1,12 @@
+session_name: Visto
+windows:
+  - window_name: runs
+    panes:
+      - cdvistofrontend && npm run dev
+      - cdvistobackend && JEST_WORKER_ID=1 npm run dev:swc
+  - window_name: frontend
+    panes:
+      - cdvistofrontend
+  - window_name: backend
+    panes:
+      - cdvistobackend 
