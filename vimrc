@@ -31,7 +31,7 @@ Plug 'preservim/nerdcommenter'
 Plug 'jlanzarotta/bufexplorer'
 ""Plug 'gregsexton/matchtag'
 Plug 'bronson/vim-trailing-whitespace'
-" Plug 'mileszs/ack.vim' replace with <leader>ag
+Plug 'mileszs/ack.vim'  " replace with <leader>ag
 Plug 'Yggdroot/indentLine'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'moll/vim-bbye' " Bdelete

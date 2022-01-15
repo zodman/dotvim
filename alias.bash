@@ -13,6 +13,8 @@ source ~/.vim/docker_alias.bash
 source ~/.vim/anybar_init.sh
 
 
+
+
 function _awsListAll() {
 
     credentialFileLocation=${AWS_SHARED_CREDENTIALS_FILE};
@@ -190,9 +192,12 @@ function pr_status() {
 }
 
 function check_anybar_running() {
+    $POWERSHELL notebar -p 1739 
+    $POWERSHELL notebar -p 1740 
     while true
     do
-        (echo >/dev/tcp/localhost/4000) &>/dev/null && anybar green  || anybar red
+        (echo >/dev/tcp/localhost/4000) &>/dev/null && anybar green 1 || anybar red 1
+        (echo >/dev/tcp/localhost/3000) &>/dev/null && anybar green  2 || anybar red 2
         sleep 1
     done
 }
