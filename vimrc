@@ -33,7 +33,9 @@ Plug 'jlanzarotta/bufexplorer'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'mileszs/ack.vim'  " replace with <leader>ag
 Plug 'Yggdroot/indentLine'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+if has('nvim')
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+endif
 Plug 'moll/vim-bbye' " Bdelete
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -96,7 +98,16 @@ Plug 'ruanyl/vim-gh-line'
 
 Plug 'wakatime/vim-wakatime'
 
+Plug 'Shougo/echodoc.vim'
+Plug 'sjl/splice.vim'
+
+
 call plug#end()            " required
+
+" echodoc
+set cmdheight=2
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'signature'
 
 
 filetype plugin indent on    " required
@@ -315,8 +326,8 @@ let g:LanguageClient_serverCommands = {
     \ 'vue': ['vls'],
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
     \ 'javascript': ['typescript-language-server', '--stdio'],
-    \ 'typescriptreact': ['typescript-language-server', '--stdio'],
-    \ 'typescript': ['typescript-language-server', '--stdio'],
+    \ 'typescriptreact': ['typescript-language-server', '--stdio', '--log-level=4', '--tsserver-log-file=/tmp/ts.log', '--tsserver-log-verbosity=verbose'],
+    \ 'typescript': ['typescript-language-server', '--stdio', '--log-level=4', '--tsserver-log-file=/tmp/ts.log', '--tsserver-log-verbosity=verbose'],
     \ 'javascript.jsx': ['typescript-language-server', '--stdio'],
     \ 'typescript.tsx': ['typescript-language-server', '--stdio'],
     \ 'python': ['pyls', '-vvvv', '--log-file=/tmp/pyls.log'],
@@ -393,5 +404,14 @@ nnoremap <Leader>bg :hi Normal guibg=NONE ctermbg=NONE " make backgroun transpar
 
 let g:gh_open_command = 'wslview '
 
-"let g:gh_line_map = '<leader>gh'
-"let g:gh_line_blame_map = '<leader>gb'
+let g:gh_line_map = '<leader>gh'
+let g:gh_line_blame_map = '<leader>gb'
+"
+"let $LANGUAGECLIENT_DEBUG=1
+"let g:LanguageClient_loggingLevel='DEBUG'
+"let g:LanguageClient_autoStart=0
+"let g:LanguageClient_loggingFile =  expand('~/.local/share/nvim/LanguageClient.log') 
+"let g:LanguageClient_waitOutputTimeout = 500
+"let g:LanguageClient_loggingFile = '/tmp/LanguageClient.log'
+"let g:LanguageClient_loggingLevel = 'INFO'
+"let g:LanguageClient_serverStderr = '/tmp/LanguageServer.log'

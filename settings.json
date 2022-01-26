@@ -1,3 +1,9 @@
 {
-    'plugins':{'flake8':{'enabled':true}}
+  "plugins": { "flake8": { "enabled": true } },
+
+  "initializationOptions": {
+    "trace": {
+      "server": "verbose"
+    }
+  },
 }

@@ -5,14 +5,14 @@ function noti () {
 #    $POWERSHELL "mpv --really-quiet 'C:\Users\QA\jarvis\jarvis_text.mp3'" 
 }
 function cmd_random_fail() {
-  p="/c/Users/QA/jarvis/failed"
+  p="/mnt/c/Users/QA/jarvis/failed"
   f=$(find $p | shuf -n1)
   f1=$(basename $f)
   $POWERSHELL "mpv --really-quiet 'C:\Users\QA\jarvis\failed\\$f1'" 
 }
 
 function cmd_random_success() {
-  p="/c/Users/QA/jarvis/success"
+  p="/mnt/c/Users/QA/jarvis/success"
   f=$(find $p | shuf -n1)
   f1=$(basename $f)
   $POWERSHELL "mpv --really-quiet 'C:\Users\QA\jarvis\success\\$f1'"
@@ -38,8 +38,7 @@ function anybar() {
   local COLOUR=${1-white}
   local OFFSET=${2:-$(_anybar_iterm_offset)}
   local ANYBAR_PORT=$((1738 + $OFFSET))
-
-  echo -n $COLOUR | nc -4u -w0 localhost $ANYBAR_PORT
+  echo -n $COLOUR | nc -4u -w0 ${WINHOST} ${ANYBAR_PORT}
 }
 
 # Monitor a long running command using AnyBar

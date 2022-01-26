@@ -10,15 +10,17 @@ export DOCKER_IP=127.0.0.1
 export DOCKER_HOST=tcp://${DOCKER_IP}:2375
 #export DOCKER_CERT_PATH=/mnt/c/Users/QA/.docker/machine/machines/default
 #export DOCKER_TLS_VERIFY="1"
-sudo mount --bind /mnt/c /c
+# sudo mount --bind /mnt/c /c
 
-export DISPLAY=:0
+# export DISPLAY=:0
+export WINHOST=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null)
+export DISPLAY=$WINHOST:0
 
 
 # export PATH=/home/zodman/.local/bin:/home/zodman/.local/bin:/home/zodman/.nvm/versions/node/v12.14.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/zodman/aws-glue-libs/bin:/home/zodman/aws-glue-libs/bin:
 
 # brew for linux
-eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+# eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 # adding directories to PATH
 export PATH="/home/linuxbrew/.linuxbrew/opt/python@3.8/bin:$PATH"
@@ -35,13 +37,6 @@ fi
 
 
 . "$HOME/.vim/alias.bash"
-# powerline
-powerline-daemon -q
-POWERLINE_BASH_CONTINUATION=1
-POWERLINE_BASH_SELECT=1
-POWPATH=/home/linuxbrew/.linuxbrew/opt/python@3.8/lib/python3.8/site-packages/
-. $POWPATH/powerline/bindings/bash/powerline.sh
-# anybar
 
 # WSL Shit
 eval "$(gh completion -s bash)"
@@ -54,3 +49,5 @@ set -o vi
 eval "$(gh completion -s bash)"
 
 export DOKKU_HOST=dokku
+
+

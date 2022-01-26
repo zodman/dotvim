@@ -202,6 +202,13 @@ function check_anybar_running() {
     done
 }
 
+function __re_request(){
+    gh pr edit --remove-reviewer alexghattas
+    gh pr edit --add-reviewer alexghattas
+    gh pr comment --body "@alexghattas comments are done ..."
+
+}
+
 ##### ALIAS
 alias m=anybar_monitor
 alias wttr='curl wttr.in -L'
@@ -236,4 +243,7 @@ alias c=__c
 alias reload-alias="source ~/.vim/alias.bash"
 # red from bake-cli
 # export FZF_DEFAULT_COMMAND='fd --type f'
-
+alias cdvistobackend="cd /home/zodman/visto/backend"
+alias cdvistofrontend="cd /home/zodman/visto/frontend"
+alias pr-open="gh  pr view --json url | jq .url | xargs wslview"
+alias re-request="__re_request"
