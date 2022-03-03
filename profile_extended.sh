@@ -5,9 +5,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 #### Docker for wsl taking from /etc/hosts
-export DOCKER_IP=127.0.0.1 
+#export DOCKER_IP=127.0.0.1 
 #$(getent  hosts host.docker.internal  | awk '{ print $1 }')
-export DOCKER_HOST=tcp://${DOCKER_IP}:2375
+# export DOCKER_HOST=tcp://${DOCKER_IP}:2375
 #export DOCKER_CERT_PATH=/mnt/c/Users/QA/.docker/machine/machines/default
 #export DOCKER_TLS_VERIFY="1"
 # sudo mount --bind /mnt/c /c

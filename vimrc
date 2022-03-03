@@ -126,7 +126,7 @@ set foldmethod=manual   "fold based on indent
 "set foldnestmax=3       "deepest fold is 3 levels
 set shortmess=atI " Shortens messages in status line.
 set laststatus=2 " Always show status line.
-set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS,htmlcov,*report*,coverage/*,my_data/*
+"set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS,htmlcov,*report*,coverage/*,my_data/*
 set foldenable " Turn on folding.
 set mouse=
 
@@ -148,11 +148,11 @@ let g:airline#extensions#tabline#enabled = 1
 " colo PaperColor
 " colo badwolf
 
-let NERDTreeIgnore=[
-                \'\.log$','junit\.xml$','\.serverless','\.git$','\.swp$','\.pyc$','\.pyo$',
-                \'\.swo$','__pycache__','htmlcov','node_modules','*report*',
-                \'coverage', '^tags$','\.egg-info','dist','my_data','\.nyc_output$'
-                \]
+"let NERDTreeIgnore=[
+                "\'\.log$','junit\.xml$','\.serverless','\.git$','\.swp$','\.pyc$','\.pyo$',
+                "\'\.swo$','__pycache__','htmlcov','node_modules','*report*',
+                "\'coverage', '^tags$','\.egg-info','dist','my_data','\.nyc_output$'
+                "\]
 "let NERDTreeQuitOnOpen = 1
 "let NERDTreeAutoDeleteBuffer = 1
 "let NERDTreeMinimalUI = 1
@@ -262,6 +262,7 @@ let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 " language tool plugin
 " use choco to install it.n
 let g:languagetool_cmd='languagetool'
+set spelllang=en_us
 " Snippets
 "let g:UltiSnipsExpandTrigger="<tab>"
 "
@@ -415,3 +416,7 @@ let g:gh_line_blame_map = '<leader>gb'
 "let g:LanguageClient_loggingFile = '/tmp/LanguageClient.log'
 "let g:LanguageClient_loggingLevel = 'INFO'
 "let g:LanguageClient_serverStderr = '/tmp/LanguageServer.log'
+"
+let g:echodoc#enable_at_startup = 1
+let g:EchoDocEnable = 1
+let g:echodoc#type = "echo"
