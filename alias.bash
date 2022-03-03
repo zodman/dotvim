@@ -11,7 +11,7 @@ source $HOME/.keychain/$HOSTNAME-sh
 
 source ~/.vim/docker_alias.bash
 source ~/.vim/anybar_init.sh
-
+source ~/.vim/jrnl-prompt.sh 
 
 
 
