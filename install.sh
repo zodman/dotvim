@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e 
 ROOT_DIR=$(pwd)
-
+# needs linuxbrew
 # Dropbox needed on ~/Dropbox
 ln -s ~/Dropbox/ssh ~/.ssh || echo bypass
 
@@ -24,11 +24,16 @@ mkdir -p .config/jrnl
 ln -s  ~/Dropbox/jrnl/jrnl.yaml  .config/jrnl/jrnl.yaml || echo bypass
 pip3 install pynvim
 
-
 mkdir -p ~/.local/share/nvim/
 ln -s -f  ~/.vim ~/.local/share/nvim/site || echo bypass
 mkdir -p ~/.config/nvim/
 ln -s -f  ~/.vim/vimrc  ~/.config/nvim/init.vim || echo bypass
 
 #echo ". ~/.vim/profile_extended.sh" >> ~/.profile
-
+# TODO: Install powerline-go on .bashrc
+#function _update_ps1() {
+    #PS1="$(powerline-go -hostname-only-if-ssh -newline  -error $?)"
+#}
+#if [ "$TERM" != "linux" ]; then
+    #PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+#fi
