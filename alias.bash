@@ -209,6 +209,10 @@ function __re_request(){
 
 }
 
+__git_stat() {
+    git diff --stat dev..`git rev-parse --abbrev-ref HEAD`
+}
+
 ##### ALIAS
 alias m=anybar_monitor
 alias wttr='curl wttr.in -L'
@@ -247,3 +251,4 @@ alias cdvistobackend="cd /home/zodman/visto/backend"
 alias cdvistofrontend="cd /home/zodman/visto/frontend"
 alias pr-open="gh  pr view --json url | jq .url | xargs wslview"
 alias re-request="__re_request"
+alias git-stat="__git_stat"
