@@ -79,6 +79,9 @@ Plug 'sjl/badwolf'
 Plug 'morhetz/gruvbox'
 Plug 'srcery-colors/srcery-vim'
 Plug 'projekt0n/github-nvim-theme'
+Plug 'julien/vim-colors-green'
+Plug 'NLKNguyen/papercolor-theme'
+
 
 
 """ " Pythons
@@ -107,7 +110,6 @@ call plug#end()            " required
 " echodoc
 set cmdheight=2
 let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = 'signature'
 
 
 filetype plugin indent on    " required
@@ -306,6 +308,8 @@ if exists('+termguicolors')
   set t_Co=256
   set termguicolors
 endif
+" lets check if it this works
+set termguicolors
 
 
 " running wsl + tmux + vim
@@ -417,6 +421,3 @@ let g:gh_line_blame_map = '<leader>gb'
 "let g:LanguageClient_loggingLevel = 'INFO'
 "let g:LanguageClient_serverStderr = '/tmp/LanguageServer.log'
 "
-let g:echodoc#enable_at_startup = 1
-let g:EchoDocEnable = 1
-let g:echodoc#type = "echo"

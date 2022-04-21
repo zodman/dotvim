@@ -82,7 +82,7 @@ function c-n() {
 
 
 function __c() {
-    [ -d node_modules ] && npm run lint:fix
+    [ -d node_modules ] && npm run lint:fix || echo 'skip'
     git commit -am "$*"
 }
 
@@ -252,3 +252,6 @@ alias cdvistofrontend="cd /home/zodman/visto/frontend"
 alias pr-open="gh  pr view --json url | jq .url | xargs wslview"
 alias re-request="__re_request"
 alias git-stat="__git_stat"
+alias pg-test="docker run -p 127.0.0.1:5432:5432  --tmpfs=/data -e PGDATA=/data -e POSTGRES_PASSWORD=password postgres"
+alias pg-test-log="pg-test -c log_statement=all"
+alias python="python3"
