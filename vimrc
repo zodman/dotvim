@@ -50,7 +50,7 @@ Plug 'jmcantrell/vim-diffchanges'
 Plug 'yasuhiroki/github-actions-yaml.vim'
 ""Plug 'stanangeloff/php.vim'
 "" Plug 'cespare/vim-toml' "check if polyglot can replace
-""Plug 'retorillo/istanbul.vim'
+Plug 'retorillo/istanbul.vim'
 Plug 'autozimu/LanguageClient-neovim', {
         \ 'branch': 'next',
     \ 'do': 'bash install.sh',

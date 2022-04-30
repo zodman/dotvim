@@ -1,28 +1,25 @@
 #!/bin/bash
+
+DIRFILES="/mnt/c/Users/QA/jarvis"
+DIRWINFILES='C:\Users\QA\jarvis\'
+
 function noti () {
     TEXT=`curl 'https://api.chucknorris.io/jokes/random?category=dev' -s | jq -r ".value"| sed s/\\"//g`
     $POWERSHELL "New-BurntToastNotification  -Silent -Text \"$1\", \"$TEXT\""
 #    $POWERSHELL "mpv --really-quiet 'C:\Users\QA\jarvis\jarvis_text.mp3'" 
 }
 function cmd_random_fail() {
-  p="/mnt/c/Users/QA/jarvis/failed"
+  p="$DIRFILES/failed"
   f=$(find $p | shuf -n1)
   f1=$(basename $f)
-  $POWERSHELL "mpv --really-quiet 'C:\Users\QA\jarvis\failed\\$f1'" 
+  $POWERSHELL "mpv --no-video --really-quiet '$DIRWINFILES\failed\\$f1'" 
 }
 
 function cmd_random_success() {
-  p="/mnt/c/Users/QA/jarvis/success"
+  p="$DIRFILES/success"
   f=$(find $p | shuf -n1)
   f1=$(basename $f)
-  $POWERSHELL "mpv --really-quiet 'C:\Users\QA\jarvis\success\\$f1'"
-}
-
-function cmd_success () {
-    $POWERSHELL "mpv --really-quiet 'C:\Users\QA\jarvis\speech_success.mp3'" 
-}
-function cmd_fail () {
-    $POWERSHELL "mpv --really-quiet 'C:\Users\QA\jarvis\speech_failed.mp3'" 
+  $POWERSHELL "mpv --no-video --really-quiet '$DIRWINFILES\success\\$f1'"
 }
 
 

@@ -4,10 +4,10 @@ hdate () {
     awk -v date="$last_date" -v now="$(date +%s)" '
     BEGIN {  
        diff = (now - date);
-       if (diff > (24*60*60)) printf "%.0f days ago", diff/(24*60*60);
-       else if (diff > (60*60)) printf "%.0f hrs ago", diff/(60*60);
-       else if (diff > 60) printf "%.0f mins ago", diff/60;
-       else printf "%s secs ago", diff;
+       if (diff > (24*60*60)) printf "%.0fd", diff/(24*60*60);
+       else if (diff > (60*60)) printf "%.0f h", diff/(60*60);
+       else if (diff > 60) printf "%.0f m", diff/60;
+       else printf "%s s", diff;
     }'
 }
 
@@ -18,6 +18,6 @@ _jrnl_last_entry() {
 
 _jrnl_prompt() {
    _jrnl_last_entry
-    echo "last jrnl: $_jrnl_last_entry_out"
+    echo "jrnl:$_jrnl_last_entry_out"
 }
 alias jrnl-prompt=_jrnl_prompt

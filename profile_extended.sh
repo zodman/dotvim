@@ -15,6 +15,9 @@ export NVM_DIR="$HOME/.nvm"
 # export DISPLAY=:0
 export WINHOST=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null)
 export DISPLAY=$WINHOST:0
+PGHOST="pglocalhost"
+
+sudo sed -i "/$PGHOST/ s/.*/$WINHOST\t$PGHOST/g" /etc/hosts
 
 
 # export PATH=/home/zodman/.local/bin:/home/zodman/.local/bin:/home/zodman/.nvm/versions/node/v12.14.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/zodman/aws-glue-libs/bin:/home/zodman/aws-glue-libs/bin:

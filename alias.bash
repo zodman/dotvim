@@ -82,7 +82,7 @@ function c-n() {
 
 
 function __c() {
-    [ -d node_modules ] && npm run lint:fix || echo 'skip'
+    [ -d node_modules ] && npm run lint:fix
     git commit -am "$*"
 }
 
@@ -213,6 +213,10 @@ __git_stat() {
     git diff --stat dev..`git rev-parse --abbrev-ref HEAD`
 }
 
+__check_docker_run() {
+    [ ! -f /var/run/docker.sock  ] && sudo service docker start
+}
+
 ##### ALIAS
 alias m=anybar_monitor
 alias wttr='curl wttr.in -L'
@@ -255,3 +259,4 @@ alias git-stat="__git_stat"
 alias pg-test="docker run -p 127.0.0.1:5432:5432  --tmpfs=/data -e PGDATA=/data -e POSTGRES_PASSWORD=password postgres"
 alias pg-test-log="pg-test -c log_statement=all"
 alias python="python3"
+alias git-branch-jira="python ~/.vim/jira_branch_info.py"
