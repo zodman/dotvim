@@ -1,3 +1,17 @@
+#!/bin/env python
+"""
+
+use the api token from jira: https://id.atlassian.com/manage-profile/security/api-tokens
+
+# add to ~/.bashrc
+export JIRA_API_TOKEN=""
+export JIRA_USER=""
+export JIRA_URL="https://myjira.atlassian.net/"
+
+# install 
+pip install jira colorama
+
+"""
 from jira import JIRA
 import os
 import subprocess
@@ -6,7 +20,7 @@ from colorama import Fore, Back, Style
 
 
 token = os.environ.get("JIRA_API_TOKEN") 
-user = os.environ.get("JIRA_USERNAME")
+user = os.environ.get("JIRA_USER")
 jira_url = os.environ.get("JIRA_URL")
 
 jira = JIRA(server=jira_url, basic_auth=(user, token))
