@@ -25,13 +25,6 @@ jira_url = os.environ.get("JIRA_URL")
 
 jira = JIRA(server=jira_url, basic_auth=(user, token))
 
-r = subprocess.check_output("git branch", shell=True)
-for i in r.decode("utf-8").split('\n'):
-    m = re.search(r'([A-Za-z]{2,3})-([0-9]{3})',i.strip())
-    if m:
-        jira_issue = m.group()
-        j = jira.issue(jira_issue)
-        print(f"{Fore.GREEN} {i.lstrip()}  {Fore.LIGHTWHITE_EX} {j.fields.status} {Fore.CYAN}{j.fields.summary} {Fore.RESET}{j.permalink()}")
-    else:
-
-        print(f"{Fore.MAGENTA} {i.strip()}")
+result = jira.search_issues(""" (assignee = currentUser() or assignee="alex@visto.ai") and statuscategory IN ("In Progress","New") ORDER BY updated""")
+for j in result:
+    print(f"{j.key} {j.fields.assignee} {Fore.LIGHTWHITE_EX} {j.fields.status} {Fore.CYAN}{j.fields.summary} {Fore.RESET}{j.permalink()} ")

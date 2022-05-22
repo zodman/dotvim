@@ -14,6 +14,43 @@ source ~/.vim/anybar_init.sh
 source ~/.vim/jrnl-prompt.sh 
 
 
+alias bred="python ~/.vim/red.py"
+
+function __git_branch_status() {
+    branch=`git rev-parse --abbrev-ref HEAD`
+
+    git for-each-ref --format='%(refname:short)' refs/heads | \
+    while read local upstream; do
+
+        # Use master if upstream branch is empty
+        [ -z $upstream ] && upstream=dev
+
+        ahead=`git rev-list dev..${local} --count`
+        behind=`git rev-list ${local}..dev --count`
+
+        if [[ $local == $branch ]]; then
+            asterisk=*
+        else
+            asterisk=' '
+        fi
+
+        # Show asterisk before current branch
+        echo -n "$asterisk $local"
+
+        # Does this branch is ahead or behind upstream branch?
+        if [[ $ahead -ne 0 && $behind -ne 0 ]]; then
+            echo  -n $(bred --fg green " ($ahead ahead and $behind behind $upstream)")
+        elif [[ $ahead -ne 0 ]]; then
+            echo -n $(bred --fg green " ($ahead ahead $upstream)")
+        elif [[ $behind -ne 0 ]]; then
+            echo -n $(bred --fg green " ($behind behind $upstream)")
+        fi
+
+        # Newline
+        echo
+
+    done;
+}
 
 function _awsListAll() {
 
@@ -126,21 +163,22 @@ function edit-alias(){
     vim ~/.vim/alias.bash
     . ~/.vim/alias.bash
 }
-function load-dot-env () {
+
+function __load_dot_env () {
     if [ -z "$*" ]; then
         if [ -f '.env' ]; then
-            export $(cat .env | grep -v "#") && red "loaded .env file"
+            export $(cat .env | grep -v "#") && echo "loaded .env file"
             export DOTENV='.env'
         else
-            red --fg yellow "no .env file"
+            $(echo "no .env file")
             unset DOTENV
         fi
     else
         if [ -f "$1" ]; then
-            export $(cat "$1" | grep -v "#") && red "loaded $1 file"
+            export $(cat "$1" | grep -v "#") && echo "loaded $1 file"
             export DOTENV=$1
         else
-            red --fg yellow "no .env file"
+            echo "no .env file"
             unset DOTENV
         fi
     fi
@@ -151,13 +189,13 @@ function pyclean () {
 }
 
 function venv () {
-    red "loading venv"
+    bred "loading venv"
     if [ ! -d '.venv' ]; then
         python3 -m venv .venv
-        red "venv created"
+        echo "venv created"
     else
         . .venv/bin/activate
-        red "venv loaded"
+         echo "venv loaded"
     fi
 }
 
@@ -205,7 +243,7 @@ function check_anybar_running() {
 function __re_request(){
     gh pr edit --remove-reviewer alexghattas
     gh pr edit --add-reviewer alexghattas
-    gh pr comment --body "@alexghattas comments are done ..."
+    gh pr comment --body "@alexghattas changes were maded and  comments are done ..."
 
 }
 
@@ -260,3 +298,6 @@ alias pg-test="docker run -p 127.0.0.1:5432:5432  --tmpfs=/data -e PGDATA=/data 
 alias pg-test-log="pg-test -c log_statement=all"
 alias python="python3"
 alias git-branch-jira="python ~/.vim/jira_branch_info.py"
+alias jira-list="python ~/.vim/jira_list.py"
+alias git-branch-status=__git_branch_status
+alias load-dot-env=__load_dot_env

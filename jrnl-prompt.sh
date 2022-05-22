@@ -5,9 +5,9 @@ hdate () {
     BEGIN {  
        diff = (now - date);
        if (diff > (24*60*60)) printf "%.0fd", diff/(24*60*60);
-       else if (diff > (60*60)) printf "%.0f h", diff/(60*60);
-       else if (diff > 60) printf "%.0f m", diff/60;
-       else printf "%s s", diff;
+       else if (diff > (60*60)) printf "%.0fh", diff/(60*60);
+       else if (diff > 60) printf "%.0fm", diff/60;
+       else printf "%ss", diff;
     }'
 }
 

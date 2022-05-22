@@ -41,7 +41,6 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 " Plug 'bling/vim-bufferline'
 "" Plug 'sjl/splice.vim'
-Plug 'editorconfig/editorconfig-vim'
 Plug 'preservim/tagbar'
 Plug 'jmcantrell/vim-diffchanges'
 
@@ -81,28 +80,30 @@ Plug 'srcery-colors/srcery-vim'
 Plug 'projekt0n/github-nvim-theme'
 Plug 'julien/vim-colors-green'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'lifepillar/vim-solarized8'
 
 
 
 """ " Pythons
-Plug 'vim-scripts/indentpython.vim'
+" Plug 'vim-scripts/indentpython.vim'
 " Plug 'mgedmin/coverage-highlight.vim'
 Plug 'raimon49/requirements.txt.vim'
 Plug 'mindriot101/vim-yapf'
-Plug 'vim-python/python-syntax'
+" Plug 'vim-python/python-syntax'
+
 
 """Plug 'digitaltoad/vim-pug'
 "" WRITING
 Plug 'dpelle/vim-LanguageTool'
 Plug 'takac/vim-hardtime'
 
-Plug 'mnishz/colorscheme-preview.vim'
 Plug 'ruanyl/vim-gh-line'
 
 Plug 'wakatime/vim-wakatime'
 
 Plug 'Shougo/echodoc.vim'
-Plug 'sjl/splice.vim'
+
+Plug 'ryanolsonx/vim-xit'
 
 
 call plug#end()            " required
@@ -146,7 +147,7 @@ let g:airline#extensions#tabline#enabled = 1
 
 
 " colorscheme gruvbox
-"colo solarized
+colo solarized8
 " colo PaperColor
 " colo badwolf
 
@@ -207,6 +208,8 @@ nnoremap _hb :set ft=handlebars<CR>
 " ejecute last command
 map <leader>l :<Up><CR>
 nnoremap gp :%!npx prettier --stdin-filepath %<CR>
+autocmd FileType typescript nnoremap <leader>iu :IstanbulUpdate <CR>
+autocmd FileType typescript nnoremap <leader>it :IstanbulToggle <CR>
 autocmd FileType javascript nnoremap <leader>iu :IstanbulUpdate <CR>
 autocmd FileType javascript nnoremap <leader>it :IstanbulToggle <CR>
 autocmd FileType python nnoremap <leader>iu :Coveragepy refresh <CR>
@@ -320,7 +323,7 @@ let g:solarized_termcolors=256
 "let g:sonokai_style = 'andromeda'
 let g:sonokai_enable_italic = 0
 let g:sonokai_disable_italic_comment = 1
-colo molokai
+"colo molokai
 
 
 " langserver configuration
@@ -420,4 +423,10 @@ let g:gh_line_blame_map = '<leader>gb'
 "let g:LanguageClient_loggingFile = '/tmp/LanguageClient.log'
 "let g:LanguageClient_loggingLevel = 'INFO'
 "let g:LanguageClient_serverStderr = '/tmp/LanguageServer.log'
-"
+
+
+augroup xit_filetype
+	autocmd!
+	autocmd BufRead,BufNewFile,BufReadPost *.xit set filetype=xit
+	autocmd FileType xit setlocal shiftwidth=4 softtabstop=4 expandtab
+augroup END
