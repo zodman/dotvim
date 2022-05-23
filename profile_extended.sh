@@ -17,17 +17,11 @@ export WINHOST=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/nu
 export DISPLAY=$WINHOST:0
 PGHOST="pglocalhost"
 
-sudo sed -i "/$PGHOST/ s/.*/$WINHOST\t$PGHOST/g" /etc/hosts
+# sudo sed -i "/$PGHOST/ s/.*/$WINHOST\t$PGHOST/g" /etc/hosts
 
-
-# export PATH=/home/zodman/.local/bin:/home/zodman/.local/bin:/home/zodman/.nvm/versions/node/v12.14.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/zodman/aws-glue-libs/bin:/home/zodman/aws-glue-libs/bin:
-
-# brew for linux
-# eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 # adding directories to PATH
-export PATH="/home/linuxbrew/.linuxbrew/opt/python@3.8/bin:$PATH"
-export PATH="/home/zodman/.yarn/bin:/home/zodman/.vim/bin:$PATH"
+export PATH="/home/zodman/.yarn/bin:/home/zodman/.vim/bin:/home/zodman/.local/bin:$PATH"
 
 
 POWERSHELL=/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe 

@@ -11,7 +11,7 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 
 git clone https://github.com/gpakosz/.tmux.git ~/.tmux || echo bypass
 ln -s -f ~/.tmux/.tmux.conf ~/.tmux.conf
-ln -s -f ~/.vim/.tmux.conf.local ~/.tmux.conf.local
+ln -s -f ~/.vim/tmux.conf.local ~/.tmux.conf.local
 
 # sudo apt install tmux ack-grep python-pep8
 ln -s ~/.vim/ctags ~/.ctagsrc || echo bypass
@@ -20,8 +20,8 @@ mkdir -p ~/.config/powerline
 ln -s ~/.vim/powerline ~/.config/powerline || echo bypass
 brew install ag universal-ctags powerline-go neovim \
     keychain gh python tmuxp nvm fzf jq jrln
-mkdir -p .config/jrnl
-ln -s  ~/Dropbox/jrnl/jrnl.yaml  .config/jrnl/jrnl.yaml || echo bypass
+mkdir -p ~/.config/jrnl
+ln -s  ~/Dropbox/jrnl/jrnl.yaml  ~/.config/jrnl/jrnl.yaml || echo bypass
 pip3 install pynvim
 
 mkdir -p ~/.local/share/nvim/
