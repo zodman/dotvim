@@ -17,6 +17,10 @@ set hidden
 set signcolumn=yes
 
 
+set clipboard+=unnamedplus
+
+
+
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
           \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -33,16 +37,13 @@ Plug 'jlanzarotta/bufexplorer'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'mileszs/ack.vim'  " replace with <leader>ag
 Plug 'Yggdroot/indentLine'
-if has('nvim')
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
-endif
+"Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'moll/vim-bbye' " Bdelete
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 " Plug 'bling/vim-bufferline'
 "" Plug 'sjl/splice.vim'
 Plug 'preservim/tagbar'
-Plug 'jmcantrell/vim-diffchanges'
 
 
 """ OTHER LANGUAGUAGES
@@ -58,14 +59,11 @@ Plug 'autozimu/LanguageClient-neovim', {
 
 Plug 'pantharshit00/vim-prisma'
 Plug 'jparise/vim-graphql'
-Plug 'hashivim/vim-terraform'
+"Plug 'hashivim/vim-terraform'
 
 "" Snippets
 "Plug 'isRuslan/vim-es6'
 "Plug 'joaohkfaria/vim-jest-snippets'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'mlaursen/vim-react-snippets', {'branch': 'main'}
 ""THEMES
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -77,10 +75,8 @@ Plug 'joshdick/onedark.vim'
 Plug 'sjl/badwolf'
 Plug 'morhetz/gruvbox'
 Plug 'srcery-colors/srcery-vim'
-Plug 'projekt0n/github-nvim-theme'
-Plug 'julien/vim-colors-green'
-Plug 'NLKNguyen/papercolor-theme'
 Plug 'lifepillar/vim-solarized8'
+Plug 'glepnir/zephyr-nvim'
 
 
 
@@ -96,15 +92,11 @@ Plug 'mindriot101/vim-yapf'
 "" WRITING
 Plug 'dpelle/vim-LanguageTool'
 Plug 'takac/vim-hardtime'
-
 Plug 'ruanyl/vim-gh-line'
-
-Plug 'wakatime/vim-wakatime'
-
 Plug 'Shougo/echodoc.vim'
-
 Plug 'ryanolsonx/vim-xit'
-
+Plug 'sbdchd/neoformat'
+Plug 'tpope/vim-fugitive'
 
 call plug#end()            " required
 
@@ -161,6 +153,7 @@ colo solarized8
 "let NERDTreeMinimalUI = 1
 "let NERDTreeDirArrows = 1
 let NERDTreeShowHidden=0
+let g:NERDCustomDelimiters = { 'javascript.jsx': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' } }
 
 " https://github.com/junegunn/fzf/issues/453#issuecomment-513495518
 "au BufEnter * if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree' && winnr('$') > 1 | b# | exe "normal! \<c-w>\<c-w>" | :blast | endif
@@ -207,7 +200,7 @@ nnoremap _pd :set ft=python.django<CR>
 nnoremap _hb :set ft=handlebars<CR>
 " ejecute last command
 map <leader>l :<Up><CR>
-nnoremap gp :%!npx prettier --stdin-filepath %<CR>
+nnoremap gp :Neoformat<CR>
 autocmd FileType typescript nnoremap <leader>iu :IstanbulUpdate <CR>
 autocmd FileType typescript nnoremap <leader>it :IstanbulToggle <CR>
 autocmd FileType javascript nnoremap <leader>iu :IstanbulUpdate <CR>
@@ -241,14 +234,19 @@ autocmd FileType typescriptreact setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType typescript setlocal ts=2 sts=2 sw=2 expandtab
 
+let g:neoformat_try_node_exe = 1
+
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=0# indentkeys-=<:> foldmethod=indent nofoldenable
 autocmd FileType prisma,graphql setlocal ts=2 sts=2 sw=2 expandtab foldmethod=indent nofoldenable
 au BufNewFile,BufRead *.py set tabstop=4 softtabstop=4 shiftwidth=4 expandtab autoindent fileformat=unix
+
 
 iab setheader #!/usr/bin/env python<CR># encoding=utf8<CR># made by zodman
 iab nocheck // @ts-nocheck
 iab zodman // made by zodman
 iab noconsole // eslint-disable-next-line no-console
+iab leroy ᕕ(ᐛ)ᕗ
+iab monocle (╭ರ_•́)
 
 
 " https://github.com/webpack/webpack/issues/781#issuecomment-95523711
@@ -342,15 +340,14 @@ let g:LanguageClient_serverCommands = {
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ }
 
-"let g:LanguageClient_diagnosticsList="Location"
+" let g:LanguageClient_diagnosticsList="Location"
 function SetLSPShortcuts()
   "Goto definition under cursor.
   nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
   nnoremap <silent>gd :call LanguageClient#textDocument_definition()<CR>
 "Rename identifier under cursor.
-  nnoremap <leader>lr :LanguageClientStop<CR>:LanguageClientStart<CR>
 " Format current document.
-  nnoremap <leader>lf :%!npx prettier --stdin-filepath %<CR>
+  nnoremap <leader>lf :Neoformat<CR>
 "Goto type definition under cursor.
   nnoremap <leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
 "List all references of identifier under cursor.
@@ -368,8 +365,8 @@ function SetLSPShortcuts()
   nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
   nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
 
-   map <leader>i :call LanguageClient#explainErrorAtPoint()<CR>
-   nnoremap <leader>ln :call LanguageClient_diagnosticsNext()<CR>
+    map <leader>i :call LanguageClient#explainErrorAtPoint()<CR>
+    nnoremap <leader>ln :call LanguageClient_diagnosticsNext()<CR>
    nnoremap <leader>lp :call LanguageClient_diagnosticsPrevious()<CR>
    "https://jameschambers.co.uk/vim-typescript-slow
 "   set re=0
@@ -380,20 +377,22 @@ endfunction()
 
 call SetLSPShortcuts()
 
+function! SwitchStableRls() abort
+  LanguageClientStop
+  sleep 100m
+  LanguageClientStart
+  echo "reload LanguageClient"
+endfunction
+
+nnoremap <leader>lr :call SwitchStableRls()<CR>
+
+
 function DebugProfile() 
     profile start profile.log
     profile func *
     profile file *
 endfunction()
 
-
-"nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-"" press ctrl+o to jump back
-""nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-"nnoremap <silent> <leader>m :call LanguageClient_contextMenu()<CR>
-
-" clear languageclient clutter
-"nnoremap <leader>cg :sign unplace *<cr>
 
 function! FzfAgCurrentWord()
   let l:word = expand('<cword>')
@@ -408,9 +407,8 @@ let g:ackprg = 'ag --vimgrep'
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 set grepprg=ag\ --nogroup\ --nocolor
 
-nnoremap <Leader>bg :hi Normal guibg=NONE ctermbg=NONE " make backgroun transparent<CR>
 
-let g:gh_open_command = 'wslview '
+"#let g:gh_open_command = 'wslview '
 
 let g:gh_line_map = '<leader>gh'
 let g:gh_line_blame_map = '<leader>gb'
@@ -430,3 +428,9 @@ augroup xit_filetype
 	autocmd BufRead,BufNewFile,BufReadPost *.xit set filetype=xit
 	autocmd FileType xit setlocal shiftwidth=4 softtabstop=4 expandtab
 augroup END
+
+" background transparent
+hi Normal guibg=NONE ctermbg=NONE
+nnoremap <Leader>bg :hi Normal guibg=NONE ctermbg=NONE " make backgroun transparent<CR>
+
+let g:gh_trace=1

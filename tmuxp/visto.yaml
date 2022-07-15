@@ -2,7 +2,7 @@ session_name: Visto
 windows:
   - window_name: runs
     panes:
-      - check_anybar_running & cdvistofrontend && npm run dev
+      - cdvistofrontend && npm run dev
       - cdvistobackend && npm run dev:swc
   - window_name: frontend
     panes:

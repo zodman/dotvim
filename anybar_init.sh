@@ -1,25 +1,27 @@
 #!/bin/bash
 
-DIRFILES="/mnt/c/Users/QA/jarvis"
+DIRFILES="/home/zodman/Dropbox/jarvis"
 DIRWINFILES='C:\Users\QA\jarvis\'
 
 function noti () {
     TEXT=`curl 'https://api.chucknorris.io/jokes/random?category=dev' -s | jq -r ".value"| sed s/\\"//g`
     $POWERSHELL "New-BurntToastNotification  -Silent -Text \"$1\", \"$TEXT\""
 #    $POWERSHELL "mpv --really-quiet 'C:\Users\QA\jarvis\jarvis_text.mp3'" 
+    mpv --really-quiet '$DIRFILES\jarvis_text.mp3' 
 }
 function cmd_random_fail() {
   p="$DIRFILES/failed"
   f=$(find $p | shuf -n1)
   f1=$(basename $f)
-  $POWERSHELL "mpv --no-video --really-quiet '$DIRWINFILES\failed\\$f1'" 
+  #$POWERSHELL "mpv --no-video --really-quiet '$DIRWINFILES\failed\\$f1'" 
+  mpv --no-video --really-quiet '$DIRFILES\failed\\$f1' 
 }
 
 function cmd_random_success() {
   p="$DIRFILES/success"
   f=$(find $p | shuf -n1)
   f1=$(basename $f)
-  $POWERSHELL "mpv --no-video --really-quiet '$DIRWINFILES\success\\$f1'"
+  #$POWERSHELL "mpv --no-video --really-quiet '$DIRWINFILES\success\\$f1'"
 }
 
 
@@ -35,7 +37,7 @@ function anybar() {
   local COLOUR=${1-white}
   local OFFSET=${2:-$(_anybar_iterm_offset)}
   local ANYBAR_PORT=$((1738 + $OFFSET))
-  echo -n $COLOUR | nc -4u -w0 ${WINHOST} ${ANYBAR_PORT}
+  echo -n $COLOUR | nc -4u -w0 127.0.0.1 ${ANYBAR_PORT}
 }
 
 # Monitor a long running command using AnyBar
@@ -55,12 +57,12 @@ function anybar_monitor() {
     local EXIT_STATUS=$?
     if [ $EXIT_STATUS -ne 0 ]; then
       anybar red
-      noti failed
-      cmd_random_fail
+      #noti failed
+      #cmd_random_fail
     else
       anybar green
-      noti success
-      cmd_random_success
+      #noti success
+      #cmd_random_success
     fi
 
     return $EXIT_STATUS

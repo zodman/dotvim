@@ -117,9 +117,25 @@ function c-n() {
     git commit --no-verify -am "$*"
 }
 
+__check-code (){
+    declare files=$(git diff dev --stat | awk '{print $1}' | sed '$ d') 
+    echo $files | xargs npx -y eslint --fix --quiet
+    echo $files | xargs npx -y jscpd -v -b
+    echo $files | xargs npx -y eslintcc 
+
+}
 
 function __c() {
-    [ -d node_modules ] && npm run lint:fix
+    if [ -d node_modules ] ;
+    then
+        __check-code
+        if ! [ $? -eq 0 ]; 
+        then
+            echo "ey! something happend"
+            return
+        fi
+
+    fi
     git commit -am "$*"
 }
 
@@ -160,7 +176,7 @@ function  clip-exe() {
 }
 
 function edit-alias(){
-    vim ~/.vim/alias.bash
+    nvim ~/.vim/alias.bash
     . ~/.vim/alias.bash
 }
 
@@ -230,8 +246,8 @@ function pr_status() {
 }
 
 function check_anybar_running() {
-    $POWERSHELL notebar -p 1739 
-    $POWERSHELL notebar -p 1740 
+    nohup somebar -p 1739  &
+    nohup somebar -p 1740  &
     while true
     do
         (echo >/dev/tcp/localhost/4000) &>/dev/null && anybar green 1 || anybar red 1
@@ -255,6 +271,26 @@ __check_docker_run() {
     [ ! -f /var/run/docker.sock  ] && sudo service docker start
 }
 
+__git_publish () {
+    git push  -u origin `git rev-parse --abbrev-ref HEAD`
+}
+
+___visto_pr () {
+    cd ~/visto/backend
+    echo `gh pr  view  --json url | jq -r ".url"`
+    cd ~/visto/frontend
+    echo `gh pr  view  --json url | jq -r ".url"`
+}
+
+__create_pr (){
+    BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    TITLE=$(jira-list -t | grep $BRANCH) 
+    gh pr create -B dev --title "$TITLE"
+}
+__m_c (){
+    anybar_monitor __c 
+}
+
 ##### ALIAS
 alias m=anybar_monitor
 alias wttr='curl wttr.in -L'
@@ -265,7 +301,6 @@ alias awslist="_awsListAll"
 alias awsset="_awsSwitchProfile"
 alias awswho="aws configure list"
 alias npm-cache-clear="npm cache clear --force"
-alias husky-skip="HUSKY_SKIP_HOOKS=1"
 alias ci-status='m gh run watch --exit-status -i 1'
 alias ci-log='gh run view --log-failed'
 alias p='git push --no-verify'
@@ -297,7 +332,9 @@ alias git-stat="__git_stat"
 alias pg-test="docker run -p 127.0.0.1:5432:5432  --tmpfs=/data -e PGDATA=/data -e POSTGRES_PASSWORD=password postgres"
 alias pg-test-log="pg-test -c log_statement=all"
 alias python="python3"
-alias git-branch-jira="python ~/.vim/jira_branch_info.py"
-alias jira-list="python ~/.vim/jira_list.py"
 alias git-branch-status=__git_branch_status
 alias load-dot-env=__load_dot_env
+alias git-log="git log --all --decorate --oneline --graph"
+alias git-publish=__git_publish
+alias visto-pr=___visto_pr
+alias git-create-pr=__create_pr

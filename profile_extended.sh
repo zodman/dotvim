@@ -13,8 +13,8 @@ export NVM_DIR="$HOME/.nvm"
 # sudo mount --bind /mnt/c /c
 
 # export DISPLAY=:0
-export WINHOST=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null)
-export DISPLAY=$WINHOST:0
+#export WINHOST=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null)
+#export DISPLAY=$WINHOST:0
 PGHOST="pglocalhost"
 
 # sudo sed -i "/$PGHOST/ s/.*/$WINHOST\t$PGHOST/g" /etc/hosts
@@ -36,15 +36,17 @@ fi
 . "$HOME/.vim/alias.bash"
 
 # WSL Shit
-eval "$(gh completion -s bash)"
+
+
+
+
 alias change-wallpaper="$POWERSHELL"' splash --query canada'
 #echo "init jarvis ..." | lolcat -a 
 #timeout 5 $POWERSHELL "mpv --really-quiet 'C:\Users\QA\jarvis\jbl_begin.caf'" 
 # make shell like vi
 set -o vi
 
-eval "$(gh completion -s bash)"
 
 export DOKKU_HOST=dokku
 
-
+export EDITOR=nvim
