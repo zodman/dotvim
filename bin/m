@@ -1,0 +1,13 @@
+#!/bin/bash -e
+
+source ~/.vim/anybar_init.sh
+# https://github.com/zmwangx/ets
+# https://github.com/sindresorhus/anybar-cli
+    anybar cyan
+    eval "$@";
+    if [ $? -eq 0 ]; then
+        anybar green
+    else
+        anybar red
+    fi
+

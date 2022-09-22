@@ -13,10 +13,76 @@ source ~/.vim/docker_alias.bash
 source ~/.vim/anybar_init.sh
 source ~/.vim/jrnl-prompt.sh 
 
+_awsListAll() {
 
-alias bred="python ~/.vim/red.py"
+    credentialFileLocation=${AWS_SHARED_CREDENTIALS_FILE};
+    if [ -z $credentialFileLocation ]; then
+        credentialFileLocation=~/.aws/credentials
+    fi
 
-function __git_branch_status() {
+    while read line; do
+        if [[ $line == "["* ]]; then echo "$line"; fi;
+    done < $credentialFileLocation;
+};
+
+_awsSwitchProfile() {
+   if [ -z $1 ]; then  echo "Usage: awsp profilename"; return; fi
+
+   exists="$(aws configure get aws_access_key_id --profile $1)"
+   if [[ -n $exists ]]; then
+       export AWS_DEFAULT_PROFILE=$1;
+       export AWS_PROFILE=$1;
+       export AWS_REGION=$(aws configure get region --profile $1);
+       echo "Switched to AWS Profile: $1";
+       aws configure list
+       complete -C aws_completer aws
+   fi
+
+};
+
+aws-echo-keys() {
+    AWS_ACCESS_KEY_ID=`aws configure get aws_access_key_id`
+    AWS_SECRET_ACCESS_KEY=`aws configure get aws_secret_access_key`
+    AWS_REGION=`aws configure get region`
+    echo "# AWS_PROFILE=${AWS_PROFILE}"
+    echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
+    echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+    echo "AWS_REGION=${AWS_REGION}"
+}
+aws-load-keys-profile() {
+    export $(aws-echo-keys | grep -v '#' | xargs )
+    env | grep AWS
+}
+
+
+_ncduzip() {
+    tmp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
+    du -hc $1
+    7z x $1 -o$tmp_dir
+    ncdu $tmp_dir
+    rm $tmp_dir -rf
+}
+dubytype() {
+    ## du for a specify type
+
+    ftypes=$(find $1 -type f | grep -E ".*\.[a-zA-Z0-9]*$" | sed -e 's/.*\(\.[a-zA-Z0-9]*\)$/\1/' | sort | uniq)
+
+    for ft in $ftypes
+    do
+            echo -n "$ft "
+                # find $1 -name "*${ft}" -exec ls -l {} \; | awk '{total += $5} END {print total}'
+                find $1 -name "*${ft}" -print0 | xargs -0 du -c | grep total | awk '{print $1}'
+            done
+}
+
+
+gitpruneremote() {
+    git remote prune origin
+}
+gitprunelocal()  {
+    git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d
+}
+__git_branch_status() {
     branch=`git rev-parse --abbrev-ref HEAD`
 
     git for-each-ref --format='%(refname:short)' refs/heads | \
@@ -39,11 +105,11 @@ function __git_branch_status() {
 
         # Does this branch is ahead or behind upstream branch?
         if [[ $ahead -ne 0 && $behind -ne 0 ]]; then
-            echo  -n $(bred --fg green " ($ahead ahead and $behind behind $upstream)")
+            echo  -n $(red --fg green " ($ahead ahead and $behind behind $upstream)")
         elif [[ $ahead -ne 0 ]]; then
-            echo -n $(bred --fg green " ($ahead ahead $upstream)")
+            echo -n $(red --fg green " ($ahead ahead $upstream)")
         elif [[ $behind -ne 0 ]]; then
-            echo -n $(bred --fg green " ($behind behind $upstream)")
+            echo -n $(red --fg green " ($behind behind $upstream)")
         fi
 
         # Newline
@@ -52,135 +118,74 @@ function __git_branch_status() {
     done;
 }
 
-function _awsListAll() {
+__git_stat() {
+    git diff --stat dev..`git rev-parse --abbrev-ref HEAD`
+}
 
-    credentialFileLocation=${AWS_SHARED_CREDENTIALS_FILE};
-    if [ -z $credentialFileLocation ]; then
-        credentialFileLocation=~/.aws/credentials
+__check_docker_run() {
+    [ ! -f /var/run/docker.sock  ] && sudo service docker start
+}
+
+__git_publish () {
+    git push  -u origin `git rev-parse --abbrev-ref HEAD`
+}
+
+
+__check_code (){
+    # -diff-filter=ACM ignore deleted https://stackoverflow.com/a/41730200/1003908
+    declare gitfiles=$(git diff dev --name-only --diff-filter=ACM)
+    declare files=$( echo "$gitfiles" | grep ts) 
+    declare filesgql=$(echo "$gitfiles"| grep graphql)
+    test -n "$filesgql" && red "prettier ===" &&  npx prettier -w $filesgql
+    if [ ! -z "$files" ]
+    then
+        red "eslint ==="
+        echo $files | xargs npx -y eslint  -c .eslintrc.zodman.js --fix --quiet --ext .ts --ext .tsx
+        red "jscp ==="
+        echo $files | xargs npx -y jscpd -v -b
+        red "complexity ==="
+        echo $files | xargs npx -y eslintcc  -gt=B  -sr
     fi
-
-    while read line; do
-        if [[ $line == "["* ]]; then echo "$line"; fi;
-    done < $credentialFileLocation;
-};
-
-function _awsSwitchProfile() {
-   if [ -z $1 ]; then  echo "Usage: awsp profilename"; return; fi
-
-   exists="$(aws configure get aws_access_key_id --profile $1)"
-   if [[ -n $exists ]]; then
-       export AWS_DEFAULT_PROFILE=$1;
-       export AWS_PROFILE=$1;
-       export AWS_REGION=$(aws configure get region --profile $1);
-       echo "Switched to AWS Profile: $1";
-       aws configure list
-       complete -C aws_completer aws
-   fi
-
-};
-
-function _ncduzip() {
-    tmp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
-    du -hc $1
-    7z x $1 -o$tmp_dir
-    ncdu $tmp_dir
-    rm $tmp_dir -rf
 }
 
-function gitpruneremote() {
-    git remote prune origin
-}
-function gitprunelocal()  {
-    git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d
-}
 
-function dubytype() {
-    ## du for a specify type
-
-    ftypes=$(find $1 -type f | grep -E ".*\.[a-zA-Z0-9]*$" | sed -e 's/.*\(\.[a-zA-Z0-9]*\)$/\1/' | sort | uniq)
-
-    for ft in $ftypes
-    do
-            echo -n "$ft "
-                # find $1 -name "*${ft}" -exec ls -l {} \; | awk '{total += $5} END {print total}'
-                find $1 -name "*${ft}" -print0 | xargs -0 du -c | grep total | awk '{print $1}'
-            done
+__c() {
+    if [ -d node_modules ] ;
+    then
+        __check_code
+    fi
+    git commit -am "$*"
 }
 
-function rm-progress (){
+gitignore() { curl -skL https://www.toptal.com/developers/gitignore/api/$@ ;}
+
+
+
+rm-progress (){
     export $RES=$( du -a $1 | wc -l)
     rm $1 -rvf | pv -l -s $RES > /dev/null
     unset $RES
 }
 
-function c-n() {
+c-n() {
     git commit --no-verify -am "$*"
 }
 
-__check-code (){
-    declare files=$(git diff dev --stat | awk '{print $1}' | sed '$ d') 
-    echo $files | xargs npx -y eslint --fix --quiet
-    echo $files | xargs npx -y jscpd -v -b
-    echo $files | xargs npx -y eslintcc 
-
-}
-
-function __c() {
-    if [ -d node_modules ] ;
-    then
-        __check-code
-        if ! [ $? -eq 0 ]; 
-        then
-            echo "ey! something happend"
-            return
-        fi
-
-    fi
-    git commit -am "$*"
-}
-
-# https://github.com/zmwangx/ets
-# https://github.com/sindresorhus/anybar-cli
-function ___m()
-{
-    anybar cyan
-    eval "$@";
-    if [ $? -eq 0 ]; then
-        anybar green
-    else
-        anybar red
-    fi
-}
-
-function gitignore() { curl -skL https://www.toptal.com/developers/gitignore/api/$@ ;}
-function aws-echo-keys() {
-    AWS_ACCESS_KEY_ID=`aws configure get aws_access_key_id`
-    AWS_SECRET_ACCESS_KEY=`aws configure get aws_secret_access_key`
-    AWS_REGION=`aws configure get region`
-    echo "# AWS_PROFILE=${AWS_PROFILE}"
-    echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
-    echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-    echo "AWS_REGION=${AWS_REGION}"
-}
-function aws-load-keys-profile() {
-    export $(aws-echo-keys | grep -v '#' | xargs )
-    env | grep AWS
-}
-
-function terminal-notifier(){
+terminal-notifier(){
     $POWERSHELL "New-BurntToastNotification  -Silent -Text \"$1\", \"$2\""
 }
 
-function  clip-exe() {
+clip-exe() {
     $POWERSHELL "clip.exe"
 }
 
-function edit-alias(){
+edit-alias(){
+
     nvim ~/.vim/alias.bash
     . ~/.vim/alias.bash
 }
 
-function __load_dot_env () {
+__load_dot_env () {
     if [ -z "$*" ]; then
         if [ -f '.env' ]; then
             export $(cat .env | grep -v "#") && echo "loaded .env file"
@@ -200,12 +205,12 @@ function __load_dot_env () {
     fi
 }
 
-function pyclean () {
+pyclean () {
         find . -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
 }
 
-function venv () {
-    bred "loading venv"
+venv () {
+    red "loading venv"
     if [ ! -d '.venv' ]; then
         python3 -m venv .venv
         echo "venv created"
@@ -215,7 +220,7 @@ function venv () {
     fi
 }
 
-function nrlogs() {
+nrlogs() {
     app=$1
     app_env=$2
     query_args="app='$app' and env='$app_env'"
@@ -232,11 +237,11 @@ function nrlogs() {
 }
 
 
-function pvrm(){
+pvrm(){
     rm -frv $1 | pv -l -s $( du -a $1 | wc -l ) > /dev/null
 }
 
-function pr_status() {
+pr_status() {
     red "==== backend ====" && \
     gh pr list -R visto-tech/backend &&\
     gh pr status -R visto-tech/backend && \
@@ -245,7 +250,7 @@ function pr_status() {
     gh pr  status -R visto-tech/frontend
 }
 
-function check_anybar_running() {
+check_anybar_running() {
     nohup somebar -p 1739  &
     nohup somebar -p 1740  &
     while true
@@ -256,23 +261,11 @@ function check_anybar_running() {
     done
 }
 
-function __re_request(){
+__re_request(){
     gh pr edit --remove-reviewer alexghattas
     gh pr edit --add-reviewer alexghattas
-    gh pr comment --body "@alexghattas changes were maded and  comments are done ..."
+    gh pr comment --body "@alexghattas The changes have been made and comments are done ..."
 
-}
-
-__git_stat() {
-    git diff --stat dev..`git rev-parse --abbrev-ref HEAD`
-}
-
-__check_docker_run() {
-    [ ! -f /var/run/docker.sock  ] && sudo service docker start
-}
-
-__git_publish () {
-    git push  -u origin `git rev-parse --abbrev-ref HEAD`
 }
 
 ___visto_pr () {
@@ -285,10 +278,18 @@ ___visto_pr () {
 __create_pr (){
     BRANCH=$(git rev-parse --abbrev-ref HEAD)
     TITLE=$(jira-list -t | grep $BRANCH) 
-    gh pr create -B dev --title "$TITLE"
-}
-__m_c (){
-    anybar_monitor __c 
+    LINK=$(jira-list -l | grep $BRANCH) 
+    SUMMARY=$(jira-list -s $BRANCH) 
+    BODY=`cat <<EOF
+## Link to ticket: $LINK
+
+## Brief Description
+$SUMMARY
+
+## Screenshot(s) if applicable
+EOF
+`
+    gh pr create -B dev --title "$TITLE" --body "$BODY"
 }
 
 ##### ALIAS
@@ -303,7 +304,7 @@ alias awswho="aws configure list"
 alias npm-cache-clear="npm cache clear --force"
 alias ci-status='m gh run watch --exit-status -i 1'
 alias ci-log='gh run view --log-failed'
-alias p='git push --no-verify'
+alias p='git push'
 alias t='t --task-dir ${TASKS_PATH} --list tasks'
 alias docker-stop-all='dstop'
 alias view-path='echo "$PATH" | tr ":" "\n" | nl'
@@ -316,12 +317,12 @@ alias posoff="pg_ctl  stop -D /home/linuxbrew/.linuxbrew/var/postgres -l logfile
 alias del-ts-check="ag '@ts-nocheck' -l | xargs sed -i  '/\/\/ @ts-nocheck/d'"
 alias npm-completation="source <(npm completion)"
 alias r=reset
-alias pr-status=pr_status
+alias git-pr-status=pr_status
 alias explorer-here="$POWERSHELL explorer ."
 alias vistoupdate="ncu -f /visto/ -u"
-alias c-m="git commit --no-verify -m"
 alias c=__c
 alias reload-alias="source ~/.vim/alias.bash"
+alias check-ts-code=__check_code
 # red from bake-cli
 # export FZF_DEFAULT_COMMAND='fd --type f'
 alias cdvistobackend="cd /home/zodman/visto/backend"
@@ -336,5 +337,8 @@ alias git-branch-status=__git_branch_status
 alias load-dot-env=__load_dot_env
 alias git-log="git log --all --decorate --oneline --graph"
 alias git-publish=__git_publish
-alias visto-pr=___visto_pr
+alias git-show-pr-visto=___visto_pr
 alias git-create-pr=__create_pr
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'
+alias freememory='gum spin --title="reseting memory" --  bash -c "swapoff -a &&  sleep 2 && swapon -a"'

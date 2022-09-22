@@ -37,19 +37,14 @@ Plug 'jlanzarotta/bufexplorer'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'mileszs/ack.vim'  " replace with <leader>ag
 Plug 'Yggdroot/indentLine'
-"Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'moll/vim-bbye' " Bdelete
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-" Plug 'bling/vim-bufferline'
-"" Plug 'sjl/splice.vim'
 Plug 'preservim/tagbar'
-
 
 """ OTHER LANGUAGUAGES
 Plug 'yasuhiroki/github-actions-yaml.vim'
-""Plug 'stanangeloff/php.vim'
-"" Plug 'cespare/vim-toml' "check if polyglot can replace
 Plug 'retorillo/istanbul.vim'
 Plug 'autozimu/LanguageClient-neovim', {
         \ 'branch': 'next',
@@ -59,11 +54,13 @@ Plug 'autozimu/LanguageClient-neovim', {
 
 Plug 'pantharshit00/vim-prisma'
 Plug 'jparise/vim-graphql'
-"Plug 'hashivim/vim-terraform'
 
 "" Snippets
-"Plug 'isRuslan/vim-es6'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'isRuslan/vim-es6'
 "Plug 'joaohkfaria/vim-jest-snippets'
+"
 ""THEMES
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -77,32 +74,35 @@ Plug 'morhetz/gruvbox'
 Plug 'srcery-colors/srcery-vim'
 Plug 'lifepillar/vim-solarized8'
 Plug 'glepnir/zephyr-nvim'
+Plug 'sainnhe/everforest'
+Plug 'NLKNguyen/papercolor-theme'
 
 
 
 """ " Pythons
-" Plug 'vim-scripts/indentpython.vim'
-" Plug 'mgedmin/coverage-highlight.vim'
 Plug 'raimon49/requirements.txt.vim'
 Plug 'mindriot101/vim-yapf'
-" Plug 'vim-python/python-syntax'
-
-
-"""Plug 'digitaltoad/vim-pug'
 "" WRITING
 Plug 'dpelle/vim-LanguageTool'
 Plug 'takac/vim-hardtime'
 Plug 'ruanyl/vim-gh-line'
-Plug 'Shougo/echodoc.vim'
 Plug 'ryanolsonx/vim-xit'
 Plug 'sbdchd/neoformat'
+
+"Plug 'kamykn/spelunker.vim'
+" Correct all words in buffer. ZL
+" Correct word under cursor. Zl
+" Correct all words in buffer. ZC
+" Correct word under cursor. Zc
+"
+" # git
 Plug 'tpope/vim-fugitive'
 
-call plug#end()            " required
+Plug 'wren/jrnl.vim'
 
-" echodoc
-set cmdheight=2
-let g:echodoc#enable_at_startup = 1
+" DENO
+
+call plug#end()            " required
 
 
 filetype plugin indent on    " required
@@ -139,10 +139,10 @@ let g:airline#extensions#tabline#enabled = 1
 
 
 " colorscheme gruvbox
-colo solarized8
+"colo solarized8
 " colo PaperColor
 " colo badwolf
-
+colo molokai
 "let NERDTreeIgnore=[
                 "\'\.log$','junit\.xml$','\.serverless','\.git$','\.swp$','\.pyc$','\.pyo$',
                 "\'\.swo$','__pycache__','htmlcov','node_modules','*report*',
@@ -247,6 +247,8 @@ iab zodman // made by zodman
 iab noconsole // eslint-disable-next-line no-console
 iab leroy ᕕ(ᐛ)ᕗ
 iab monocle (╭ರ_•́)
+iab initlogger const logger = LoggerFor(module);
+
 
 
 " https://github.com/webpack/webpack/issues/781#issuecomment-95523711
@@ -331,12 +333,12 @@ set hidden
 let g:LanguageClient_serverCommands = {
     \ 'vue': ['vls'],
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'typescript': ['typescript-language-server', '--stdio'],
     \ 'javascript': ['typescript-language-server', '--stdio'],
-    \ 'typescriptreact': ['typescript-language-server', '--stdio', '--log-level=4', '--tsserver-log-file=/tmp/ts.log', '--tsserver-log-verbosity=verbose'],
-    \ 'typescript': ['typescript-language-server', '--stdio', '--log-level=4', '--tsserver-log-file=/tmp/ts.log', '--tsserver-log-verbosity=verbose'],
+    \ 'typescriptreact': ['typescript-language-server', '--stdio'],
     \ 'javascript.jsx': ['typescript-language-server', '--stdio'],
     \ 'typescript.tsx': ['typescript-language-server', '--stdio'],
-    \ 'python': ['pyls', '-vvvv', '--log-file=/tmp/pyls.log'],
+    \ 'python': ['/usr/local/bin/pyls', '-vvvv', '--log-file=/tmp/pyls.log'],
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ }
 
@@ -377,6 +379,21 @@ endfunction()
 
 call SetLSPShortcuts()
 
+if (filereadable("deno.json"))
+    let g:LanguageClient_serverCommands = {
+        \ 'typescript': {
+        \   'name': 'deno',
+        \   'command': ['deno', 'lsp'],
+        \   'initializationOptions': {
+        \        "enable": v:true,
+        \        "lint": v:true,
+        \     },
+        \   },
+        \ }
+endif
+
+
+
 function! SwitchStableRls() abort
   LanguageClientStop
   sleep 100m
@@ -414,12 +431,11 @@ let g:gh_line_map = '<leader>gh'
 let g:gh_line_blame_map = '<leader>gb'
 "
 "let $LANGUAGECLIENT_DEBUG=1
-"let g:LanguageClient_loggingLevel='DEBUG'
-"let g:LanguageClient_autoStart=0
+" let g:LanguageClient_autoStart=1
 "let g:LanguageClient_loggingFile =  expand('~/.local/share/nvim/LanguageClient.log') 
 "let g:LanguageClient_waitOutputTimeout = 500
 "let g:LanguageClient_loggingFile = '/tmp/LanguageClient.log'
-"let g:LanguageClient_loggingLevel = 'INFO'
+"let g:LanguageClient_loggingLevel = 'DEBUG'
 "let g:LanguageClient_serverStderr = '/tmp/LanguageServer.log'
 
 
@@ -434,3 +450,8 @@ hi Normal guibg=NONE ctermbg=NONE
 nnoremap <Leader>bg :hi Normal guibg=NONE ctermbg=NONE " make backgroun transparent<CR>
 
 let g:gh_trace=1
+let g:gh_open_command = 'fn() { echo "$@" | pbcopy; }; fn '
+
+set fillchars+=diff:╱
+
+let g:python3_host_prog = '/usr/bin/python'
