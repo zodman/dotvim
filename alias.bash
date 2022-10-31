@@ -135,26 +135,31 @@ __check_code (){
     # -diff-filter=ACM ignore deleted https://stackoverflow.com/a/41730200/1003908
     declare gitfiles=$(git diff dev --name-only --diff-filter=ACM)
     declare files=$( echo "$gitfiles" | grep ts) 
-    declare filesgql=$(echo "$gitfiles"| grep graphql)
+    declare filesgql=$(echo "$gitfiles"| grep 'graphql\|prisma')
     test -n "$filesgql" && red "prettier ===" &&  npx prettier -w $filesgql
     if [ ! -z "$files" ]
     then
         red "eslint ==="
         echo $files | xargs npx -y eslint  -c .eslintrc.zodman.js --fix --quiet --ext .ts --ext .tsx
-        red "jscp ==="
-        echo $files | xargs npx -y jscpd -v -b
-        red "complexity ==="
+        red "jscpd ==="
+        echo $files | xargs npx -y jscpd -s
+        red "complexity eslintcc ==="
         echo $files | xargs npx -y eslintcc  -gt=B  -sr
     fi
 }
 
 
 __c() {
+    anybar blue
     if [ -d node_modules ] ;
     then
+        anybar cyan
         __check_code
+        red "Checking code ==="
+        git status
+        anybar green
     fi
-    git commit -am "$*"
+    git commit -am "$*"  && anybar green || anybar red
 }
 
 gitignore() { curl -skL https://www.toptal.com/developers/gitignore/api/$@ ;}
@@ -188,18 +193,18 @@ edit-alias(){
 __load_dot_env () {
     if [ -z "$*" ]; then
         if [ -f '.env' ]; then
-            export $(cat .env | grep -v "#") && echo "loaded .env file"
+            export $(cat .env | grep -v "#") && red "loaded .env file"
             export DOTENV='.env'
         else
-            $(echo "no .env file")
+            red "no .env file"
             unset DOTENV
         fi
     else
         if [ -f "$1" ]; then
-            export $(cat "$1" | grep -v "#") && echo "loaded $1 file"
+            export $(cat "$1" | grep -v "#") && red "loaded $1 file"
             export DOTENV=$1
         else
-            echo "no .env file"
+            red "no .env file"
             unset DOTENV
         fi
     fi
@@ -213,10 +218,10 @@ venv () {
     red "loading venv"
     if [ ! -d '.venv' ]; then
         python3 -m venv .venv
-        echo "venv created"
+        red "venv created"
     else
         . .venv/bin/activate
-         echo "venv loaded"
+         red "venv loaded"
     fi
 }
 
@@ -250,16 +255,6 @@ pr_status() {
     gh pr  status -R visto-tech/frontend
 }
 
-check_anybar_running() {
-    nohup somebar -p 1739  &
-    nohup somebar -p 1740  &
-    while true
-    do
-        (echo >/dev/tcp/localhost/4000) &>/dev/null && anybar green 1 || anybar red 1
-        (echo >/dev/tcp/localhost/3000) &>/dev/null && anybar green  2 || anybar red 2
-        sleep 1
-    done
-}
 
 __re_request(){
     gh pr edit --remove-reviewer alexghattas
@@ -270,9 +265,14 @@ __re_request(){
 
 ___visto_pr () {
     cd ~/visto/backend
+
     echo `gh pr  view  --json url | jq -r ".url"`
+    red --fg cyan "draft: `gh pr  view  --json isDraft | jq -r '.isDraft'`"
+
     cd ~/visto/frontend
-    echo `gh pr  view  --json url | jq -r ".url"`
+    echo `gh pr  view  --json url | jq -r ".url"` 
+    red --fg cyan "draft: `gh pr  view  --json isDraft | jq -r '.isDraft'` "
+
 }
 
 __create_pr (){
@@ -292,6 +292,23 @@ EOF
     gh pr create -B dev --title "$TITLE" --body "$BODY"
 }
 
+git-sync-main-dev () {
+    branch=$(git rev-parse --abbrev-ref HEAD)
+    red "checkout main"
+    git checkout main
+    red '|--|'
+    git pull
+    red "checkout dev"
+    git checkout dev
+    git pull
+    git merge main
+    red '|--|'
+    git checkout $branch
+    git merge main
+    git merge dev
+    red done
+}
+
 ##### ALIAS
 alias m=anybar_monitor
 alias wttr='curl wttr.in -L'
@@ -304,7 +321,8 @@ alias awswho="aws configure list"
 alias npm-cache-clear="npm cache clear --force"
 alias ci-status='m gh run watch --exit-status -i 1'
 alias ci-log='gh run view --log-failed'
-alias p='git push'
+alias git-sync-from-main="git checkout main; git pull; git checkout -; git merge main"
+alias p='git checkout main; git pull;  git checkout -; git merge main; git push'
 alias t='t --task-dir ${TASKS_PATH} --list tasks'
 alias docker-stop-all='dstop'
 alias view-path='echo "$PATH" | tr ":" "\n" | nl'
@@ -341,4 +359,4 @@ alias git-show-pr-visto=___visto_pr
 alias git-create-pr=__create_pr
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
-alias freememory='gum spin --title="reseting memory" --  bash -c "swapoff -a &&  sleep 2 && swapon -a"'
+alias freememory='sudo gum spin --title="reseting memory" --  bash -c "sudo -S swapoff -a &&  sleep 2 && sudo -S swapon -a"'

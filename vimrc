@@ -33,15 +33,15 @@ Plug 'preservim/nerdtree'
 Plug 'mattn/emmet-vim'
 Plug 'preservim/nerdcommenter'
 Plug 'jlanzarotta/bufexplorer'
-""Plug 'gregsexton/matchtag'
+Plug 'gregsexton/matchtag'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'mileszs/ack.vim'  " replace with <leader>ag
-Plug 'Yggdroot/indentLine'
+"Plug 'Yggdroot/indentLine'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'moll/vim-bbye' " Bdelete
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'preservim/tagbar'
+"Plug 'preservim/tagbar'
 
 """ OTHER LANGUAGUAGES
 Plug 'yasuhiroki/github-actions-yaml.vim'
@@ -121,7 +121,7 @@ set foldmethod=manual   "fold based on indent
 "set foldnestmax=3       "deepest fold is 3 levels
 set shortmess=atI " Shortens messages in status line.
 set laststatus=2 " Always show status line.
-"set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS,htmlcov,*report*,coverage/*,my_data/*
+set wildignore+=*.pyc,*.pyo,*.db,PYSMELLTAGS,htmlcov,*report*,coverage/*,my_data/*,__pycache__/*
 set foldenable " Turn on folding.
 set mouse=
 
@@ -142,12 +142,8 @@ let g:airline#extensions#tabline#enabled = 1
 "colo solarized8
 " colo PaperColor
 " colo badwolf
-colo molokai
-"let NERDTreeIgnore=[
-                "\'\.log$','junit\.xml$','\.serverless','\.git$','\.swp$','\.pyc$','\.pyo$',
-                "\'\.swo$','__pycache__','htmlcov','node_modules','*report*',
-                "\'coverage', '^tags$','\.egg-info','dist','my_data','\.nyc_output$'
-                "\]
+colo sonokai
+let NERDTreeRespectWildIgnore=1 " Ignore wildignore=
 "let NERDTreeQuitOnOpen = 1
 "let NERDTreeAutoDeleteBuffer = 1
 "let NERDTreeMinimalUI = 1
@@ -221,6 +217,7 @@ au BufNewFile,BufRead *.vue setf vue.html.javascript.css
 autocmd BufNewFile,BufReadPost *.jade set filetype=pug
 autocmd BufNewFile,BufReadPost Bakefile set filetype=bash
 autocmd BufNewFile,BufReadPost *.md set textwidth=80 conceallevel=0
+autocmd BufNewFile,BufReadPost *.fdf set filetype=pdf
 
 au BufRead,BufNewFile .tmux.conf.local set filetype=tmux
 au BufRead,BufNewFile *.vue set expandtab
@@ -323,7 +320,6 @@ let g:solarized_termcolors=256
 "let g:sonokai_style = 'andromeda'
 let g:sonokai_enable_italic = 0
 let g:sonokai_disable_italic_comment = 1
-"colo molokai
 
 
 " langserver configuration
@@ -454,4 +450,5 @@ let g:gh_open_command = 'fn() { echo "$@" | pbcopy; }; fn '
 
 set fillchars+=diff:╱
 
-let g:python3_host_prog = '/usr/bin/python'
+let g:python3_host_prog = '/usr/bin/python3'
+let g:python_host_prog = '/usr/bin/python'

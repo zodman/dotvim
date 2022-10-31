@@ -1,0 +1,8 @@
+#!/bin/bash
+source ~/.vim/anybar_init.sh
+set +x
+    while true
+    do
+        (echo >/dev/tcp/localhost/"$1") &>/dev/null && anybar blue  || anybar exclamation
+        sleep 1
+    done
