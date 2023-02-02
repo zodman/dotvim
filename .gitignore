@@ -4,3 +4,4 @@ black
 autoload/plug.vim
 plugged
 tags
+pack
