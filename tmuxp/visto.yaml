@@ -2,8 +2,8 @@ session_name: Visto
 windows:
   - window_name: runs
     panes:
-      - cdvistofrontend && npm run dev
-      - cdvistobackend && npm run dev:swc
+      - cdvistofrontend && nvm use && npm run dev
+      - cdvistobackend && nvm use && npm run dev:swc
   - window_name: frontend
     panes:
       - cdvistofrontend

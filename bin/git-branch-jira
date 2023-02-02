@@ -25,13 +25,22 @@ jira_url = os.environ.get("JIRA_URL")
 
 jira = JIRA(server=jira_url, basic_auth=(user, token))
 
-r = subprocess.check_output("git branch", shell=True)
+subp = lambda x: subprocess.check_output(x, shell=True, stderr=subprocess.STDOUT)
+
+
+r = subp('git branch')
 for i in r.decode("utf-8").split('\n'):
-    m = re.search(r'([A-Za-z]{2,3})-([0-9]{3})',i.strip())
+    line = i.strip()
+    if not line:
+        continue
+    m = re.search(r'([A-Za-z]{2,3})-([0-9]{3})',line)
     if m:
         jira_issue = m.group()
         j = jira.issue(jira_issue)
         print(f"{Fore.GREEN} {i.lstrip()}  {Fore.LIGHTWHITE_EX} {j.fields.status} {Fore.CYAN}{j.fields.summary} {Fore.RESET}{j.permalink()} {j.fields.assignee}")
     else:
-
-        print(f"{Fore.MAGENTA} {i.strip()}")
+        branch = line
+        if "* " in line:
+            branch = line.split("* ")[1]
+        description = subp(f'git config branch.{branch}.description || echo ""').decode("utf-8")
+        print(f"{Fore.MAGENTA} {line} {Fore.LIGHTCYAN_EX} {description.strip()}")

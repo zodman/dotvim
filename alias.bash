@@ -13,6 +13,13 @@ source ~/.vim/docker_alias.bash
 source ~/.vim/anybar_init.sh
 source ~/.vim/jrnl-prompt.sh 
 
+
+if  command -v gh &> /dev/null
+then
+    eval "$(gh completion -s bash)"
+fi
+
+
 _awsListAll() {
 
     credentialFileLocation=${AWS_SHARED_CREDENTIALS_FILE};
@@ -134,8 +141,10 @@ __git_publish () {
 __check_code (){
     # -diff-filter=ACM ignore deleted https://stackoverflow.com/a/41730200/1003908
     declare gitfiles=$(git diff dev --name-only --diff-filter=ACM)
+    red "files changed:"
+    echo "$gitfiles"
     declare files=$( echo "$gitfiles" | grep ts) 
-    declare filesgql=$(echo "$gitfiles"| grep 'graphql\|prisma')
+    declare filesgql=$(echo "$gitfiles"| grep 'graphql\|prisma'| grep -v '\.sql\|\.dbml')
     test -n "$filesgql" && red "prettier ===" &&  npx prettier -w $filesgql
     if [ ! -z "$files" ]
     then
@@ -167,9 +176,8 @@ gitignore() { curl -skL https://www.toptal.com/developers/gitignore/api/$@ ;}
 
 
 rm-progress (){
-    export $RES=$( du -a $1 | wc -l)
+    $RES=$( du -a $1 | wc -l)
     rm $1 -rvf | pv -l -s $RES > /dev/null
-    unset $RES
 }
 
 c-n() {
@@ -218,7 +226,9 @@ venv () {
     red "loading venv"
     if [ ! -d '.venv' ]; then
         python3 -m venv .venv
-        red "venv created"
+        . .venv/bin/activate
+        red "venv created and loaded"
+
     else
         . .venv/bin/activate
          red "venv loaded"
@@ -264,14 +274,25 @@ __re_request(){
 }
 
 ___visto_pr () {
+    red "For your review: :reviewed:"
+    red backend
     cd ~/visto/backend
-
+    BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    jira-list -t | grep $BRANCH
     echo `gh pr  view  --json url | jq -r ".url"`
     red --fg cyan "draft: `gh pr  view  --json isDraft | jq -r '.isDraft'`"
-
+    git log @{u}..
+    git log origin/$BRANCH..HEAD
+    red frontend
     cd ~/visto/frontend
+    BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    jira-list -t | grep $BRANCH
     echo `gh pr  view  --json url | jq -r ".url"` 
     red --fg cyan "draft: `gh pr  view  --json isDraft | jq -r '.isDraft'` "
+    git log @{u}..
+    git log origin/$BRANCH..HEAD
+    git status -s
+    red ":tv: VIDEO url: "
 
 }
 
@@ -308,6 +329,7 @@ git-sync-main-dev () {
     git merge dev
     red done
 }
+
 
 ##### ALIAS
 alias m=anybar_monitor
@@ -359,4 +381,8 @@ alias git-show-pr-visto=___visto_pr
 alias git-create-pr=__create_pr
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
-alias freememory='sudo gum spin --title="reseting memory" --  bash -c "sudo -S swapoff -a &&  sleep 2 && sudo -S swapon -a"'
+alias freememory='sudo gum spin --title="reseting memory" --  bash -c "echo 3 > /proc/sys/vm/drop_caches && sudo -S swapoff -a &&  sleep 2 && sudo -S swapon -a"'
+alias please="gum input --password | sudo -nS"
+alias git-jira="git-branch-jira"
+alias ls='exa --group-directories-first'
+alias now='date +"%FT%H%M"'

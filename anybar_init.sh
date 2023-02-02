@@ -1,27 +1,29 @@
 #!/bin/bash
 
 DIRFILES="/home/zodman/Dropbox/jarvis"
-DIRWINFILES='C:\Users\QA\jarvis\'
+# DIRWINFILES='C:\Users\QA\jarvis\'
 
 function noti () {
-    TEXT=`curl 'https://api.chucknorris.io/jokes/random?category=dev' -s | jq -r ".value"| sed s/\\"//g`
-    $POWERSHELL "New-BurntToastNotification  -Silent -Text \"$1\", \"$TEXT\""
+    # TEXT=`curl 'https://api.chucknorris.io/jokes/random?category=dev' -s | jq -r ".value"| sed s/\\"//g`
+    #$POWERSHELL "New-BurntToastNotification  -Silent -Text \"$1\", \"$TEXT\""
 #    $POWERSHELL "mpv --really-quiet 'C:\Users\QA\jarvis\jarvis_text.mp3'" 
     mpv --really-quiet '$DIRFILES\jarvis_text.mp3' 
 }
 function cmd_random_fail() {
-  p="$DIRFILES/failed"
-  f=$(find $p | shuf -n1)
-  f1=$(basename $f)
+  #p="$DIRFILES/failed"
+  #f=$(find $p | shuf -n1)
+  #f1=$(basename $f)
   #$POWERSHELL "mpv --no-video --really-quiet '$DIRWINFILES\failed\\$f1'" 
-  mpv --no-video --really-quiet '$DIRFILES\failed\\$f1' 
+  mpv --no-video --really-quiet "$DIRFILES/speech_failed.mp3"
 }
 
 function cmd_random_success() {
-  p="$DIRFILES/success"
-  f=$(find $p | shuf -n1)
-  f1=$(basename $f)
+  #p="$DIRFILES/success"
+  #f=$(find $p | shuf -n1)
+  #f1=$(basename $f)
   #$POWERSHELL "mpv --no-video --really-quiet '$DIRWINFILES\success\\$f1'"
+
+  mpv --no-video --really-quiet "$DIRFILES/speech_success.mp3"
 }
 
 
@@ -53,16 +55,13 @@ function anybar_monitor() {
   else
     anybar orange
     $@
-
     local EXIT_STATUS=$?
     if [ $EXIT_STATUS -ne 0 ]; then
       anybar red
-      #noti failed
-      #cmd_random_fail
+      cmd_random_fail
     else
       anybar green
-      #noti success
-      #cmd_random_success
+      cmd_random_success
     fi
 
     return $EXIT_STATUS

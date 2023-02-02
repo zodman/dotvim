@@ -29,16 +29,19 @@ jira = JIRA(server=jira_url, basic_auth=(user, token))
 def main(args):
     if args.summary:
         result = jira.issue(args.summary, fields='description')
-        print(f"{result.fields.description or ''}")
+        print(f"{(result.fields.description or '').replace('#','')}")
         return 
-    result = jira.search_issues(""" (assignee = currentUser() or assignee="alex@visto.ai") and statuscategory IN ("In Progress","New") ORDER BY updated""")
+    result = jira.search_issues(""" (assignee = currentUser() or assignee="alex@visto.ai") 
+                                and statuscategory IN ("In Progress","New") 
+                                ORDER BY updated""")
     for j in result:
         if args.title:
             print(f"{j.key} {j.fields.summary}")
         elif args.link:
             print(f"{j.key} {j.permalink()}")
         else:
-            print(f"{j.key} {j.fields.assignee} {Fore.LIGHTWHITE_EX} {j.fields.status} {Fore.CYAN}{j.fields.summary} {Fore.RESET}{j.permalink()} ")
+            print(f"{j.key} "
+                  f" {j.fields.assignee} {Fore.LIGHTWHITE_EX} {j.fields.status} {Fore.CYAN}{j.fields.summary} {Fore.RESET}{j.permalink()} ")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='List jira issues ..  made by zodman')

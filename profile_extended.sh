@@ -35,10 +35,6 @@ fi
 
 . "$HOME/.vim/alias.bash"
 
-# WSL Shit
-
-
-
 
 alias change-wallpaper="$POWERSHELL"' splash --query canada'
 #echo "init jarvis ..." | lolcat -a 
@@ -50,3 +46,17 @@ set -o vi
 export DOKKU_HOST=dokku
 
 export EDITOR=nvim
+
+# load .nvmrc https://stackoverflow.com/a/48322289/1003908
+_nvmrc_hook() {
+  if [[ $PWD == $PREV_PWD ]]; then
+    return
+  fi
+  
+  PREV_PWD=$PWD
+  [[ -f ".nvmrc" ]] && nvm use
+}
+
+if ! [[ "${PROMPT_COMMAND:-}" =~ _nvmrc_hook ]]; then
+  PROMPT_COMMAND="_nvmrc_hook${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
+fi

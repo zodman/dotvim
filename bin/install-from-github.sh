@@ -11,13 +11,21 @@ if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
     exit
 fi
 
-main() {
-    options=$(gum spin --title "fetching urls..." -- lastversion --assets $1)
-    selected=$(gum  choose `lastversion --assets $1`)
-    tmpfile=$(mktemp /tmp/XXXX.deb)
-    gum spin --title="Downloading $selected" -- curl -s -q -L $selected -o $tmpfile
-    sudo  dpkg -i  $tmpfile
-    rm -rf $tmpfile
+selected=$(gum  choose `lastversion --assets $1`)
+tmpfile=$(mktemp /tmp/XXXX.deb)
+gum spin --title="Downloading $selected" -- curl -s -q -L $selected -o $tmpfile
 
-}
-main "$0"
+red "Install the $tmpfile"
+if [[ $tmpfile == *.deb ]] 
+then
+    sudo  dpkg -i  $tmpfile
+elif [[ $tmpfile == *.zip ]]
+then
+    sudo unzip -d /usr/local/ $tmpfile
+else
+    red "No installed the $tmpfile"
+    
+fi
+
+rm -rf $tmpfile
+

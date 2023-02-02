@@ -36,7 +36,6 @@ Plug 'jlanzarotta/bufexplorer'
 Plug 'gregsexton/matchtag'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'mileszs/ack.vim'  " replace with <leader>ag
-"Plug 'Yggdroot/indentLine'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'moll/vim-bbye' " Bdelete
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -59,6 +58,7 @@ Plug 'jparise/vim-graphql'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'isRuslan/vim-es6'
+Plug 'mlaursen/vim-react-snippets'
 "Plug 'joaohkfaria/vim-jest-snippets'
 "
 ""THEMES
@@ -76,6 +76,7 @@ Plug 'lifepillar/vim-solarized8'
 Plug 'glepnir/zephyr-nvim'
 Plug 'sainnhe/everforest'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 
 
 
@@ -84,12 +85,11 @@ Plug 'raimon49/requirements.txt.vim'
 Plug 'mindriot101/vim-yapf'
 "" WRITING
 Plug 'dpelle/vim-LanguageTool'
-Plug 'takac/vim-hardtime'
 Plug 'ruanyl/vim-gh-line'
 Plug 'ryanolsonx/vim-xit'
 Plug 'sbdchd/neoformat'
 
-"Plug 'kamykn/spelunker.vim'
+" Plug 'kamykn/spelunker.vim'
 " Correct all words in buffer. ZL
 " Correct word under cursor. Zl
 " Correct all words in buffer. ZC
@@ -269,14 +269,6 @@ set spelllang=en_us
 "let g:UltiSnipsExpandTrigger="<tab>"
 "
 
-" HARDTIME
-let g:list_of_normal_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-let g:list_of_visual_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-let g:list_of_insert_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-let g:list_of_disabled_keys = []
-" ENABLE FOR DEFAULT
-let g:hardtime_default_on = 1
-
 
 
 " COLORS
@@ -338,7 +330,6 @@ let g:LanguageClient_serverCommands = {
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ }
 
-" let g:LanguageClient_diagnosticsList="Location"
 function SetLSPShortcuts()
   "Goto definition under cursor.
   nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
