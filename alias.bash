@@ -149,7 +149,7 @@ __check_code (){
     if [ ! -z "$files" ]
     then
         red "eslint ==="
-        echo $files | xargs npx -y eslint  -c .eslintrc.zodman.js --fix --quiet --ext .ts --ext .tsx
+        echo $files | xargs node_modules/.bin/eslint  -c ./.eslintrc.zodman.js --fix --quiet --ext .ts --ext .tsx
         red "jscpd ==="
         echo $files | xargs npx -y jscpd -s
         red "complexity eslintcc ==="
@@ -343,8 +343,7 @@ alias awswho="aws configure list"
 alias npm-cache-clear="npm cache clear --force"
 alias ci-status='m gh run watch --exit-status -i 1'
 alias ci-log='gh run view --log-failed'
-alias git-sync-from-main="git checkout main; git pull; git checkout -; git merge main"
-alias p='git checkout main; git pull;  git checkout -; git merge main; git push'
+alias p='git-sync-main-dev; git push'
 alias t='t --task-dir ${TASKS_PATH} --list tasks'
 alias docker-stop-all='dstop'
 alias view-path='echo "$PATH" | tr ":" "\n" | nl'
@@ -386,3 +385,4 @@ alias please="gum input --password | sudo -nS"
 alias git-jira="git-branch-jira"
 alias ls='exa --group-directories-first'
 alias now='date +"%FT%H%M"'
+alias timeleft='termdown'

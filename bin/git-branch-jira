@@ -43,4 +43,4 @@ for i in r.decode("utf-8").split('\n'):
         if "* " in line:
             branch = line.split("* ")[1]
         description = subp(f'git config branch.{branch}.description || echo ""').decode("utf-8")
-        print(f"{Fore.MAGENTA} {line} {Fore.LIGHTCYAN_EX} {description.strip()}")
+        print(f"{Fore.MAGENTA} {line}{Fore.LIGHTCYAN_EX} {description.strip()}")
