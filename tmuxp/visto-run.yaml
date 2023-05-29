@@ -1,0 +1,7 @@
+session_name: Visto
+windows:
+  - window_name: runs
+    panes:
+      - cdvistofrontend && nvm use && npm run dev
+      - cdvistobackend && nvm use && npm run dev:swc
+

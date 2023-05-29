@@ -386,3 +386,4 @@ alias git-jira="git-branch-jira"
 alias ls='exa --group-directories-first'
 alias now='date +"%FT%H%M"'
 alias timeleft='termdown'
+alias git-and-watch='git push && gum spin -- sleep 2  && gh run  watch && gum confirm "view logs" &&  gh run view --log'
