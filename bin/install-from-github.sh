@@ -6,8 +6,14 @@
 
 set -o errexit
 
+red() {
+	RED='\033[0;31m'
+	NOCOLOR='\033[0m'
+	printf "${RED} $1 ${NOCOLOR}"
+}
+
 if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
-	echo "Usage: ./$0 <software>"
+	red "Usage: ./$0 <owner/repo>"
 	exit
 fi
 
