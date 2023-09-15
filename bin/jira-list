@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/bin/env python3
 """
 
 use the api token from jira: https://id.atlassian.com/manage-profile/security/api-tokens
@@ -14,26 +14,24 @@ pip install jira colorama
 """
 from jira import JIRA
 import os
-import subprocess
-import re
-from colorama import Fore, Back, Style
+from colorama import Fore, Back
 import argparse
 
 
-token = os.environ.get("JIRA_API_TOKEN") 
+token = os.environ.get("JIRA_API_TOKEN")
 user = os.environ.get("JIRA_USER")
 jira_url = os.environ.get("JIRA_URL")
 
 jira = JIRA(server=jira_url, basic_auth=(user, token))
 
+
 def main(args):
     if args.summary:
         result = jira.issue(args.summary, fields='description')
         print(f"{(result.fields.description or '').replace('#','')}")
-        return 
-    result = jira.search_issues(""" (assignee = currentUser() or assignee="alex@visto.ai") 
-                                and statuscategory IN ("In Progress","New") 
-                                ORDER BY updated""")
+        return
+    result = jira.search_issues(
+        """ assignee = currentUser() AND resolution = Unresolved order by updated DESC """)
     for j in result:
         if args.title:
             print(f"{j.key} {j.fields.summary}")
@@ -43,10 +41,14 @@ def main(args):
             print(f"{j.key} "
                   f" {j.fields.assignee} {Fore.LIGHTWHITE_EX} {j.fields.status} {Fore.CYAN}{j.fields.summary} {Fore.RESET}{j.permalink()} ")
 
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='List jira issues ..  made by zodman')
-    parser.add_argument("-t","--title",help="only show ID and title", action="store_true")
-    parser.add_argument("-l","--link",help="show only links", action="store_true")
-    parser.add_argument("-s","--summary",help="show sumary")
+    parser = argparse.ArgumentParser(
+        description='List jira issues ..  made by zodman')
+    parser.add_argument(
+        "-t", "--title", help="only show ID and title", action="store_true")
+    parser.add_argument(
+        "-l", "--link", help="show only links", action="store_true")
+    parser.add_argument("-s", "--summary", help="show sumary")
     args = parser.parse_args()
     main(args)
