@@ -1,0 +1,42 @@
+#!/bin/env python3
+"""
+
+use the api token from jira: https://id.atlassian.com/manage-profile/security/api-tokens
+
+# add to ~/.bashrc
+export JIRA_API_TOKEN=""
+export JIRA_USER=""
+export JIRA_URL="https://myjira.atlassian.net/"
+
+# install 
+pip install jira colorama
+
+"""
+from jira import JIRA
+import os
+import json
+import argparse
+
+
+token = os.environ.get("JIRA_API_TOKEN")
+user = os.environ.get("JIRA_USER")
+jira_url = os.environ.get("JIRA_URL")
+
+jira = JIRA(server=jira_url, basic_auth=(user, token))
+
+
+def main(args):
+    result = jira.issue(args.issue, fields=['id', 'summary', 'status'])
+    print(json.dumps({
+        "key": result.key,
+        "summary": result.fields.summary,
+        "link": result.permalink()
+    }))
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description='List jira issues ..  made by zodman')
+    parser.add_argument("issue")
+    args = parser.parse_args()
+    main(args)
