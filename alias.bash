@@ -251,78 +251,23 @@ pvrm() {
 	rm -frv $1 | pv -l -s $(du -a $1 | wc -l) >/dev/null
 }
 
-pr_status() {
-	red "==== backend ====" &&
-		gh pr list -R visto-tech/backend &&
-		gh pr status -R visto-tech/backend &&
-		red "===== fronted ====" &&
-		gh pr list -R visto-tech/frontend &&
-		gh pr status -R visto-tech/frontend
-}
-
-__re_request() {
-	gh pr edit --remove-reviewer alexghattas
-	gh pr edit --add-reviewer alexghattas
-	gh pr comment --body "@alexghattas The changes have been made and comments are done ..."
-
-}
-
-___visto_pr() {
-	red "For your review: :reviewed:"
-	red backend
-	cd ~/visto/backend
-	BRANCH=$(git rev-parse --abbrev-ref HEAD)
-	jira-list -t | grep $BRANCH
-	echo $(gh pr view --json url | jq -r ".url")
-	red --fg cyan "draft: $(gh pr view --json isDraft | jq -r '.isDraft')"
-	git log @{u}..
-	git log origin/$BRANCH..HEAD
-	red frontend
-	cd ~/visto/frontend
-	BRANCH=$(git rev-parse --abbrev-ref HEAD)
-	jira-list -t | grep $BRANCH
-	echo $(gh pr view --json url | jq -r ".url")
-	red --fg cyan "draft: $(gh pr view --json isDraft | jq -r '.isDraft') "
-	git log @{u}..
-	git log origin/$BRANCH..HEAD
-	git status -s
-	red ":tv: VIDEO url: "
-
-}
-
 __create_pr() {
-	BRANCH=$(git rev-parse --abbrev-ref HEAD)
+	BRANCH=$(git rev-parse --abbrev-ref HEAD | grep -oE '[A-Z]{2,9}-[0-9]{4}')
 	TITLE=$(jira-list -t | grep $BRANCH)
 	LINK=$(jira-list -l | grep $BRANCH)
 	SUMMARY=$(jira-list -s $BRANCH)
 	BODY=$(
 		cat <<EOF
+$TITLE
+
 ## Link to ticket: $LINK
 
 ## Brief Description
+#
 $SUMMARY
-
-## Screenshot(s) if applicable
 EOF
 	)
-	gh pr create -B dev --title "$TITLE" --body "$BODY"
-}
-
-git-sync-main-dev() {
-	branch=$(git rev-parse --abbrev-ref HEAD)
-	red "checkout main"
-	git checkout main
-	red '|--|'
-	git pull
-	red "checkout dev"
-	git checkout dev
-	git pull
-	git merge main
-	red '|--|'
-	git checkout $branch
-	git merge main
-	git merge dev
-	red done
+	glab mr create --title "$TITLE" --description "$BODY" --draft
 }
 
 srctodo() {

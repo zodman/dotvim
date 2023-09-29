@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/bin/env python3
 """
 
 use the api token from jira: https://id.atlassian.com/manage-profile/security/api-tokens
@@ -19,13 +19,15 @@ import re
 from colorama import Fore, Back, Style
 
 
-token = os.environ.get("JIRA_API_TOKEN") 
+token = os.environ.get("JIRA_API_TOKEN")
 user = os.environ.get("JIRA_USER")
 jira_url = os.environ.get("JIRA_URL")
 
 jira = JIRA(server=jira_url, basic_auth=(user, token))
 
-subp = lambda x: subprocess.check_output(x, shell=True, stderr=subprocess.STDOUT)
+
+def subp(x): return subprocess.check_output(
+    x, shell=True, stderr=subprocess.STDOUT)
 
 
 r = subp('git branch')
@@ -33,7 +35,7 @@ for i in r.decode("utf-8").split('\n'):
     line = i.strip()
     if not line:
         continue
-    m = re.search(r'([A-Za-z]{2,3})-([0-9]{3})',line)
+    m = re.search(r'([A-Za-z]{2,9})-([0-9]{4})', line)
     if m:
         jira_issue = m.group()
         j = jira.issue(jira_issue)
@@ -42,5 +44,6 @@ for i in r.decode("utf-8").split('\n'):
         branch = line
         if "* " in line:
             branch = line.split("* ")[1]
-        description = subp(f'git config branch.{branch}.description || echo ""').decode("utf-8")
+        description = subp(
+            f'git config branch.{branch}.description || echo ""').decode("utf-8")
         print(f"{Fore.MAGENTA} {line}{Fore.LIGHTCYAN_EX} {description.strip()}")

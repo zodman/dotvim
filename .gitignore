@@ -5,3 +5,4 @@ autoload/plug.vim
 plugged
 tags
 pack
+*.out

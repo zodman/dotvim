@@ -31,7 +31,7 @@ def main(args):
         print(f"{(result.fields.description or '').replace('#','')}")
         return
     result = jira.search_issues(
-        """ assignee = currentUser() AND resolution = Unresolved order by status DESC """)
+        """ assignee = currentUser() AND resolution = Unresolved order by priority, status DESC """)
     for j in result:
         if args.title:
             print(f"{j.key} {j.fields.summary}")
@@ -39,7 +39,7 @@ def main(args):
             print(f"{j.key} {j.permalink()}")
         else:
             print(f"{j.key} "
-                  f" {j.fields.assignee} {Fore.LIGHTWHITE_EX} {j.fields.status} {Fore.CYAN}{j.fields.summary} {Fore.RESET}{j.permalink()} ")
+                  f" {j.fields.assignee} {Fore.LIGHTWHITE_EX} {j.fields.status} [{j.fields.priority}] {Fore.CYAN}{j.fields.summary} {Fore.RESET}{j.permalink()} ")
 
 
 if __name__ == "__main__":
