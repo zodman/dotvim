@@ -17,7 +17,7 @@ if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
 	exit
 fi
 
-selected=$(gum choose $(lastversion --at gitlab --at github --assets $1))
+selected=$(gum choose $(lastversion --at gitlab --at github --assets $1 --having-asset))
 
 tmp_filename=$(curl -s -q -L -I $selected | grep 'disposition' | tail -n1 | awk '{print $3}' | sed s/filename=//g | sed 's/\r$//g')
 

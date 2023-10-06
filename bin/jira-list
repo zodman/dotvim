@@ -38,8 +38,15 @@ def main(args):
         elif args.link:
             print(f"{j.key} {j.permalink()}")
         else:
-            print(f"{j.key} "
-                  f" {j.fields.assignee} {Fore.LIGHTWHITE_EX} {j.fields.status} [{j.fields.priority}] {Fore.CYAN}{j.fields.summary} {Fore.RESET}{j.permalink()} ")
+            print(f" 🆔{  j.key}  "
+                  f" {Fore.LIGHTYELLOW_EX}{[i.name for i in j.fields.fixVersions]}"                  f"{Fore.RESET} {j.fields.assignee} "
+                  f"{Fore.BLUE} {j.fields.status} -  "
+                  f"{Fore.GREEN}{j.fields.priority}"
+                  f" 💬 ({len(j.fields.comment.comments)})"
+                  f"\n ➡️  {Fore.CYAN}{j.fields.summary}"
+
+                  f"\n 🔗{ Fore.RESET}{j.permalink()} "
+                  )
 
 
 if __name__ == "__main__":

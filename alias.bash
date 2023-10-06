@@ -251,25 +251,6 @@ pvrm() {
 	rm -frv $1 | pv -l -s $(du -a $1 | wc -l) >/dev/null
 }
 
-__create_pr() {
-	BRANCH=$(git rev-parse --abbrev-ref HEAD | grep -oE '[A-Z]{2,9}-[0-9]{4}')
-	TITLE=$(jira-list -t | grep $BRANCH)
-	LINK=$(jira-list -l | grep $BRANCH)
-	SUMMARY=$(jira-list -s $BRANCH)
-	BODY=$(
-		cat <<EOF
-$TITLE
-
-## Link to ticket: $LINK
-
-## Brief Description
-#
-$SUMMARY
-EOF
-	)
-	glab mr create --title "$TITLE" --description "$BODY" --draft
-}
-
 srctodo() {
 	rg -i TODO --vimgrep | awk '{split($1,arr,":"); print "\"git blame -f -n -L"  arr[2] "," arr[2], arr[1] "\""}' | xargs -n1 bash -c | rg "$(git config --global user.name)"
 }
