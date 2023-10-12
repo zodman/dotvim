@@ -7,11 +7,10 @@ __create_pr() {
 	BODY=$(
 		cat <<EOF
 $TITLE
-
 ## Link to ticket: $LINK
 
-## Brief Description
-#
+## Brief description
+
 $SUMMARY
 EOF
 	)

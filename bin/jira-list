@@ -34,11 +34,11 @@ def main(args):
         """ assignee = currentUser() AND resolution = Unresolved order by priority, status DESC """)
     for j in result:
         if args.title:
-            print(f"{j.key} {j.fields.summary}")
+            print(f"[{j.key}] {j.fields.summary}")
         elif args.link:
             print(f"{j.key} {j.permalink()}")
         else:
-            print(f" 🆔{  j.key}  "
+            print(f" 🆔{[.key}]
                   f" {Fore.LIGHTYELLOW_EX}{[i.name for i in j.fields.fixVersions]}"                  f"{Fore.RESET} {j.fields.assignee} "
                   f"{Fore.BLUE} {j.fields.status} -  "
                   f"{Fore.GREEN}{j.fields.priority}"
