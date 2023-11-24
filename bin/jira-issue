@@ -26,11 +26,13 @@ jira = JIRA(server=jira_url, basic_auth=(user, token))
 
 
 def main(args):
-    result = jira.issue(args.issue, fields=['id', 'summary', 'status'])
+    result = jira.issue(args.issue)
+        
     print(json.dumps({
         "key": result.key,
         "summary": result.fields.summary,
-        "link": result.permalink()
+        "link": result.permalink(),
+        "description": result.fields.description,
     }))
 
 

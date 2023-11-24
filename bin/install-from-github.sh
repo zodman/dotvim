@@ -17,7 +17,8 @@ if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
 	exit
 fi
 
-selected=$(gum choose $(lastversion --at gitlab --at github --assets $1 --having-asset))
+options=$(lastversion --at gitlab --at github --assets $1 --having-asset)
+selected=$(gum choose $options)
 
 tmp_filename=$(curl -s -q -L -I $selected | grep 'disposition' | tail -n1 | awk '{print $3}' | sed s/filename=//g | sed 's/\r$//g')
 
@@ -41,8 +42,8 @@ elif [[ $tmpfile == *.tar.gz ]]; then
 elif [[ $tmpfile == *.zip ]]; then
 	sudo unzip -d /usr/local/ $tmpfile
 else
-	red "No installed the $tmpfile"
-
+	cp $tmpfile .
+	red "No installed copied to $(pwd)"
 fi
 
 rm -rf $tmpfile

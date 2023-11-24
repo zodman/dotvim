@@ -1,5 +1,5 @@
 #!/bin/bash
-source ~/.vim/anybar_init.sh
+source $HOME/.vim/anybar_init.sh
 check_anybar_running() {
 	nohup somebar -p 1739 &
 	nohup somebar -p 1740 &

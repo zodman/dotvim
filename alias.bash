@@ -252,7 +252,7 @@ pvrm() {
 }
 
 srctodo() {
-	rg -i TODO --vimgrep | awk '{split($1,arr,":"); print "\"git blame -f -n -L"  arr[2] "," arr[2], arr[1] "\""}' | xargs -n1 bash -c | rg "$(git config --global user.name)"
+	rg -e '(TODO|FIX|HACK):' -t ts --vimgrep | awk '{split($1,arr,":"); print "\"git blame -f -n -L"  arr[2] "," arr[2], arr[1] "\""}' | xargs -n1 bash -c | rg "$(git config --global user.name)"
 }
 
 ##### ALIAS
@@ -312,3 +312,4 @@ alias now='date +"%FT%H%M"'
 alias timeleft='termdown'
 alias git-and-watch='git push && gum spin -- sleep 2  && gh run  watch && gum confirm "view logs" &&  gh run view --log'
 alias sshR='ssh -R 27017:localhost:27017'
+alias alto-up='tmuxp load ~/work/andres_tools/local.tmuxp.yaml'

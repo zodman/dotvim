@@ -1,9 +1,10 @@
 #!/bin/env bash
 __create_pr() {
 	BRANCH=$(git rev-parse --abbrev-ref HEAD | grep -oE '[A-Z]{2,9}-[0-9]{4}')
-	TITLE=$(jira-list -t | grep $BRANCH)
-	LINK=$(jira-list -l | grep $BRANCH)
-	SUMMARY=$(jira-list -s $BRANCH)
+	TITLE=$(jira-issue $BRANCH | jq '.summary')
+	KEY=$(jira-issue $BRANCH | jq '.key')
+	LINK=$(jira-issue $BRANCH | jq '.link')
+	SUMMARY=$(jira-issue $BRANCH | jq '.description')
 	BODY=$(
 		cat <<EOF
 $TITLE
@@ -14,7 +15,7 @@ $TITLE
 $SUMMARY
 EOF
 	)
-	glab mr create --title "$TITLE" --description "$BODY" --draft
+	glab mr create --title "[$KEY] $TITLE" --description "$BODY" --draft
 }
 
 __create_pr
