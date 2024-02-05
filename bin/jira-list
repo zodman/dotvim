@@ -47,7 +47,7 @@ def main(args):
                   f" 💬 ({len(j.fields.comment.comments)})"
                   f"\n ➡️  {Fore.CYAN}{j.fields.summary}"
 
-                  f"\n 🔗 { Fore.RESET}{j.permalink()} "
+                  f"\n 🔗 { Fore.RESET}{j.permalink()} \n"
                   )
 
 

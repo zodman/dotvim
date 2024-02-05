@@ -7,11 +7,12 @@ TASKS_PATH='~/Dropbox/tasks'
 #eval `keychain --eval --agents ssh id_rsa`
 if [ -x "$(command -v keychain)" ]; then
 	eval $(keychain --agents ssh --eval id_rsa)
-	eval $(keychain --agents ssh --eval id_rsa2)
+	# eval $(keychain --agents ssh --eval id_rsa2)
 	source $HOME/.keychain/$HOSTNAME-sh
 fi
 
 source ~/.vim/docker_alias.bash
+source ~/.vim/nix_alias.sh
 source ~/.vim/anybar_init.sh
 source ~/.vim/jrnl-prompt.sh
 
@@ -186,7 +187,6 @@ clip-exe() {
 }
 
 edit-alias() {
-
 	nvim ~/.vim/alias.bash
 	. ~/.vim/alias.bash
 }
@@ -255,7 +255,26 @@ srctodo() {
 	rg -e '(TODO|FIX|HACK):' -t ts --vimgrep | awk '{split($1,arr,":"); print "\"git blame -f -n -L"  arr[2] "," arr[2], arr[1] "\""}' | xargs -n1 bash -c | rg "$(git config --global user.name)"
 }
 
+git_sync() {
+	set -x
+	git checkout rc-v2.3.1
+	git pull
+	git checkout -
+	git merge rc-v2.3.1
+	set +x
+}
+
+bw-search() {
+	login=$(bw list items --search $1 | jq -r '.[] | {name: .name, username: .login.username, password: .login.password }')
+	echo $login | jq
+	password=$(echo "$login" | jq -r '.password')
+	echo $password | pbcopy
+	echo "copy to clipboard"
+}
+
 ##### ALIAS
+[ "$TERM" = "xterm-kitty" ] && alias ssh="kitty +kitten  ssh"
+
 alias m=anybar_monitor
 alias wttr='curl wttr.in -L'
 alias wtc='git commit -am "$(curl --retry 5 --retry-delay 0 -s http://whatthecommit.com/index.txt)"'
@@ -275,41 +294,42 @@ alias rscp='rsync -aP'
 alias rsmv='rsync -aP --remove-source-files'
 alias m-ets="m ets -s"
 alias cloudflare-docker-localhost="cloudflared tunnel --hostname localhost.python3.ninja --url http://$DOCKER_IP:3000"
-alias poson="pg_ctl start -D /home/linuxbrew/.linuxbrew/var/postgres -l logfile"
-alias posoff="pg_ctl  stop -D /home/linuxbrew/.linuxbrew/var/postgres -l logfile"
 alias del-ts-check="ag '@ts-nocheck' -l | xargs sed -i  '/\/\/ @ts-nocheck/d'"
 alias npm-completation="source <(npm completion)"
 alias r=reset
-alias git-pr-status=pr_status
 alias explorer-here="$POWERSHELL explorer ."
-alias vistoupdate="ncu -f /visto/ -u"
 alias c=__c
 alias reload-alias="source ~/.vim/alias.bash"
 alias check-ts-code=__check_code
 # red from bake-cli
 # export FZF_DEFAULT_COMMAND='fd --type f'
-alias cdvistobackend="cd /home/zodman/visto/backend"
-alias cdvistofrontend="cd /home/zodman/visto/frontend"
+
 alias pr-open="gh  pr view --json url | jq .url | xargs wslview"
-alias re-request="__re_request"
+
 alias git-stat="__git_stat"
-alias pg-test="docker run -p 127.0.0.1:5432:5432  --tmpfs=/data -e PGDATA=/data -e POSTGRES_PASSWORD=password postgres"
-alias pg-test-log="pg-test -c log_statement=all"
-alias python="python3"
+alias git-pr-status=pr_status
 alias git-branch-status=__git_branch_status
-alias load-dot-env=__load_dot_env
 alias git-log="git log --all --decorate --oneline --graph"
 alias git-publish=__git_publish
 alias git-show-pr-visto=___visto_pr
+alias git-select-branch='gum filter `git for-each-ref --format="%(refname:short)" refs/heads/`'
+alias git-checkout='git checkout $(git-select-branch)'
 alias git-create-pr=__create_pr
+alias git-and-watch='git push && gum spin -- sleep 2  && gh run  watch && gum confirm "view logs" &&  gh run view --log'
+
+alias pg-test="docker run -p 127.0.0.1:5432:5432  --tmpfs=/data -e PGDATA=/data -e POSTGRES_PASSWORD=password postgres"
+alias pg-test-log="pg-test -c log_statement=all"
+alias python="python3"
+alias load-dot-env=__load_dot_env
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
-alias freememory='sudo gum spin --title="reseting memory" --  bash -c "echo 3 > /proc/sys/vm/drop_caches && sudo -S swapoff -a &&  sleep 2 && sudo -S swapon -a"'
+alias freememory='sudo gum spin --title="reseting memory" --show-output --  bash -c "echo 3 > /proc/sys/vm/drop_caches && sudo -S swapoff -a &&  sleep 2 && sudo -S swapon -a && service zram-config restart"'
 alias please="gum input --password | sudo -nS"
-alias git-jira="git-branch-jira"
+alias git-jira="bkt --ttl $(expr 5 \* 60 \* 1000)ms -- git-branch-jira"
 alias ls='exa --group-directories-first'
 alias now='date +"%FT%H%M"'
 alias timeleft='termdown'
-alias git-and-watch='git push && gum spin -- sleep 2  && gh run  watch && gum confirm "view logs" &&  gh run view --log'
 alias sshR='ssh -R 27017:localhost:27017'
 alias alto-up='tmuxp load ~/work/andres_tools/local.tmuxp.yaml'
+alias ssh-alto='ssh `ssh-alto-devices.sh`'
+alias get-ip-qa-alto='list_alto_devices.py --scan --json | grep ALTP0005 | jq -r .data.ip'

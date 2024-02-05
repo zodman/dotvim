@@ -1,14 +1,41 @@
 [user]
-	email = zodman@gmail.com
-	name = zodman
+	email = avargas@nicoyalife.com
+	name = Andres Vargas
 
-[merge]
-        tool = vimdiff
+[rebase]
+  autoSquash = true
 
-[mergetool]
-        keepBackup = false
-            
-[mergetool "vimdiff"]
-        cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 [core]
-	editor = vim
+    pager = delta
+	excludesfile = /home/avargas/.gitignore
+
+[interactive]
+    diffFilter = delta --color-only --features=interactive 
+
+[delta]
+    features = decorations
+    side-by-side = true
+    line-number = true
+    navigate = true
+
+[delta "interactive"]
+    keep-plus-minus-markers = false
+
+[delta "decorations"]
+    commit-decoration-style = blue ol
+    commit-style = raw
+    file-style = omit
+    hunk-header-decoration-style = blue box
+    hunk-header-file-style = red
+    hunk-header-line-number-style = "#067a00"
+    hunk-header-style = file line-number syntax
+[diff]
+	tool = meld
+[cola]
+	spellcheck = false
+[alias]
+	conflicts = !git ls-files -u | cut -f 2 | sort -u
+  freediff= !git diff --ignore-blank-lines --ignore-all-space --ignore-cr-at-eol
+
+[push]
+	autoSetupRemote = true
