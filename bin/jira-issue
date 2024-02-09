@@ -27,18 +27,20 @@ jira = JIRA(server=jira_url, basic_auth=(user, token))
 
 def main(args):
     result = jira.issue(args.issue)
-        
-    print(json.dumps({
-        "key": result.key,
-        "summary": result.fields.summary,
-        "link": result.permalink(),
-        "description": result.fields.description,
-    }))
+    print(
+        json.dumps(
+            {
+                "key": result.key,
+                "summary": result.fields.summary,
+                "link": result.permalink(),
+                "description": result.fields.description,
+            }
+        )
+    )
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description='List jira issues ..  made by zodman')
+    parser = argparse.ArgumentParser(description="List jira issues ..  made by zodman")
     parser.add_argument("issue")
     args = parser.parse_args()
     main(args)
