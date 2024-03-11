@@ -6,7 +6,7 @@ TASKS_PATH='~/Dropbox/tasks'
 
 #eval `keychain --eval --agents ssh id_rsa`
 if [ -x "$(command -v keychain)" ]; then
-	eval $(keychain --agents ssh --eval id_rsa)
+	eval $(keychain --agents ssh --eval id_rsa-nicoya)
 	# eval $(keychain --agents ssh --eval id_rsa2)
 	source $HOME/.keychain/$HOSTNAME-sh
 fi
@@ -19,6 +19,9 @@ source ~/.vim/jrnl-prompt.sh
 if command -v gh &>/dev/null; then
 	eval "$(gh completion -s bash)"
 fi
+
+export EDITOR='nvim'
+export VISUAL=$EDITOR
 
 _awsListAll() {
 
@@ -333,3 +336,4 @@ alias sshR='ssh -R 27017:localhost:27017'
 alias alto-up='tmuxp load ~/work/andres_tools/local.tmuxp.yaml'
 alias ssh-alto='ssh `ssh-alto-devices.sh`'
 alias get-ip-qa-alto='list_alto_devices.py --scan --json | grep ALTP0005 | jq -r .data.ip'
+alias s="gum spin --show-output --"

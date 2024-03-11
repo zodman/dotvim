@@ -12,7 +12,7 @@ hdate() {
 }
 
 _jrnl_last_entry() {
-	lastdatetime=$(jrnl --short -n 1 | awk '{print $1 " " $2}')
+	lastdatetime=$(jrnl --short -n 1 --config-override colors.date NONE | awk '{print $1 " " $2}')
 	_jrnl_last_entry_out=$(hdate "$lastdatetime")
 }
 

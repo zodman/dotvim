@@ -35,7 +35,17 @@
 	spellcheck = false
 [alias]
 	conflicts = !git ls-files -u | cut -f 2 | sort -u
-  freediff= !git diff --ignore-blank-lines --ignore-all-space --ignore-cr-at-eol
+    freediff= !git diff --ignore-blank-lines --ignore-all-space --ignore-cr-at-eol
+    push-notify= !git push -o ci.variable="NOTIFY=1"
 
 [push]
 	autoSetupRemote = true
+[credential "https://gitlab.com"]
+	helper = 
+	helper = !/nix/store/xn11lird6fhd1yyw85w8wwnsk58mfyj6-glab-1.36.0/bin/glab auth git-credential
+[http]
+	postBuffer = 157286400
+[pack]
+	window = 1
+[credential]
+	helper = store
