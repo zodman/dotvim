@@ -7,7 +7,7 @@
 
 [core]
     pager = delta
-	excludesfile = /home/avargas/.gitignore
+  	excludesfile = /home/avargas/.gitignore
 
 [interactive]
     diffFilter = delta --color-only --features=interactive 
@@ -30,7 +30,17 @@
     hunk-header-line-number-style = "#067a00"
     hunk-header-style = file line-number syntax
 [diff]
-	tool = meld
+        tool = difftastic
+
+[difftool]
+        prompt = false
+
+[difftool "difftastic"]
+        cmd = difft "$LOCAL" "$REMOTE"
+
+[pager]
+        difftool = true
+
 [cola]
 	spellcheck = false
 [alias]
