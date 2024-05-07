@@ -8,14 +8,17 @@ export JIRA_API_TOKEN=""
 export JIRA_USER=""
 export JIRA_URL="https://myjira.atlassian.net/"
 
-# install 
+# install
 pip install jira colorama
 
 """
+
 from jira import JIRA
 import os
 import json
 import argparse
+from jira2markdown import convert as conv
+import re
 
 
 token = os.environ.get("JIRA_API_TOKEN")
@@ -23,6 +26,12 @@ user = os.environ.get("JIRA_USER")
 jira_url = os.environ.get("JIRA_URL")
 
 jira = JIRA(server=jira_url, basic_auth=(user, token))
+
+
+def convert(desc):
+    data = conv(desc)
+    p = re.compile(r"<img.*?/>")
+    return p.sub("", data)
 
 
 def main(args):
@@ -34,14 +43,15 @@ def main(args):
                 "key": result.key,
                 "summary": result.fields.summary,
                 "link": result.permalink(),
-                "description": result.fields.description,
+                "description": convert(result.fields.description or ""),
             }
         )
     )
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="List jira issues ..  made by zodman")
+    parser = argparse.ArgumentParser(
+        description="List jira issues ..  made by zodman")
     parser.add_argument("issue")
     args = parser.parse_args()
     main(args)

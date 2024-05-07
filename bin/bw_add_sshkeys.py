@@ -9,6 +9,7 @@ import logging
 import os
 import subprocess
 from typing import Any
+from rich.prompt import Prompt
 
 
 def get_session(session: str) -> str:
@@ -31,9 +32,9 @@ def get_session(session: str) -> str:
     else:
         logging.debug("Bitwarden vault is locked")
         operation = "unlock"
-
+    bw_pass = Prompt.ask("bw password", password=True)
     proc_session = subprocess.run(
-        ["bw", "--raw", operation],
+        ["bw", "--raw", operation, bw_pass],
         stdout=subprocess.PIPE,
         universal_newlines=True,
         check=True,
@@ -284,7 +285,7 @@ if __name__ == "__main__":
         if args.debug:
             loglevel = logging.DEBUG
         else:
-            loglevel = logging.INFO
+            loglevel = logging.ERROR
 
         logging.basicConfig(format="%(levelname)-8s %(message)s", level=loglevel)
 

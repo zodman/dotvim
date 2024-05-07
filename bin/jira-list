@@ -8,14 +8,16 @@ export JIRA_API_TOKEN=""
 export JIRA_USER=""
 export JIRA_URL="https://myjira.atlassian.net/"
 
-# install 
+# install
 pip install jira colorama
 
 """
+
 from jira import JIRA
 import os
 from colorama import Fore, Back
 import argparse
+from jira2markdown import convert
 
 
 token = os.environ.get("JIRA_API_TOKEN")
@@ -27,35 +29,38 @@ jira = JIRA(server=jira_url, basic_auth=(user, token))
 
 def main(args):
     if args.summary:
-        result = jira.issue(args.summary, fields='description')
-        print(f"{(result.fields.description or '').replace('#','')}")
+        result = jira.issue(args.summary, fields="description")
+        print(f"{convert(result.fields.description or '')}")
         return
     result = jira.search_issues(
-        """ assignee = currentUser() AND resolution = Unresolved order by priority, status DESC """)
+        """ assignee = currentUser() AND resolution = Unresolved order by priority, status DESC """
+    )
     for j in result:
         if args.title:
             print(
-                f"[{j.key}] - {[i.name for i in j.fields.fixVersions]} {j.fields.summary}")
+                f"[{j.key}] - {[i.name for i in j.fields.fixVersions]} {j.fields.summary}"
+            )
         elif args.link:
             print(f"{j.key} {j.permalink()}")
         else:
-            print(f" 🆔 {j.key}",
-                  f" {Fore.LIGHTYELLOW_EX}{[i.name for i in j.fields.fixVersions]}"
-                  f"{Fore.RESET} {j.fields.assignee} "
-                  f"{Fore.BLUE} {j.fields.status} -  "
-                  f"{Fore.GREEN}{j.fields.priority}"
-                  f" 💬 ({len(j.fields.comment.comments)})"
-                  f"\n ➡️  {Fore.CYAN}{j.fields.summary}"
-
-                  f"\n 🔗 { Fore.RESET}{j.permalink()} \n"
-                  )
+            print(
+                f" 🆔 {j.key}",
+                f" {Fore.LIGHTYELLOW_EX}{[i.name for i in j.fields.fixVersions]}"
+                f"{Fore.RESET} {j.fields.assignee} "
+                f"{Fore.BLUE} {j.fields.status} -  "
+                f"{Fore.GREEN}{j.fields.priority}"
+                f" 💬 ({len(j.fields.comment.comments)})"
+                f"\n ➡️  {Fore.CYAN}{j.fields.summary}"
+                f"\n 🔗 { Fore.RESET}{j.permalink()} \n",
+            )
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description='List jira issues ..  made by zodman')
+        description="List jira issues ..  made by zodman")
     parser.add_argument(
-        "-t", "--title", help="only show ID and title", action="store_true")
+        "-t", "--title", help="only show ID and title", action="store_true"
+    )
     parser.add_argument(
         "-l", "--link", help="show only links", action="store_true")
     parser.add_argument("-s", "--summary", help="show sumary")

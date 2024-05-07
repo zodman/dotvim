@@ -4,12 +4,9 @@
 TASKS_PATH='~/Dropbox/tasks'
 # pip install git+https://github.com/sjl/t.git
 
-#eval `keychain --eval --agents ssh id_rsa`
-if [ -x "$(command -v keychain)" ]; then
-	eval $(keychain --agents ssh --eval id_rsa-nicoya)
-	# eval $(keychain --agents ssh --eval id_rsa2)
-	source $HOME/.keychain/$HOSTNAME-sh
-fi
+# bw_add_sshkeys.py
+eval $(keychain --eval --agents ssh id_rsa-nicoya)
+eval $(keychain --eval --agents ssh id_rsa-digitalocean)
 
 source ~/.vim/docker_alias.bash
 source ~/.vim/nix_alias.sh
@@ -289,7 +286,6 @@ alias awswho="aws configure list"
 alias npm-cache-clear="npm cache clear --force"
 alias ci-status='m gh run watch --exit-status -i 1'
 alias ci-log='gh run view --log-failed'
-alias p='git-sync-main-dev; git push'
 alias t='t --task-dir ${TASKS_PATH} --list tasks'
 alias docker-stop-all='dstop'
 alias view-path='echo "$PATH" | tr ":" "\n" | nl'
@@ -326,17 +322,18 @@ alias python="python3"
 alias load-dot-env=__load_dot_env
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
-alias freememory='sudo gum spin --title="reseting memory" --show-output --  bash -c "echo 3 > /proc/sys/vm/drop_caches && sudo -S swapoff -a &&  sleep 2 && sudo -S swapon -a && service zram-config restart"'
+alias freememory='gum input --password | sudo -nS gum spin --title="reseting memory" --show-output --  bash -c "echo 3 > /proc/sys/vm/drop_caches && sudo -S swapoff -a &&  sleep 2 && sudo -S swapon -a && service zram-config restart"'
 alias please="gum input --password | sudo -nS"
 alias git-jira="bkt --ttl $(expr 5 \* 60 \* 1000)ms -- git-branch-jira"
+alias list-alto-devices="bkt --ttl $(expr 5 \* 60 \* 1000)ms -- list_alto_devices.py"
 alias ls='exa --group-directories-first'
 alias now='date +"%FT%H%M"'
 alias timeleft='termdown'
 alias alto-up='tmuxp load ~/work/andres_tools/local.tmuxp.yaml'
-alias alto-down='podman-compose -f ~/work/andres_tools/docker-compose.yaml down && fuser -k 3000/tcp && fuser -k 4200/tcp || echo done '
+alias alto-down='podman-compose -f ~/work/andres_tools/docker-compose.yaml down && tmux kill-session -t dev'
 alias ssh-alto='sshpass -p $ALTO_PASSWORD ssh `ssh-alto-devices.sh`'
 alias sshR='ssh -R 27017:localhost:27017'
-alias get-ip-qa-alto='list_alto_devices.py --scan --json | grep ALTP0005 | jq -r .data.ip'
+alias get-ip-qa-alto='list_alto_devices.py  --json | grep ALTP0005 | jq -r .data.ip'
 alias ssh-alto-qa='sshpass -p $ALTO_PASSWORD ssh `get-ip-qa-alto`'
 alias s="gum spin --show-output --"
 alias sync-ssh-keys='fab -r ~/work/andres_tools/   sync-ssh-keys -H'
