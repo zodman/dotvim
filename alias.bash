@@ -255,21 +255,51 @@ srctodo() {
 	rg -e '(TODO|FIX|HACK):' -t ts --vimgrep | awk '{split($1,arr,":"); print "\"git blame -f -n -L"  arr[2] "," arr[2], arr[1] "\""}' | xargs -n1 bash -c | rg "$(git config --global user.name)"
 }
 
-git_sync() {
-	set -x
-	git checkout rc-v2.3.1
-	git pull
-	git checkout -
-	git merge rc-v2.3.1
-	set +x
-}
-
 bw-search() {
 	login=$(bw list items --search $1 | jq -r '.[] | {name: .name, username: .login.username, password: .login.password }')
 	echo $login | jq
 	password=$(echo "$login" | jq -r '.password')
 	echo $password | pbcopy
 	echo "copy to clipboard"
+}
+
+alto_qa_mongostat() {
+	IP=$(get-ip-qa-alto)
+	sshpass -p $ALTO_PASSWORD ssh -t $IP '~/.local/bin/tmuxp load /data/avargas/tmuxp_stat.yaml'
+}
+
+reload_nvm() {
+	export NVM_DIR="$HOME/.nvm"
+	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+}
+
+get-ip-alto() {
+	ALTO=$1
+	list_alto_devices.py --json | grep $ALTO | jq -r .data.ip
+}
+
+alto-ros-status() {
+	IP=$(get-ip-alto $1)
+	curl -s http://$IP/server/system_scheduler/ss_get_node_state | jq -r '.node_state' | sed s/------------/\\n/g
+}
+
+print_status() {
+	local message="$1"
+	local status="$2"
+
+	# Get the number of columns, but subtact 8 to leave space for the status.
+	local columns=$((COLUMNS - 9))
+
+	# Print left-aligned message and right-aligned status.
+	printf "%-*s [%s] \n" "$columns" "$message" "$status"
+}
+is_ok() {
+	print_status $1 $'\e[32m OK \e[m'
+}
+it_fail() {
+
+	print_status $1 $'\e[31mFAILED\e[m'
 }
 
 ##### ALIAS
@@ -315,14 +345,15 @@ alias git-select-branch='gum filter `git for-each-ref --format="%(refname:short)
 alias git-checkout='git checkout $(git-select-branch)'
 alias git-create-pr=__create_pr
 alias git-and-watch='git push && gum spin -- sleep 2  && gh run  watch && gum confirm "view logs" &&  gh run view --log'
-
+alias push-ci='aic -a && git push && gum spin -- sleep 2  && glab ci view'
+alias git-done='glab mr update --ready && glab mr approve  &&  glab mr merge --auto-merge --squash -y'
 alias pg-test="docker run -p 127.0.0.1:5432:5432  --tmpfs=/data -e PGDATA=/data -e POSTGRES_PASSWORD=password postgres"
 alias pg-test-log="pg-test -c log_statement=all"
 alias python="python3"
 alias load-dot-env=__load_dot_env
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
-alias freememory='gum input --password | sudo -nS gum spin --title="reseting memory" --show-output --  bash -c "echo 3 > /proc/sys/vm/drop_caches && sudo -S swapoff -a &&  sleep 2 && sudo -S swapon -a && service zram-config restart"'
+alias freememory='sudo gum spin --title="reseting memory" --show-output --  bash -c "echo 3 > /proc/sys/vm/drop_caches && sudo -S swapoff -a &&  sleep 2 && sudo -S swapon -a && service zram-config restart"'
 alias please="gum input --password | sudo -nS"
 alias git-jira="bkt --ttl $(expr 5 \* 60 \* 1000)ms -- git-branch-jira"
 alias list-alto-devices="bkt --ttl $(expr 5 \* 60 \* 1000)ms -- list_alto_devices.py"
@@ -337,3 +368,4 @@ alias get-ip-qa-alto='list_alto_devices.py  --json | grep ALTP0005 | jq -r .data
 alias ssh-alto-qa='sshpass -p $ALTO_PASSWORD ssh `get-ip-qa-alto`'
 alias s="gum spin --show-output --"
 alias sync-ssh-keys='fab -r ~/work/andres_tools/   sync-ssh-keys -H'
+alias find-larger-number-lines='find . -type f -print0 | xargs -0 wc -l | sort -n'

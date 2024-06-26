@@ -43,6 +43,7 @@
 
 [cola]
 	spellcheck = false
+	startupmode = list
 [alias]
 	conflicts = !git ls-files -u | cut -f 2 | sort -u
     freediff= !git diff --ignore-blank-lines --ignore-all-space --ignore-cr-at-eol
