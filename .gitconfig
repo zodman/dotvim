@@ -6,31 +6,33 @@
   autoSquash = true
 
 [core]
-    pager = delta
+    ; pager = delta
   	excludesfile = /home/avargas/.gitignore
 
-[interactive]
-    diffFilter = delta --color-only --features=interactive 
-
-[delta]
-    features = decorations
-    side-by-side = true
-    line-number = true
-    navigate = true
-
-[delta "interactive"]
-    keep-plus-minus-markers = false
-
-[delta "decorations"]
-    commit-decoration-style = blue ol
-    commit-style = raw
-    file-style = omit
-    hunk-header-decoration-style = blue box
-    hunk-header-file-style = red
-    hunk-header-line-number-style = "#067a00"
-    hunk-header-style = file line-number syntax
+; [interactive]
+;     diffFilter = delta --color-only --features=interactive 
+;
+; [delta]
+;     features = decorations
+;     side-by-side = true
+;     line-number = true
+;     navigate = true
+;
+; [delta "interactive"]
+;     keep-plus-minus-markers = false
+;
+; [delta "decorations"]
+;     commit-decoration-style = blue ol
+;     commit-style = raw
+;     file-style = omit
+;     hunk-header-decoration-style = blue box
+;     hunk-header-file-style = red
+;     hunk-header-line-number-style = "#067a00"
+;     hunk-header-style = file line-number syntax
+;
 [diff]
         tool = difftastic
+        external = difft
 
 [difftool]
         prompt = false
@@ -41,12 +43,15 @@
 [pager]
         difftool = true
 
+
 [cola]
 	spellcheck = false
 	startupmode = list
 [alias]
-	conflicts = !git ls-files -u | cut -f 2 | sort -u
+  	conflicts = !git ls-files -u | cut -f 2 | sort -u
     freediff= !git diff --ignore-blank-lines --ignore-all-space --ignore-cr-at-eol
+    difflog = "-c diff.external=difft log -p --ext-diff"
+    dft = difftool 
     push-notify= !git push -o ci.variable="NOTIFY=1"
 
 [push]

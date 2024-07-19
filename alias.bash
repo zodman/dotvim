@@ -1,3 +1,20 @@
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+command -v pyenv >/dev/null || eval "$(pyenv init -)"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+
+command -v glab -v >/dev/null || source $(glab completion -s bash)
+command -v starship -V >/dev/null || eval "$(starship init bash)"
+command -v direnv version >/dev/null && eval "$(direnv hook bash)"
+
+[ -s "$HOME/.local/share/blesh/ble.sh" ] && source "$HOME/.local/share/blesh/ble.sh"
+if [ -x "$(command -v podman)" ]; then
+	export DOCKER_HOST="unix://$(podman info --format '{{.Host.RemoteSocket.Path}}')"
+fi
+
 # pip install http://bitbucket.org/sjl/t/get/tip.zip
 
 #export TERM='xterm-256color'
@@ -19,6 +36,7 @@ fi
 
 export EDITOR='nvim'
 export VISUAL=$EDITOR
+set -o vi
 
 _awsListAll() {
 
@@ -252,7 +270,7 @@ pvrm() {
 }
 
 srctodo() {
-	rg -e '(TODO|FIX|HACK):' -t ts --vimgrep | awk '{split($1,arr,":"); print "\"git blame -f -n -L"  arr[2] "," arr[2], arr[1] "\""}' | xargs -n1 bash -c | rg "$(git config --global user.name)"
+	rg -e '(TODO|FIX|HACK|BUG):' -t ts --vimgrep | awk '{split($1,arr,":"); print "\"git blame -f -n -L"  arr[2] "," arr[2], arr[1] "\""}' | xargs -n1 bash -c | rg "$(git config --global user.name)"
 }
 
 bw-search() {
