@@ -26,7 +26,9 @@ EOF
 
 	web_url=$(glab api merge_requests?source_branch=$BRANCH 2>/dev/null |
 		jq -r '.[].web_url' | head -1)
-	jira-add-link $BRANCH $web_url "Gitlab MR on ${REPO_NAME}"
+	set -x
+	jira-add-link "$BRANCH" "$web_url" "Gitlab MR on ${REPO_NAME}"
+	set +x
 }
 
 __create_pr

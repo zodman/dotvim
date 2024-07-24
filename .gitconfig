@@ -32,7 +32,7 @@
 ;
 [diff]
         tool = difftastic
-        external = difft
+        ; external = difft
 
 [difftool]
         prompt = false

@@ -270,7 +270,9 @@ pvrm() {
 }
 
 srctodo() {
-	rg -e '(TODO|FIX|HACK|BUG):' -t ts --vimgrep | awk '{split($1,arr,":"); print "\"git blame -f -n -L"  arr[2] "," arr[2], arr[1] "\""}' | xargs -n1 bash -c | rg "$(git config --global user.name)"
+	rg -e '(TODO|FIX|HACK|BUG):' -t ts --vimgrep |
+		awk '{split($1,arr,":"); print "\"git blame -f -n -L"  arr[2] "," arr[2], arr[1] "\""}' |
+		xargs -n1 bash -c | rg "$(git config --global user.name)"
 }
 
 bw-search() {
@@ -364,7 +366,8 @@ alias git-checkout='git checkout $(git-select-branch)'
 alias git-create-pr=__create_pr
 alias git-and-watch='git push && gum spin -- sleep 2  && gh run  watch && gum confirm "view logs" &&  gh run view --log'
 alias push-ci='aic -a && git push && gum spin -- sleep 2  && glab ci view'
-alias git-done='glab mr update --ready && glab mr approve  &&  glab mr merge --auto-merge --squash -y'
+alias git-ready='glab mr update --ready && glab mr approve'
+alias git-done='git-ready  &&  glab mr merge --auto-merge --squash -y'
 alias pg-test="docker run -p 127.0.0.1:5432:5432  --tmpfs=/data -e PGDATA=/data -e POSTGRES_PASSWORD=password postgres"
 alias pg-test-log="pg-test -c log_statement=all"
 alias python="python3"
@@ -373,8 +376,9 @@ alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
 alias freememory='sudo gum spin --title="reseting memory" --show-output --  bash -c "echo 3 > /proc/sys/vm/drop_caches && sudo -S swapoff -a &&  sleep 2 && sudo -S swapon -a && service zram-config restart"'
 alias please="gum input --password | sudo -nS"
-alias git-jira="bkt --ttl $(expr 5 \* 60 \* 1000)ms -- git-branch-jira"
-alias list-alto-devices="bkt --ttl $(expr 5 \* 60 \* 1000)ms -- list_alto_devices.py"
+alias git-j="bkt --ttl $(expr 5 \* 60 \* 1000)ms -- git-branch-jira"
+alias list-alto-d="bkt --ttl $(expr 5 \* 60 \* 1000)ms -- list_alto_devices.py"
+alias list-alto-devices="list_alto_devices.py"
 alias ls='exa --group-directories-first'
 alias now='date +"%FT%H%M"'
 alias timeleft='termdown'

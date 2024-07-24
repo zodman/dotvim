@@ -1,0 +1,10 @@
+#!/bin/env bash
+set -x
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+JIRA_ID=$(echo $BRANCH | grep -oE '[A-Z]{2,9}-[0-9]{4}')
+LINK=$(jira-issue $JIRA_ID| jq -r '.link')
+desc_old=$(glab api merge_requests?source_branch=$BRANCH  2> /dev/null |  jq -r '.[0].description' )
+desc=$(printf "# $LINK \n ${desc_old}")
+glab mr  update -d "$desc"
+
+# vim: filetype=bash
