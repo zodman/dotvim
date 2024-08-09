@@ -48,11 +48,27 @@
 	spellcheck = false
 	startupmode = list
 [alias]
-  	conflicts = !git ls-files -u | cut -f 2 | sort -u
-    freediff= !git diff --ignore-blank-lines --ignore-all-space --ignore-cr-at-eol
-    difflog = "-c diff.external=difft log -p --ext-diff"
-    dft = difftool 
-    push-notify= !git push -o ci.variable="NOTIFY=1"
+  conflicts = !git ls-files -u | cut -f 2 | sort -u
+  freediff= !git diff --ignore-blank-lines --ignore-all-space --ignore-cr-at-eol
+  difflog = "-c diff.external=difft log -p --ext-diff"
+  dft = difftool 
+  push-notify= !git push -o ci.variable="NOTIFY=1"
+  ready =!glab mr update --ready
+	append = town append
+	compress = town compress
+	contribute = town contribute
+	diff-parent = town diff-parent
+	hack = town hack
+	kill = town kill
+	observe = town observe
+	park = town park
+	prepend = town prepend
+	propose = town propose
+	rename-branch = town rename-branch
+	repo = town repo
+	set-parent = town set-parent
+	ship = town ship
+	sync = town sync
 
 [push]
 	autoSetupRemote = true
@@ -65,3 +81,5 @@
 	window = 1
 [credential]
 	helper = store
+[git-town]
+	perennial-branches = rc-* release* SWALTONEW*

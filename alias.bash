@@ -7,6 +7,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
 command -v glab -v >/dev/null || source $(glab completion -s bash)
+command -v git-town -version >/dev/null || source $(git-town completation bash)
 command -v starship -V >/dev/null || eval "$(starship init bash)"
 command -v direnv version >/dev/null && eval "$(direnv hook bash)"
 
@@ -364,10 +365,12 @@ alias git-show-pr-visto=___visto_pr
 alias git-select-branch='gum filter `git for-each-ref --format="%(refname:short)" refs/heads/`'
 alias git-checkout='git checkout $(git-select-branch)'
 alias git-create-pr=__create_pr
-alias git-and-watch='git push && gum spin -- sleep 2  && gh run  watch && gum confirm "view logs" &&  gh run view --log'
-alias push-ci='aic -a && git push && gum spin -- sleep 2  && glab ci view'
-alias git-ready='glab mr update --ready && glab mr approve'
-alias git-done='git-ready  &&  glab mr merge --auto-merge --squash -y'
+alias git-commit-and-push='aic -a && git push'
+alias git-push-and-watch='git push && gum spin -- sleep 2  && gh run  watch && gum confirm "view logs" &&  gh run view --log'
+alias git-commit-push-view-ci='aic -a && git push && gum spin -- sleep 2  && glab ci view'
+alias git-ready='glab mr update --ready'
+alias git-ready-approve='git-ready && glab mr approve'
+alias git-ready-and-merge='git-ready  &&  glab mr merge --auto-merge --squash -y'
 alias pg-test="docker run -p 127.0.0.1:5432:5432  --tmpfs=/data -e PGDATA=/data -e POSTGRES_PASSWORD=password postgres"
 alias pg-test-log="pg-test -c log_statement=all"
 alias python="python3"
@@ -379,7 +382,7 @@ alias please="gum input --password | sudo -nS"
 alias git-j="bkt --ttl $(expr 5 \* 60 \* 1000)ms -- git-branch-jira"
 alias list-alto-d="bkt --ttl $(expr 5 \* 60 \* 1000)ms -- list_alto_devices.py"
 alias list-alto-devices="list_alto_devices.py"
-alias ls='exa --group-directories-first'
+alias ls='lsd'
 alias now='date +"%FT%H%M"'
 alias timeleft='termdown'
 alias alto-up='tmuxp load ~/work/andres_tools/local.tmuxp.yaml'
@@ -391,3 +394,6 @@ alias ssh-alto-qa='sshpass -p $ALTO_PASSWORD ssh `get-ip-qa-alto`'
 alias s="gum spin --show-output --"
 alias sync-ssh-keys='fab -r ~/work/andres_tools/   sync-ssh-keys -H'
 alias find-larger-number-lines='find . -type f -print0 | xargs -0 wc -l | sort -n'
+alias jira-info="jira-issue $(get-jira-from-branch) | jq"
+
+alias nico-mongo='mongosh nicoya_development-db'

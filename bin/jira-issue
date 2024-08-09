@@ -35,7 +35,10 @@ def convert(desc):
 
 
 def main(args):
-    result = jira.issue(args.issue)
+
+    issue = args.issue
+
+    result = jira.issue(issue)
 
     print(
         json.dumps(
@@ -50,8 +53,7 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="List jira issues ..  made by zodman")
+    parser = argparse.ArgumentParser(description="List jira issues ..  made by zodman")
     parser.add_argument("issue")
     args = parser.parse_args()
     main(args)
