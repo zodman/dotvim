@@ -22,13 +22,11 @@ EOF
 		refs/heads/ | gum filter)
 	glab mr create -a avargas101 --title "[$KEY] $TITLE" \
 		--description "$BODY" --draft \
-		--target-branch $BRANCH_TARGET -l $BRANCH_TARGET
+		--target-branch $BRANCH_TARGET
 
 	web_url=$(glab api merge_requests?source_branch=$BRANCH 2>/dev/null |
 		jq -r '.[].web_url' | head -1)
-	set -x
 	jira-add-link "$JIRA_ID" "$web_url" "Gitlab MR on ${REPO_NAME}"
-	set +x
 }
 
 __create_pr

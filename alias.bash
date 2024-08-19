@@ -394,6 +394,6 @@ alias ssh-alto-qa='sshpass -p $ALTO_PASSWORD ssh `get-ip-qa-alto`'
 alias s="gum spin --show-output --"
 alias sync-ssh-keys='fab -r ~/work/andres_tools/   sync-ssh-keys -H'
 alias find-larger-number-lines='find . -type f -print0 | xargs -0 wc -l | sort -n'
-alias jira-info="jira-issue $(get-jira-from-branch) | jq"
+alias jira-info="get-jira-from-branch |  xargs jira-issue  | jq"
 
 alias nico-mongo='mongosh nicoya_development-db'
