@@ -7,7 +7,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
 command -v glab -v >/dev/null || source $(glab completion -s bash)
-command -v git-town -version >/dev/null || source $(git-town completation bash)
+command -v git-town -version >/dev/null && source $(git-town completation bash)
 command -v starship -V >/dev/null || eval "$(starship init bash)"
 command -v direnv version >/dev/null && eval "$(direnv hook bash)"
 
