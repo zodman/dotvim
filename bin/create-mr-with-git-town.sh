@@ -1,14 +1,6 @@
 #!/bin/env bash
 set -x
 __create_pr() {
-	PARENT_BRANCH=$(
-		git show-branch -a 2>/dev/null |
-			sed "s/].*//" |
-			grep "\*" |
-			grep -v "$(git rev-parse --abbrev-ref HEAD)" |
-			head -n1 |
-			sed "s/^.*\[//"
-	)
 	BRANCH=$(git rev-parse --abbrev-ref HEAD)
 	JIRA_ID=$(echo $BRANCH | grep -oE '[A-Z]{2,9}-[0-9]{4}')
 	TITLE=$(jira-issue $JIRA_ID | jq -r '.summary')
@@ -27,11 +19,7 @@ $SUMMARY
 EOF
 	)
 
-	# BRANCH_TARGET=$PARENT_BRANCH
-	BRANCH_TARGET=$(git for-each-ref --format="%(refname:short)" | gum filter)
-	glab mr create -a avargas101 --title "[$KEY] $TITLE" \
-		--description "$BODY" --draft \
-		--target-branch $BRANCH_TARGET
+	git-town propose --title "[$KEY] $TITLE" --body "$BODY"
 
 	web_url=$(glab api merge_requests?source_branch=$BRANCH 2>/dev/null |
 		jq -r '.[].web_url' | head -1)

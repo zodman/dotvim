@@ -5,6 +5,7 @@
 ### used lastversion and gum
 
 set -o errexit
+set -x
 
 red() {
 	RED='\033[0;31m'
@@ -17,7 +18,7 @@ if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
 	exit
 fi
 
-options=$(lastversion --at gitlab --at github --assets $1 --having-asset)
+options=$(lastversion --at gitlab --assets $1 --having-asset)
 selected=$(gum choose $options)
 
 tmp_filename=$(curl -s -q -L -I $selected | grep 'disposition' | tail -n1 | awk '{print $3}' | sed s/filename=//g | sed 's/\r$//g')
@@ -25,7 +26,7 @@ tmp_filename=$(curl -s -q -L -I $selected | grep 'disposition' | tail -n1 | awk 
 #tmpfile=$(mktemp /tmp/XXXX.$tmp_filename)
 tmpfile=/tmp/$tmp_filename
 
-gum spin --title="Downloading $selected" -- curl -s -q -L $selected -o $tmpfile
+gum spin --title="Downloading $selected" -- curl -s -q -L "$selected" -o $tmpfile
 
 red "Install the $tmpfile"
 if [[ $tmpfile == *.deb ]]; then

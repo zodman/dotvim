@@ -7,7 +7,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
 command -v glab -v >/dev/null || source $(glab completion -s bash)
-command -v git-town -version >/dev/null && source $(git-town completation bash)
+command -v git-town -version >/dev/null || source $(git-town completation bash)
 command -v starship -V >/dev/null || eval "$(starship init bash)"
 command -v direnv version >/dev/null && eval "$(direnv hook bash)"
 
@@ -273,7 +273,7 @@ pvrm() {
 srctodo() {
 	rg -e '(TODO|FIX|HACK|BUG):' -t ts --vimgrep |
 		awk '{split($1,arr,":"); print "\"git blame -f -n -L"  arr[2] "," arr[2], arr[1] "\""}' |
-		xargs -n1 bash -c | rg "$(git config --global user.name)"
+		xargs -n1 bash -c | rg "$(git config --global user.name)" | grep --color TODO
 }
 
 bw-search() {
@@ -371,6 +371,7 @@ alias git-commit-push-view-ci='aic -a && git push && gum spin -- sleep 2  && gla
 alias git-ready='glab mr update --ready'
 alias git-ready-approve='git-ready && glab mr approve'
 alias git-ready-and-merge='git-ready  &&  glab mr merge --auto-merge --squash -y'
+alias git-current-branch='git rev-parse --abbrev-ref HEAD'
 alias pg-test="docker run -p 127.0.0.1:5432:5432  --tmpfs=/data -e PGDATA=/data -e POSTGRES_PASSWORD=password postgres"
 alias pg-test-log="pg-test -c log_statement=all"
 alias python="python3"
@@ -397,3 +398,4 @@ alias find-larger-number-lines='find . -type f -print0 | xargs -0 wc -l | sort -
 alias jira-info="get-jira-from-branch |  xargs jira-issue  | jq"
 
 alias nico-mongo='mongosh nicoya_development-db'
+alias cdnico="cd ~/work/alto_portal/"
