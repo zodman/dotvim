@@ -1,4 +1,7 @@
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
 [[ $- == *i* ]] && source $(blesh-share)/ble.sh --noattach
+
 
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
@@ -8,9 +11,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
-command -v glab -v >/dev/null || source $(glab completion -s bash)
-command -v git-town -version >/dev/null || source $(git-town completation bash)
-command -v starship -V >/dev/null || eval "$(starship init bash)"
+#command -v glab -v >/dev/null &&  source $(glab completion -s bash) || true
+#command -v git-town --version >/dev/null &&  source $(git-town completions bash) || true
+command -v starship -V >/dev/null &&  eval "$(starship init bash)" || true
 command -v direnv version >/dev/null && eval "$(direnv hook bash)"
 
 if [ -x "$(command -v podman)" ]; then
@@ -24,8 +27,15 @@ TASKS_PATH='~/Dropbox/tasks'
 # pip install git+https://github.com/sjl/t.git
 
 # bw_add_sshkeys.py
-eval $(keychain --eval --agents ssh id_rsa-nicoya)
-eval $(keychain --eval --agents ssh id_rsa-digitalocean)
+if [ -f $HOME/.shh/id_rsa-nicoya ]; then
+	eval $(keychain --eval --agents ssh id_rsa-nicoya)
+
+fi
+
+if [ -f $HOME/.shh/id_rsa-digitalocean ]; then
+
+	eval $(keychain --eval --agents ssh id_rsa-digitalocean)
+fi
 
 source ~/.vim/docker_alias.bash
 source ~/.vim/nix_alias.sh
@@ -404,5 +414,4 @@ alias nico-mongo='mongosh nicoya_development-db'
 alias cdnico="cd ~/work/alto_portal/"
 alias deploy-actual-branch-in-alto='just -f ~/work/autotest/justfile instrument_qa_with_branch `git-current-branch`'
 alias reddit='tuir'
-
 [[ ! ${BLE_VERSION-} ]] || ble-attach
