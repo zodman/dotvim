@@ -1,11 +1,12 @@
 #!/bin/bash
 source $HOME/.vim/anybar_init.sh
+set -x
 check_anybar_running() {
 	nohup somebar -p 1739 &
 	nohup somebar -p 1740 &
 	while true; do
-		(echo >/dev/tcp/localhost/4200) &>/dev/null && anybar blue 1 || anybar exclamation 1
-		(echo >/dev/tcp/localhost/3000) &>/dev/null && anybar blue 2 || anybar exclamation 2
+		curl localhost:4200 &>/dev/null && anybar blue 1 || anybar exclamation 1
+		curl localhost:3000 &>/dev/null && anybar blue 2 || anybar exclamation 2
 		sleep 1
 	done
 }

@@ -1,3 +1,5 @@
+[[ $- == *i* ]] && source $(blesh-share)/ble.sh --noattach
+
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 command -v pyenv >/dev/null || eval "$(pyenv init -)"
@@ -11,7 +13,6 @@ command -v git-town -version >/dev/null || source $(git-town completation bash)
 command -v starship -V >/dev/null || eval "$(starship init bash)"
 command -v direnv version >/dev/null && eval "$(direnv hook bash)"
 
-[ -s "$HOME/.local/share/blesh/ble.sh" ] && source "$HOME/.local/share/blesh/ble.sh"
 if [ -x "$(command -v podman)" ]; then
 	export DOCKER_HOST="unix://$(podman info --format '{{.Host.RemoteSocket.Path}}')"
 fi
@@ -384,6 +385,7 @@ alias git-j="bkt --ttl $(expr 5 \* 60 \* 1000)ms -- git-branch-jira"
 alias list-alto-d="bkt --ttl $(expr 5 \* 60 \* 1000)ms -- list_alto_devices.py"
 alias list-alto-devices="list_alto_devices.py"
 alias ls='lsd'
+alias l='lsd'
 alias now='date +"%FT%H%M"'
 alias timeleft='termdown'
 alias alto-up='tmuxp load ~/work/andres_tools/local.tmuxp.yaml'
@@ -392,6 +394,7 @@ alias ssh-alto='sshpass -p $ALTO_PASSWORD ssh `ssh-alto-devices.sh`'
 alias sshR='ssh -R 27017:localhost:27017'
 alias get-ip-qa-alto='list_alto_devices.py  --json | grep ALTP0005 | jq -r .data.ip'
 alias ssh-alto-qa='sshpass -p $ALTO_PASSWORD ssh `get-ip-qa-alto`'
+alias ssh-alto--qa-with-tunnel='sshpass -p $ALTO_PASSWORD ssh -L 4200:localhost:4200 `get-ip-qa-alto`'
 alias s="gum spin --show-output --"
 alias sync-ssh-keys='fab -r ~/work/andres_tools/   sync-ssh-keys -H'
 alias find-larger-number-lines='find . -type f -print0 | xargs -0 wc -l | sort -n'
@@ -399,3 +402,7 @@ alias jira-info="get-jira-from-branch |  xargs jira-issue  | jq"
 
 alias nico-mongo='mongosh nicoya_development-db'
 alias cdnico="cd ~/work/alto_portal/"
+alias deploy-actual-branch-in-alto='just -f ~/work/autotest/justfile instrument_qa_with_branch `git-current-branch`'
+alias reddit='tuir'
+
+[[ ! ${BLE_VERSION-} ]] || ble-attach

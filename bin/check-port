@@ -1,8 +1,9 @@
 #!/bin/bash
-source ~/.vim/anybar_init.sh
+function anybar { echo -n $1 | nc -4u -w0 localhost ${2:-1738}; }
+nohup somebar -p $2 &
+
 set +x
-    while true
-    do
-        (echo >/dev/tcp/localhost/"$1") &>/dev/null && anybar blue  || anybar exclamation
-        sleep 1
-    done
+while true; do
+	(echo >/dev/tcp/localhost/"$1") &>/dev/null && anybar blue $2 || anybar exclamation $2
+	sleep 1
+done
